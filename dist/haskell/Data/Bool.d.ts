@@ -2,6 +2,7 @@ import { IBool } from './IBool';
 import { IShowable } from './IShowable';
 import { String } from './String';
 declare abstract class Bool implements IBool, IShowable {
+    construct: typeof Bool._True;
     abstract cata: Bool.Cata;
     static True: () => Bool;
     static False: () => Bool;

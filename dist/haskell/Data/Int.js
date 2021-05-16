@@ -6,6 +6,7 @@ var ts_toolbelt_1 = require("../../ts-toolbelt");
 var Int = /** @class */ (function () {
     function Int() {
         var _this = this;
+        this.construct = Int;
         this._ = 0;
         this.show = function () { return String_1.String.Lift("" + _this._); };
     }

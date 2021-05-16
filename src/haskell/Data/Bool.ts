@@ -9,6 +9,7 @@ import {
 } from '../../ts-toolbelt'
 
 abstract class Bool implements IBool, IShowable {
+	construct = Bool._True;
 	abstract cata: Bool.Cata;
 	static True = (): Bool => new Bool._True();
 	static False = (): Bool => new Bool._False();

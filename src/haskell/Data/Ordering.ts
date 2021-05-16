@@ -6,12 +6,11 @@ import {String} from './String'
 import {Bool} from './Bool'
 import {S} from '../../ts-toolbelt/common'
 import {
-	Construct,
-	Deconstruct,
 	Json,
 } from '../../ts-toolbelt'
 
 abstract class Ordering implements IShowable, ISemigroup, IEq, IOrdering {
+	construct = Ordering._LT;
 	abstract cata: Ordering.Cata;
 	static LT = (): Ordering => new Ordering._LT();
 	static GT = (): Ordering => new Ordering._GT();

@@ -1,6 +1,9 @@
-//import {IEq} from './IEq'
+import {
+	Construct
+} from '../../ts-toolbelt'
 
 export interface IOrdering {
+	construct: COrdering<IOrdering>;
 	cata: IOrdering.Cata;
 }
 export namespace IOrdering {
@@ -12,3 +15,4 @@ export namespace IOrdering {
 		}): T | U | K;
 	}
 }
+export interface COrdering<TOrdering extends IOrdering = IOrdering> extends Construct<TOrdering> {}

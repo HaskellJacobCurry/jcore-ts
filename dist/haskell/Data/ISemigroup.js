@@ -5,4 +5,5 @@ var ts_toolbelt_1 = require("../../ts-toolbelt");
 var Semigroup;
 (function (Semigroup) {
     Semigroup.append = function (semigroup0) { return function (semigroup1) { return ts_toolbelt_1.polymorph(semigroup0.append(semigroup1)); }; };
-})(Semigroup = exports.Semigroup || (exports.Semigroup = {}));
+})(Semigroup || (Semigroup = {}));
+exports.Semigroup = Semigroup;

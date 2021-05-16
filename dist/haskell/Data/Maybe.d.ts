@@ -1,6 +1,7 @@
 import { IFunctor } from './IFunctor';
 import { Construct, Deconstruct } from '../../ts-toolbelt';
 declare abstract class Maybe<A = any> implements IFunctor<A> {
+    construct: typeof Maybe._Nothing;
     a: A;
     abstract cata: Maybe.Cata<A>;
     static Nothing: <A_1 = any>() => Maybe<A_1>;

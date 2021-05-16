@@ -21,6 +21,7 @@ var ts_toolbelt_1 = require("../../ts-toolbelt");
 var Ordering = /** @class */ (function () {
     function Ordering() {
         var _this = this;
+        this.construct = Ordering._LT;
         this.show = function () { return (_this.cata({
             LT: function () { return String_1.String.Lift('LT'); },
             GT: function () { return String_1.String.Lift('GT'); },

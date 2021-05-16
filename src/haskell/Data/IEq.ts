@@ -1,5 +1,6 @@
 import {IBool, Bool} from './IBool'
 import {
+	Construct,
 	polymorph
 } from '../../ts-toolbelt'
 
@@ -19,5 +20,7 @@ export namespace Eq {
 }
 
 export interface IEq {
+	construct: CEq<IEq>;
 	eq(_: IEq): IBool;
 }
+export interface CEq<TEq extends IEq = IEq> extends Construct<TEq> {}

@@ -1,4 +1,5 @@
 import { IBool } from './IBool';
+import { Construct } from '../../ts-toolbelt';
 /**
  * class Eq f where
  *  eq :: f -> f -> Bool
@@ -13,5 +14,8 @@ export declare namespace Eq {
     let notEq: Eq['notEq'];
 }
 export interface IEq {
+    construct: CEq<IEq>;
     eq(_: IEq): IBool;
+}
+export interface CEq<TEq extends IEq = IEq> extends Construct<TEq> {
 }

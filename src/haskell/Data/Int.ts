@@ -8,6 +8,7 @@ import {
 } from '../../ts-toolbelt'
 
 class Int implements IShowable {
+	construct = Int;
 	_: number = 0;
 
 	show = (): String => String.Lift(`${this._}`);

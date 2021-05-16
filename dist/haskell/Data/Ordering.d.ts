@@ -1,9 +1,11 @@
 import { ISemigroup } from './ISemigroup';
 import { IEq } from './IEq';
+import { IOrdering } from './IOrdering';
 import { IShowable } from './IShowable';
 import { String } from './String';
 import { Bool } from './Bool';
-declare abstract class Ordering implements IShowable, ISemigroup, IEq {
+declare abstract class Ordering implements IShowable, ISemigroup, IEq, IOrdering {
+    construct: typeof Ordering._LT;
     abstract cata: Ordering.Cata;
     static LT: () => Ordering;
     static GT: () => Ordering;

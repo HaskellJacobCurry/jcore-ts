@@ -18,6 +18,7 @@ var common_1 = require("../../ts-toolbelt/common");
 var ts_toolbelt_1 = require("../../ts-toolbelt");
 var Maybe = /** @class */ (function () {
     function Maybe() {
+        this.construct = Maybe._Nothing;
         this.a = undefined;
     }
     Maybe.prototype.map = function (f) {

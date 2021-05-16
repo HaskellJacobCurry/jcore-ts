@@ -1,6 +1,7 @@
 import { IShowable } from './IShowable';
 import { String } from './String';
 declare class Int implements IShowable {
+    construct: typeof Int;
     _: number;
     show: () => String;
 }

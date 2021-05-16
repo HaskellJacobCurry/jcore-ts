@@ -7,4 +7,5 @@ var Bool;
     Bool.not = function (bool) { return ts_toolbelt_1.polymorph(bool.not()); };
     Bool.and = function (bool0) { return function (bool1) { return ts_toolbelt_1.polymorph(bool0.and(bool1)); }; };
     Bool.or = function (bool0) { return function (bool1) { return ts_toolbelt_1.polymorph(bool0.or(bool1)); }; };
-})(Bool = exports.Bool || (exports.Bool = {}));
+})(Bool || (Bool = {}));
+exports.Bool = Bool;

@@ -1,11 +1,11 @@
-import {IMonoid} from '../IMonoid'
-import {ISemigroup} from '../ISemigroup'
+import {IMonoid} from './IMonoid'
+import {ISemigroup} from '../../../dist/haskell/Data/ISemigroup'
 import {
 	Json,
 	Construct,
 	Deconstruct,
 	Required,
-} from '../../../ts-toolbelt'
+} from '../../../dist/ts-toolbelt'
 
 class A implements ISemigroup {
 	append(_: A) {return _}

@@ -1,4 +1,5 @@
 import {
+	Construct,
 	polymorph
 } from '../../ts-toolbelt'
 
@@ -6,13 +7,16 @@ import {
  * class Semigroup f where
  *  append :: f -> f -> f
  */
-export interface Semigroup {
+interface Semigroup {
 	append: <TSemigroup extends ISemigroup>(_: TSemigroup) => (_: TSemigroup) => TSemigroup
 }
-export namespace Semigroup {
+namespace Semigroup {
 	export let append: Semigroup['append'] = semigroup0 => semigroup1 => polymorph(semigroup0.append(semigroup1));
 }
+export {Semigroup}
 
 export interface ISemigroup {
+	construct: CSemigroup<ISemigroup>;
 	append(_: ISemigroup): ISemigroup;
 }
+export interface CSemigroup<TSemigroup extends ISemigroup = ISemigroup> extends Construct<TSemigroup> {}

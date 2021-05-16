@@ -21,6 +21,7 @@ var ts_toolbelt_1 = require("../../ts-toolbelt");
 var Bool = /** @class */ (function () {
     function Bool() {
         var _this = this;
+        this.construct = Bool._True;
         this.show = function () { return (_this.cata({
             True: function () { return String_1.String.Lift('True'); },
             False: function () { return String_1.String.Lift('False'); }

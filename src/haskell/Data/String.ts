@@ -1,9 +1,11 @@
 import {
 	Json
 } from '../../ts-toolbelt'
-import {IShowable, IString} from './IShowable'
+import {IShowable} from './IShowable'
+import {IString} from './IString'
 
 class String implements IShowable, IString {
+	construct = String;
 	_: string = '';
 
 	show(): String {

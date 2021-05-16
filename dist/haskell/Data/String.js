@@ -4,6 +4,7 @@ exports.String = void 0;
 var ts_toolbelt_1 = require("../../ts-toolbelt");
 var String = /** @class */ (function () {
     function String() {
+        this.construct = String;
         this._ = '';
     }
     String.prototype.show = function () {

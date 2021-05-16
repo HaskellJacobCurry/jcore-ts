@@ -1,14 +1,19 @@
-export interface Showable {
+import {IString} from './IString'
+import {
+	Construct
+} from '../../ts-toolbelt'
+
+interface Showable {
 	show: (_: IShowable) => IString;
 }
-export namespace Showable {
+namespace Showable {
 	export let show: Showable['show'] = showable => showable.show();
 }
+export {Showable}
 
 export interface IShowable {
+	construct: CShowable<IShowable>;
 	show(): IString;
 }
+export interface CShowable<TShowable extends IShowable = IShowable> extends Construct<TShowable> {}
 
-export interface IString {
-	toString(): string;
-}
