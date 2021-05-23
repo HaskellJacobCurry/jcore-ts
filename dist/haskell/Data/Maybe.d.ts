@@ -1,12 +1,13 @@
 import { IFunctor } from './IFunctor';
-import { Construct, Deconstruct } from '../../ts-toolbelt';
+import { Construct } from '../../ts-toolbelt';
 declare abstract class Maybe<A = any> implements IFunctor<A> {
     construct: typeof Maybe._Nothing;
     a: A;
     abstract cata: Maybe.Cata<A>;
     static Nothing: <A_1 = any>() => Maybe<A_1>;
     static Just: <A_1>(a: A_1) => Maybe<A_1>;
-    map<B>(f: (_: A) => B): IFunctor<B>;
+    static Lift: <A_1>(a: A_1) => Maybe<A_1>;
+    map: <B>(f: (_: A) => B) => IFunctor<B>;
 }
 declare namespace Maybe {
     namespace Tag {
@@ -28,8 +29,6 @@ declare namespace Maybe {
         cata: Cata<A>;
     }
 }
-declare let _Maybe: <A extends Construct<any>>(a: A) => typeof Maybe & {
-    Lift: (a: Deconstruct<A>) => Maybe<Deconstruct<A>>;
-};
+declare let _Maybe: <A extends Construct<{}>>(a: A) => typeof Maybe;
 export { _Maybe as Maybe };
 export default Maybe;

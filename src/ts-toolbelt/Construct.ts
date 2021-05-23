@@ -1,5 +1,7 @@
-export type Construct<T = any> = new() => T;
-export type Deconstruct<T> = T extends new() => infer T ? T : never;
-export interface Constructible<T = any> {
-	new(): this;
+export type Construct<T = {}> = new(...as: any[]) => T;
+
+export type Deconstruct<T> = T extends new(...as: any[]) => infer T ? T : never;
+
+export interface Constructible {
+	construct: Construct<Constructible> & {default: Constructible};
 }

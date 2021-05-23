@@ -1,4 +1,5 @@
-import {IFunctor, Functor} from './IFunctor'
+import {IFunctor} from './IFunctor'
+import {IMonoid} from './IMonoid'
 import {S} from '../../ts-toolbelt/common'
 import {
 	Construct,
@@ -12,10 +13,18 @@ abstract class Maybe<A = any> implements IFunctor<A> {
 	abstract cata: Maybe.Cata<A>;
 	static Nothing = <A = any>(): Maybe<A> => new Maybe._Nothing<A>();
 	static Just = <A>(a: A): Maybe<A> => ((just = new Maybe._Just<A>()) => just)();
+	static Lift = Maybe.Just;
 
-	map<B>(f: (_: A) => B): IFunctor<B> {
-		return <any>1;
-	}
+	map = <B>(f: (_: A) => B): IFunctor<B> => (
+		this.cata({
+			Just: a => Maybe.Just(f(a)),
+			Nothing: () => Maybe.Nothing(),
+		})
+	);
+
+	//append = (maybe: Maybe<A>): Maybe<A> => ();
+
+	//static mempty = Maybe.Nothing;
 }
 namespace Maybe {
 	export namespace Tag {
@@ -44,7 +53,7 @@ let _Maybe = <A extends Construct>(a: A) => (
 	(Maybe => (
 		Maybe
 	))(Json.assign(Maybe, {
-		Lift: (a: Deconstruct<A>) => Maybe.Just(a),
+		//Lift: (a: Deconstruct<A>) => Maybe.Just(a),
 	}))
 );
 export {_Maybe as Maybe}

@@ -18,17 +18,22 @@ var common_1 = require("../../ts-toolbelt/common");
 var ts_toolbelt_1 = require("../../ts-toolbelt");
 var Maybe = /** @class */ (function () {
     function Maybe() {
+        var _this = this;
         this.construct = Maybe._Nothing;
         this.a = undefined;
+        this.map = function (f) { return (_this.cata({
+            Just: function (a) { return Maybe.Just(f(a)); },
+            Nothing: function () { return Maybe.Nothing(); }
+        })); };
+        //append = (maybe: Maybe<A>): Maybe<A> => ();
+        //static mempty = Maybe.Nothing;
     }
-    Maybe.prototype.map = function (f) {
-        return 1;
-    };
     Maybe.Nothing = function () { return new Maybe._Nothing(); };
     Maybe.Just = function (a) { return (function (just) {
         if (just === void 0) { just = new Maybe._Just(); }
         return just;
     })(); };
+    Maybe.Lift = Maybe.Just;
     return Maybe;
 }());
 (function (Maybe) {
@@ -61,7 +66,7 @@ var Maybe = /** @class */ (function () {
     Maybe._Just = _Just;
 })(Maybe || (Maybe = {}));
 var _Maybe = function (a) { return ((function (Maybe) { return (Maybe); })(ts_toolbelt_1.Json.assign(Maybe, {
-    Lift: function (a) { return Maybe.Just(a); }
+//Lift: (a: Deconstruct<A>) => Maybe.Just(a),
 }))); };
 exports.Maybe = _Maybe;
 exports["default"] = Maybe;

@@ -21,3 +21,5 @@ export declare type Readonly<T extends any> = {
 export declare let S: <T extends string>(_: T) => T;
 export declare let N: <T extends number>(_: T) => T;
 export declare let T: <T extends Tuple>(..._: T) => T;
+export declare let cast: <T = any>(_?: T | undefined) => <U extends T>() => U;
+export declare let reinterpret: <T = any>(_?: T | undefined) => <U>() => U;

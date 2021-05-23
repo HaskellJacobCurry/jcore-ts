@@ -21,7 +21,9 @@ import {
 	Partial,
 	Record,
 	Required,
-	Readonly
+	Readonly,
+	cast,
+	reinterpret
 } from './common'
 
 export * from './Polymorph'
@@ -57,4 +59,6 @@ export {
 	Record,
 	Required,
 	Readonly,
+	cast,
+	reinterpret,
 }

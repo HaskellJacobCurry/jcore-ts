@@ -45,3 +45,6 @@ export type Readonly<
 export let S = <T extends String>(_: T) => <T>_;
 export let N = <T extends Number>(_: T) => <T>_;
 export let T = <T extends Tuple>(..._: T) => <T>_;
+
+export let cast = <T = any>(_?: T) => <U extends T>() => <U>_;
+export let reinterpret = <T = any>(_?: any) => <T>_;
