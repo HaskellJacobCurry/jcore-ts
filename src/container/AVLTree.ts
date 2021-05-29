@@ -8,6 +8,7 @@ import {
 import {trampoline} from '../common/trampoline'
 import {Stack} from './Stack'
 import {BinarySearchTreeAVL} from './BinarySearchTreeAVL'
+import {Array} from './Array'
 
 export class AVLTree<
 	TValue extends any = any,
@@ -33,6 +34,38 @@ export class AVLTree<
 				tree.setTree(value, key);
 			}
 		)();
+		while (stackBalanceCallback.size() != 0) {
+			stackBalanceCallback.pop()();
+		}
+		return this;
+	}
+
+	removeOne(value: TValue): this {
+		let stackBalanceCallback = new Stack<Function<[], void>>();
+		trampoline<[this | null, TKey], void>(
+			(remove, tree, key) => {
+				if (tree) {
+					stackBalanceCallback.push_(() => tree.balance());
+					let compareRes = tree.compareKey(key, tree.key);
+					if (compareRes == -1) {
+						return remove(tree.left, key);
+					} else if (compareRes == 1) {
+						return remove(tree.right, key);
+					} else if (1 < tree.values.length) {
+						new Array(tree.values).pop();
+					} else if (!tree.left) {
+						tree.transplantTree(tree.right);
+					} else if (!tree.right) {
+						tree.transplantTree(tree.left);
+					} else {
+						let successor = tree.right.findMinTree();
+						tree.key = successor.key;
+						tree.values = successor.values;
+						return remove(tree.right, tree.key);
+					}
+				}
+			}
+		)(this, this.getKey(value));
 		while (stackBalanceCallback.size() != 0) {
 			stackBalanceCallback.pop()();
 		}
@@ -69,7 +102,7 @@ export class AVLTree<
 		return this;
 	}
 
-	_remove_(value: TValue): this {
+	private _remove_(value: TValue): this {
 		(function remove(tree, key): void {
 			if (tree) {
 				let compareRes = tree.compareKey(key, tree.key);

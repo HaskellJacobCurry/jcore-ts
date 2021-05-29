@@ -18,6 +18,7 @@ var ts_toolbelt_1 = require("../ts-toolbelt");
 var trampoline_1 = require("../common/trampoline");
 var Stack_1 = require("./Stack");
 var BinarySearchTreeAVL_1 = require("./BinarySearchTreeAVL");
+var Array_1 = require("./Array");
 var AVLTree = /** @class */ (function (_super) {
     __extends(AVLTree, _super);
     function AVLTree() {
@@ -43,6 +44,40 @@ var AVLTree = /** @class */ (function (_super) {
             }
             tree.setTree(value, key);
         })();
+        while (stackBalanceCallback.size() != 0) {
+            stackBalanceCallback.pop()();
+        }
+        return this;
+    };
+    AVLTree.prototype.removeOne = function (value) {
+        var stackBalanceCallback = new Stack_1.Stack();
+        trampoline_1.trampoline(function (remove, tree, key) {
+            if (tree) {
+                stackBalanceCallback.push_(function () { return tree.balance(); });
+                var compareRes = tree.compareKey(key, tree.key);
+                if (compareRes == -1) {
+                    return remove(tree.left, key);
+                }
+                else if (compareRes == 1) {
+                    return remove(tree.right, key);
+                }
+                else if (1 < tree.values.length) {
+                    new Array_1.Array(tree.values).pop();
+                }
+                else if (!tree.left) {
+                    tree.transplantTree(tree.right);
+                }
+                else if (!tree.right) {
+                    tree.transplantTree(tree.left);
+                }
+                else {
+                    var successor = tree.right.findMinTree();
+                    tree.key = successor.key;
+                    tree.values = successor.values;
+                    return remove(tree.right, tree.key);
+                }
+            }
+        })(this, this.getKey(value));
         while (stackBalanceCallback.size() != 0) {
             stackBalanceCallback.pop()();
         }

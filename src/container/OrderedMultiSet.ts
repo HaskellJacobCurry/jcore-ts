@@ -30,5 +30,16 @@ export class OrderedMultiSet<
 	forEach(cb: (value: TValue) => void): this {
 		return this.inorderTraverse((key, values) => new Array(values).forEach(cb));
 	}
+
+	forEach_(cb: (value: TValue) => Bool): this {
+		return this.inorderTraverse((key, values) => {
+			for (let i = 0; i < values.length; i++) {
+				if (!cb(values[i])) {
+					return false;
+				}
+			}
+			return true;
+		});
+	}
 }
 export default OrderedMultiSet

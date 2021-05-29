@@ -2,7 +2,6 @@
 exports.__esModule = true;
 exports.BinarySearchTree = void 0;
 var ts_toolbelt_1 = require("../ts-toolbelt");
-var trampoline_1 = require("../common/trampoline");
 var Array_1 = require("./Array");
 var BinarySearchTree = /** @class */ (function () {
     function BinarySearchTree(compareKey, getKey) {
@@ -15,7 +14,7 @@ var BinarySearchTree = /** @class */ (function () {
         this.getKey = getKey;
     }
     BinarySearchTree.prototype.size = function () {
-        return trampoline_1.trampoline(function (size, tree, acc, cont) {
+        return ts_toolbelt_1.trampoline(function (size, tree, acc, cont) {
             if (acc === void 0) { acc = 0; }
             if (cont === void 0) { cont = function (acc) { return acc; }; }
             return (!tree ? cont(acc) : ((function (acc) { return (size(tree.left, acc, function (acc) { return (size(tree.right, acc, cont)); })); })(acc + tree.values.length)));
@@ -24,7 +23,7 @@ var BinarySearchTree = /** @class */ (function () {
     BinarySearchTree.prototype.insert_ = function (value) {
         var _this = this;
         var key = this.getKey(value);
-        trampoline_1.trampoline(function (insert, tree) {
+        ts_toolbelt_1.trampoline(function (insert, tree) {
             if (tree === void 0) { tree = _this; }
             if (!tree.isEmpty()) {
                 var compareRes = tree.compareKey(key, tree.key);
@@ -93,7 +92,7 @@ var BinarySearchTree = /** @class */ (function () {
     };
     BinarySearchTree.prototype.inorderTraverse = function (cb) {
         var _this = this;
-        trampoline_1.trampoline(function (inorderTraverse, tree, cont) {
+        ts_toolbelt_1.trampoline(function (inorderTraverse, tree, cont) {
             if (tree === void 0) { tree = _this; }
             if (cont === void 0) { cont = function () { }; }
             return ((function (cont) { return (tree.left !== null ?
@@ -106,7 +105,7 @@ var BinarySearchTree = /** @class */ (function () {
     };
     BinarySearchTree.prototype.preorderTraverse = function (cb) {
         var _this = this;
-        trampoline_1.trampoline(function (preorderTraverse, tree, cont) {
+        ts_toolbelt_1.trampoline(function (preorderTraverse, tree, cont) {
             if (tree === void 0) { tree = _this; }
             if (cont === void 0) { cont = function () { }; }
             return ((function (cont) { return (cb(tree.key, tree.values), cont()); })(function () { return ((function (cont) { return (tree.left !== null ?
@@ -148,14 +147,14 @@ var BinarySearchTree = /** @class */ (function () {
     };
     BinarySearchTree.prototype.findMinTree = function () {
         var _this = this;
-        return trampoline_1.trampoline(function (min, tree) {
+        return ts_toolbelt_1.trampoline(function (min, tree) {
             if (tree === void 0) { tree = _this; }
             return (tree.left !== null ? min(tree.left) : tree);
         })();
     };
     BinarySearchTree.prototype.findMaxTree = function () {
         var _this = this;
-        return trampoline_1.trampoline(function (max, tree) {
+        return ts_toolbelt_1.trampoline(function (max, tree) {
             if (tree === void 0) { tree = _this; }
             return (tree.right !== null ? max(tree.right) : tree);
         })();
@@ -165,7 +164,7 @@ var BinarySearchTree = /** @class */ (function () {
         if (this.right !== null) {
             return this.right.findMinTree();
         }
-        return trampoline_1.trampoline(function (successor, tree) {
+        return ts_toolbelt_1.trampoline(function (successor, tree) {
             if (tree === void 0) { tree = _this; }
             return (tree.parent !== null ? (tree.parent.left === tree ?
                 tree.parent :
@@ -178,7 +177,7 @@ var BinarySearchTree = /** @class */ (function () {
         if (this.left !== null) {
             return this.left.findMaxTree();
         }
-        return trampoline_1.trampoline(function (predecessor, tree) {
+        return ts_toolbelt_1.trampoline(function (predecessor, tree) {
             if (tree === void 0) { tree = _this; }
             return (tree.parent !== null ? (tree.parent.right === tree ?
                 tree.parent :
@@ -187,7 +186,7 @@ var BinarySearchTree = /** @class */ (function () {
         })();
     };
     BinarySearchTree.prototype.findTreeByKey = function (key) {
-        return trampoline_1.trampoline(function (findByKey, tree) { return (tree === null ?
+        return ts_toolbelt_1.trampoline(function (findByKey, tree) { return (tree === null ?
             tree :
             (function (compareRes) {
                 if (compareRes === void 0) { compareRes = tree.compareKey(key, tree.key); }

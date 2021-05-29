@@ -9,8 +9,17 @@ console.log(tree.get('lol'));
 console.log({size: tree.size()});
 console.log('inorderTraverse');
 tree.forEach((key, value) => console.log({key, value}));
+((i = 0) => {
+	tree.forEach_((k, v) => {
+		if (i++ < 2) {
+			console.log({k,v});
+			return true;
+		}
+		return false;
+	})
+})();
 
-tree.unset('hey').unset('yo').unset('lol');
+tree.unset('hey').unset('yo').unsetOne('lol');
 
 console.log({size: tree.size()});
 console.log('inorderTraverse');

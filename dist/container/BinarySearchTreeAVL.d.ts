@@ -11,6 +11,7 @@ export declare class BinarySearchTreeAVL<TValue extends any = any, TKey extends 
     size(): Int;
     insert_(value: TValue): this;
     insert(values: TValue[]): this;
+    removeOne(value: TValue): this;
     remove_(value: TValue): this;
     remove(values: TValue[]): this;
     findByKey(key: TKey): TValue[];
@@ -20,6 +21,7 @@ export declare class BinarySearchTreeAVL<TValue extends any = any, TKey extends 
     max(): TValue[];
     inorderTraverse(cb: BinarySearchTreeAVL.InorderTraverse.Callback<TKey, TValue>): this;
     preorderTraverse(cb: BinarySearchTreeAVL.PreorderTraverse.Callback<TKey, TValue>): this;
+    inorderTraverse_(cb: BinarySearchTreeAVL.InorderTraverse_.Callback<TKey, TValue>): this;
     protected setTree(value: TValue, key?: TKey): this;
     protected isSentinel(): Bool;
     protected isRoot(): Bool;
@@ -48,6 +50,11 @@ export declare namespace BinarySearchTreeAVL {
     namespace PreorderTraverse {
         interface Callback<TKey extends any, TValue extends any> {
             (key: TKey, values: TValue[]): any;
+        }
+    }
+    namespace InorderTraverse_ {
+        interface Callback<TKey extends any, TValue extends any> {
+            (key: TKey, values: TValue[]): Bool;
         }
     }
 }

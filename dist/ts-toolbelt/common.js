@@ -11,4 +11,4 @@ exports.T = function () {
     return _;
 };
 exports.cast = function (_) { return function () { return _; }; };
-exports.reinterpret = function (_) { return function () { return _; }; };
+exports.reinterpret = function (_) { return _; };

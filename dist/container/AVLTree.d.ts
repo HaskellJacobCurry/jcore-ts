@@ -4,8 +4,9 @@ export declare class AVLTree<TValue extends any = any, TKey extends any = TValue
     protected height: Int;
     protected static maxHeightDiff: Int;
     insert_(value: TValue): this;
+    removeOne(value: TValue): this;
     remove_(value: TValue): this;
-    _remove_(value: TValue): this;
+    private _remove_;
     protected makeSubtree(): this;
     protected balance(): void;
     protected rotateLeft(): void;

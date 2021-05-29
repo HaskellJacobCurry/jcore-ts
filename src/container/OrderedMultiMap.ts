@@ -4,6 +4,7 @@ import {
 	Compare,
 	Any,
 	Bool,
+	reinterpret,
 } from '../ts-toolbelt'
 
 export class OrderedMultiMap<
@@ -24,6 +25,10 @@ export class OrderedMultiMap<
 		return this.remove_(this.makeValue(key));
 	}
 
+	unsetOne(key: TKey): this {
+		return this.removeOne(this.makeValue(key));
+	}
+
 	get(key: TKey): TValue[] {
 		return new Array(this.findByKey(key)).map(({value}) => value).unlift();
 	}
@@ -36,8 +41,20 @@ export class OrderedMultiMap<
 		return this.inorderTraverse((key, values) => new Array(values).forEach(({value}) => cb(key, value)));
 	}
 
+	forEach_(cb: (key: TKey, value: TValue) => Bool): this {
+		return this.inorderTraverse((_, values) => {
+			for (let i = 0; i < values.length; i++) {
+				let {key, value} = values[i];
+				if (!cb(key, value)) {
+					return false;
+				}
+			}
+			return true;
+		});
+	}
+
 	private makeValue(key: TKey): OrderedMultiMap.Value<TKey, TValue> {
-		return {key, value: <any>undefined};
+		return {key, value: reinterpret<TValue>()};
 	}
 }
 export namespace OrderedMultiMap {

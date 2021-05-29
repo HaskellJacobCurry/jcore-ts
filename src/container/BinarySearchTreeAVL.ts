@@ -4,8 +4,9 @@ import {
 	Compare,
 	Any,
 	Bool,
+	Trampoline,
+	trampoline,
 } from '../ts-toolbelt'
-import {trampoline} from '../common/trampoline'
 import {Array} from './Array'
 
 export class BinarySearchTreeAVL<
@@ -72,6 +73,33 @@ export class BinarySearchTreeAVL<
 		return new Array(values).foldl((acc, value) => acc.insert_(value), this);
 	}
 
+	removeOne(value: TValue): this {
+		trampoline<[this | null, TKey], void>(
+			(remove, tree, key) => {
+				if (tree) {
+					let compareRes = tree.compareKey(key, tree.key);
+					if (compareRes == -1) {
+						return remove(tree.left, key);
+					} else if (compareRes == 1) {
+						return remove(tree.right, key);
+					} else if (1 < tree.values.length) {
+						new Array(tree.values).pop();
+					} else if (!tree.left) {
+						tree.transplantTree(tree.right);
+					} else if (!tree.right) {
+						tree.transplantTree(tree.left);
+					} else {
+						let successor = tree.right.findMinTree();
+						tree.key = successor.key;
+						tree.values = successor.values;
+						return remove(tree.right, tree.key);
+					}
+				}
+			}
+		)(this, this.getKey(value));
+		return this;
+	}
+
 	remove_(value: TValue): this {
 		trampoline<[this | null, TKey], void>(
 			(remove, tree, key) => {
@@ -131,7 +159,7 @@ export class BinarySearchTreeAVL<
 	}
 
 	inorderTraverse(cb: BinarySearchTreeAVL.InorderTraverse.Callback<TKey, TValue>): this {
-		trampoline<[this?, Function<[], void>?], void>(
+		trampoline<[this?, Trampoline.Cont<void>?], void>(
 			(inorderTraverse, tree = this, cont = () => {}) => (
 				(cont => (
 					tree.left !== null ?
@@ -142,7 +170,7 @@ export class BinarySearchTreeAVL<
 						if (!tree.isEmpty()) {
 							cb(tree.key, tree.values);
 						}
-						cont();
+						return cont();
 					})(() => (
 						tree.right !== null ?
 						inorderTraverse(tree.right, cont) :
@@ -155,13 +183,13 @@ export class BinarySearchTreeAVL<
 	}
 
 	preorderTraverse(cb: BinarySearchTreeAVL.PreorderTraverse.Callback<TKey, TValue>): this {
-		trampoline<[this?, Function<[], void>?], void>(
+		trampoline<[this?, Trampoline.Cont<void>?], void>(
 			(preorderTraverse, tree = this, cont = () => {}) => (
 				(cont => {
 					if (!tree.isEmpty()) {
 						cb(tree.key, tree.values);
 					}
-					cont();
+					return cont();
 				})(() => (
 					(cont => (
 						tree.left !== null ?
@@ -173,6 +201,34 @@ export class BinarySearchTreeAVL<
 						cont()
 					))
 				))
+			)
+		)();
+		return this;
+	}
+
+	inorderTraverse_(cb: BinarySearchTreeAVL.InorderTraverse_.Callback<TKey, TValue>): this {
+		trampoline<[this?, Trampoline.Cont<void>?], void>(
+			(inorderTraverse, tree = this, cont = () => {}) => (
+				((finalCont = cont) => (
+					(cont => (
+						tree.left !== null ?
+						inorderTraverse(tree.left, cont) : 
+						cont()
+					))(() => (
+						(cont => {
+							if (!tree.isEmpty()) {
+								if (!cb(tree.key, tree.values)) {
+									return finalCont();
+								}
+							}
+							return cont();
+						})(() => (
+							tree.right !== null ?
+							inorderTraverse(tree.right, cont) :
+							cont()
+						))
+					))
+				))()
 			)
 		)();
 		return this;
@@ -339,6 +395,15 @@ export namespace BinarySearchTreeAVL {
 			TValue extends any
 		> {
 			(key: TKey, values: TValue[]): any;
+		}
+	}
+
+	export namespace InorderTraverse_ {
+		export interface Callback<
+			TKey extends any,
+			TValue extends any
+		> {
+			(key: TKey, values: TValue[]): Bool;
 		}
 	}
 }
