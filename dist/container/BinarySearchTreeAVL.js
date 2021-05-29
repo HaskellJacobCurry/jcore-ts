@@ -59,7 +59,7 @@ var BinarySearchTreeAVL = /** @class */ (function () {
     BinarySearchTreeAVL.prototype.insert = function (values) {
         return new Array_1.Array(values).foldl(function (acc, value) { return acc.insert_(value); }, this);
     };
-    BinarySearchTreeAVL.prototype.removeOne = function (value) {
+    BinarySearchTreeAVL.prototype.removeOne_ = function (value) {
         ts_toolbelt_1.trampoline(function (remove, tree, key) {
             if (tree) {
                 var compareRes = tree.compareKey(key, tree.key);
@@ -87,6 +87,9 @@ var BinarySearchTreeAVL = /** @class */ (function () {
             }
         })(this, this.getKey(value));
         return this;
+    };
+    BinarySearchTreeAVL.prototype.removeOne = function (values) {
+        return new Array_1.Array(values).foldl(function (acc, value) { return acc.removeOne_(value); }, this);
     };
     BinarySearchTreeAVL.prototype.remove_ = function (value) {
         ts_toolbelt_1.trampoline(function (remove, tree, key) {
@@ -140,6 +143,12 @@ var BinarySearchTreeAVL = /** @class */ (function () {
             throw new Error('BinarySearchTreeAVL.prototype.max');
         }
         return new Array_1.Array(values).slice().unlift();
+    };
+    BinarySearchTreeAVL.prototype.removeMin = function () {
+        return this.removeOne(this.min());
+    };
+    BinarySearchTreeAVL.prototype.removeMax = function () {
+        return this.removeOne(this.max());
     };
     BinarySearchTreeAVL.prototype.inorderTraverse = function (cb) {
         var _this = this;

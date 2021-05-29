@@ -30,7 +30,7 @@ var OrderedMultiMap = /** @class */ (function (_super) {
         return this.remove_(this.makeValue(key));
     };
     OrderedMultiMap.prototype.unsetOne = function (key) {
-        return this.removeOne(this.makeValue(key));
+        return this.removeOne_(this.makeValue(key));
     };
     OrderedMultiMap.prototype.get = function (key) {
         return new Array_1.Array(this.findByKey(key)).map(function (_a) {

@@ -73,7 +73,7 @@ export class BinarySearchTreeAVL<
 		return new Array(values).foldl((acc, value) => acc.insert_(value), this);
 	}
 
-	removeOne(value: TValue): this {
+	removeOne_(value: TValue): this {
 		trampoline<[this | null, TKey], void>(
 			(remove, tree, key) => {
 				if (tree) {
@@ -98,6 +98,10 @@ export class BinarySearchTreeAVL<
 			}
 		)(this, this.getKey(value));
 		return this;
+	}
+
+	removeOne(values: TValue[]): this {
+		return new Array(values).foldl((acc, value) => acc.removeOne_(value), this);
 	}
 
 	remove_(value: TValue): this {
@@ -156,6 +160,14 @@ export class BinarySearchTreeAVL<
 			throw new Error('BinarySearchTreeAVL.prototype.max');
 		}
 		return new Array(values).slice().unlift();
+	}
+
+	removeMin(): this {
+		return this.removeOne(this.min());
+	}
+
+	removeMax(): this {
+		return this.removeOne(this.max());
 	}
 
 	inorderTraverse(cb: BinarySearchTreeAVL.InorderTraverse.Callback<TKey, TValue>): this {

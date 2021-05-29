@@ -16,8 +16,8 @@ tree.forEach_(v => {
 	}
 	return false;
 });
-console.log('remove 1*3, 33*1, 44*1');
-tree.removeOne(1).removeOne(1).removeOne(1).removeOne(33).removeOne(44);
+console.log('remove 1*3, max, min, min');
+tree.removeOne_(1).removeOne_(1).removeOne_(1).removeMax().removeMin().removeMin();
 console.log({size: tree.size()});
 tree.forEach(v => console.log({v}))
 

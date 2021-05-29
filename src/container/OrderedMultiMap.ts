@@ -26,7 +26,7 @@ export class OrderedMultiMap<
 	}
 
 	unsetOne(key: TKey): this {
-		return this.removeOne(this.makeValue(key));
+		return this.removeOne_(this.makeValue(key));
 	}
 
 	get(key: TKey): TValue[] {

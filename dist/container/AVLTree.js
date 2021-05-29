@@ -49,7 +49,7 @@ var AVLTree = /** @class */ (function (_super) {
         }
         return this;
     };
-    AVLTree.prototype.removeOne = function (value) {
+    AVLTree.prototype.removeOne_ = function (value) {
         var stackBalanceCallback = new Stack_1.Stack();
         trampoline_1.trampoline(function (remove, tree, key) {
             if (tree) {

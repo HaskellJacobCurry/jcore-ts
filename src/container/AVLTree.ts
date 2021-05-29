@@ -40,7 +40,7 @@ export class AVLTree<
 		return this;
 	}
 
-	removeOne(value: TValue): this {
+	removeOne_(value: TValue): this {
 		let stackBalanceCallback = new Stack<Function<[], void>>();
 		trampoline<[this | null, TKey], void>(
 			(remove, tree, key) => {

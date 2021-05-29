@@ -11,7 +11,8 @@ export declare class BinarySearchTreeAVL<TValue extends any = any, TKey extends 
     size(): Int;
     insert_(value: TValue): this;
     insert(values: TValue[]): this;
-    removeOne(value: TValue): this;
+    removeOne_(value: TValue): this;
+    removeOne(values: TValue[]): this;
     remove_(value: TValue): this;
     remove(values: TValue[]): this;
     findByKey(key: TKey): TValue[];
@@ -19,6 +20,8 @@ export declare class BinarySearchTreeAVL<TValue extends any = any, TKey extends 
     min(): TValue[];
     _max(): TValue[];
     max(): TValue[];
+    removeMin(): this;
+    removeMax(): this;
     inorderTraverse(cb: BinarySearchTreeAVL.InorderTraverse.Callback<TKey, TValue>): this;
     preorderTraverse(cb: BinarySearchTreeAVL.PreorderTraverse.Callback<TKey, TValue>): this;
     inorderTraverse_(cb: BinarySearchTreeAVL.InorderTraverse_.Callback<TKey, TValue>): this;
