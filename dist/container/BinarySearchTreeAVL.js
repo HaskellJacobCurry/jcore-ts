@@ -145,10 +145,12 @@ var BinarySearchTreeAVL = /** @class */ (function () {
         return new Array_1.Array(values).slice().unlift();
     };
     BinarySearchTreeAVL.prototype.removeMin = function () {
-        return this.removeOne(this.min());
+        var mins = this.min();
+        return this.removeOne(mins.length == 0 ? mins : [mins[0]]);
     };
     BinarySearchTreeAVL.prototype.removeMax = function () {
-        return this.removeOne(this.max());
+        var maxs = this.max();
+        return this.removeOne(maxs.length == 0 ? maxs : [maxs[0]]);
     };
     BinarySearchTreeAVL.prototype.inorderTraverse = function (cb) {
         var _this = this;

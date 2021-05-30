@@ -1,6 +1,6 @@
 import {
-	Construct,
-	polymorph
+	reinterpret,
+	cast,
 } from '../../dependency/jcore/dist/ts-toolbelt'
 
 interface Bool {
@@ -8,29 +8,23 @@ interface Bool {
 	and: <TBool extends IBool>(_: TBool) => (_: TBool) => TBool;
 	or: <TBool extends IBool>(_: TBool) => (_: TBool) => TBool;
 }
-namespace Bool {
-	export let not: Bool['not'] = bool => polymorph(bool.not());
-
-	export let and: Bool['and'] = bool0 => bool1 => polymorph(bool0.and(bool1));
-
-	export let or: Bool['and'] = bool0 => bool1 => polymorph(bool0.or(bool1));
-}
+let Bool: Bool = {
+	not: bool0 => cast(bool0.not())(),
+	and: bool0 => bool1 => cast(bool0.and(bool1))(),
+	or: bool0 => bool1 => cast(bool0.or(bool1))(),
+};
 export {Bool}
 
-interface IBool {
-	construct: CBool<IBool>;
-	cata: IBool.Cata;
+export interface IBool {
+	cata: <T, U>(
+		fs: {
+			False: () => T;
+			True: () => U;
+		}
+	) => T | U;
 	not(): IBool;
-	and(_: IBool): IBool;
-	or(_: IBool): IBool;
+	and(other: IBool): IBool;
+	or(other: IBool): IBool;
 }
-namespace IBool {
-	export interface Cata {
-		<T, U>(fs: {
-			True: () => T;
-			False: () => U;
-		}): T | U;
-	}
-}
-export {IBool}
-export interface CBool<TBool extends IBool = IBool> extends Construct<TBool> {}
+
+export default Bool

@@ -1,0 +1,11 @@
+import { Function } from '../ts-toolbelt/Function';
+declare function pipe(): <T>(_: T) => T;
+declare function pipe<TFunc extends Function>(f: TFunc): TFunc;
+declare function pipe<T0, T1, T2>(f0: (_: T0) => T1, f1: (_: T1) => T2): (_: T0) => T2;
+declare function pipe<T0, T1, T2, T3>(f0: (_: T0) => T1, f1: (_: T1) => T2, f2: (_: T2) => T3): (_: T0) => T3;
+declare function pipe<T0, T1, T2, T3, T4>(f0: (_: T0) => T1, f1: (_: T1) => T2, f2: (_: T2) => T3, f3: (_: T3) => T4): (_: T0) => T4;
+declare function pipe<T0, T1, T2, T3, T4, T5>(f0: (_: T0) => T1, f1: (_: T1) => T2, f2: (_: T2) => T3, f3: (_: T3) => T4, f4: (_: T4) => T5): (_: T0) => T5;
+declare function pipe<T0, T1, T2, T3, T4, T5, T6>(f0: (_: T0) => T1, f1: (_: T1) => T2, f2: (_: T2) => T3, f3: (_: T3) => T4, f4: (_: T4) => T5, f5: (_: T5) => T6): (_: T0) => T6;
+declare function pipe(...fs: Function[]): Function;
+export default pipe;
+export { pipe };

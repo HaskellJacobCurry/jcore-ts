@@ -1,28 +1,19 @@
+import {IString} from './IString'
+import {IShow} from './Show'
 import {
 	Json
 } from '../../dependency/jcore/dist/ts-toolbelt'
-import {IShowable} from './IShowable'
-import {IString} from './IString'
 
-class String implements IShowable, IString {
-	construct = String;
-	_: string = '';
+export let Show: IShow<String> = ({
+	show: string => `"${string.toString()}"`,
+});
 
-	show(): String {
-		return this;
+export interface String extends IString {}
+export let String = Json.assign(
+	(value: string): String => ({
+		toString: () => value,
+	}), {
+		Show
 	}
-
-	toString(): string {
-		return this._;
-	}
-}
-type _String = String;
-let _String = (
-	(String => (
-		String
-	))(Json.assign(String, {
-		Lift: (_: string): String => ((string = new String()) => (string._ = _, string))()
-	}))
 );
-export {_String as String}
-export default _String
+export default String

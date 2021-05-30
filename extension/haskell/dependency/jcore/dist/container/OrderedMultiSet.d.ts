@@ -6,5 +6,6 @@ export declare class OrderedMultiSet<TValue extends any = any> extends AVLTree<T
     add(values: TValue[]): this;
     contain(value: TValue): Bool;
     forEach(cb: (value: TValue) => void): this;
+    forEach_(cb: (value: TValue) => Bool): this;
 }
 export default OrderedMultiSet;

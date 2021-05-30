@@ -1,0 +1,11 @@
+import { Function } from '../ts-toolbelt/Function';
+declare function compose(): <T>(_: T) => T;
+declare function compose<TFunc extends Function>(f: TFunc): TFunc;
+declare function compose<T0, T1, T2>(f1: (_: T1) => T2, f0: (_: T0) => T1): (_: T0) => T2;
+declare function compose<T0, T1, T2, T3>(f2: (_: T2) => T3, f1: (_: T1) => T2, f0: (_: T0) => T1): (_: T0) => T3;
+declare function compose<T0, T1, T2, T3, T4>(f3: (_: T3) => T4, f2: (_: T2) => T3, f1: (_: T1) => T2, f0: (_: T0) => T1): (_: T0) => T4;
+declare function compose<T0, T1, T2, T3, T4, T5>(f4: (_: T4) => T5, f3: (_: T3) => T4, f2: (_: T2) => T3, f1: (_: T1) => T2, f0: (_: T0) => T1): (_: T0) => T5;
+declare function compose<T0, T1, T2, T3, T4, T5, T6>(f5: (_: T5) => T6, f4: (_: T4) => T5, f3: (_: T3) => T4, f2: (_: T2) => T3, f1: (_: T1) => T2, f0: (_: T0) => T1): (_: T0) => T6;
+declare function compose(...fs: Function[]): Function;
+export default compose;
+export { compose };

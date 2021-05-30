@@ -2,10 +2,10 @@
 exports.__esModule = true;
 exports.Bool = void 0;
 var ts_toolbelt_1 = require("../../dependency/jcore/dist/ts-toolbelt");
-var Bool;
-(function (Bool) {
-    Bool.not = function (bool) { return ts_toolbelt_1.polymorph(bool.not()); };
-    Bool.and = function (bool0) { return function (bool1) { return ts_toolbelt_1.polymorph(bool0.and(bool1)); }; };
-    Bool.or = function (bool0) { return function (bool1) { return ts_toolbelt_1.polymorph(bool0.or(bool1)); }; };
-})(Bool || (Bool = {}));
+var Bool = {
+    not: function (bool0) { return ts_toolbelt_1.cast(bool0.not())(); },
+    and: function (bool0) { return function (bool1) { return ts_toolbelt_1.cast(bool0.and(bool1))(); }; },
+    or: function (bool0) { return function (bool1) { return ts_toolbelt_1.cast(bool0.or(bool1))(); }; }
+};
 exports.Bool = Bool;
+exports["default"] = Bool;

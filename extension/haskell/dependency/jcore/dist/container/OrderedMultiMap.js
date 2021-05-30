@@ -29,6 +29,9 @@ var OrderedMultiMap = /** @class */ (function (_super) {
     OrderedMultiMap.prototype.unset = function (key) {
         return this.remove_(this.makeValue(key));
     };
+    OrderedMultiMap.prototype.unsetOne = function (key) {
+        return this.removeOne_(this.makeValue(key));
+    };
     OrderedMultiMap.prototype.get = function (key) {
         return new Array_1.Array(this.findByKey(key)).map(function (_a) {
             var value = _a.value;
@@ -44,8 +47,19 @@ var OrderedMultiMap = /** @class */ (function (_super) {
             return cb(key, value);
         }); });
     };
+    OrderedMultiMap.prototype.forEach_ = function (cb) {
+        return this.inorderTraverse(function (_, values) {
+            for (var i = 0; i < values.length; i++) {
+                var _a = values[i], key = _a.key, value = _a.value;
+                if (!cb(key, value)) {
+                    return false;
+                }
+            }
+            return true;
+        });
+    };
     OrderedMultiMap.prototype.makeValue = function (key) {
-        return { key: key, value: undefined };
+        return { key: key, value: ts_toolbelt_1.reinterpret() };
     };
     return OrderedMultiMap;
 }(AVLTree_1.AVLTree));

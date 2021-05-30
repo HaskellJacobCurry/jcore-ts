@@ -1,110 +1,110 @@
-import {ISemigroup} from './ISemigroup'
-import {IEq} from './IEq'
 import {IOrdering} from './IOrdering'
-import {IShowable} from './IShowable'
+import {Eq as IEq} from './Eq'
+import {Ord as IOrd} from './Ord'
+import {IShow} from './Show'
 import {String} from './String'
 import {Bool} from './Bool'
-import {S} from '../../dependency/jcore/dist/ts-toolbelt/common'
 import {
 	Json,
+	Function,
 } from '../../dependency/jcore/dist/ts-toolbelt'
 
-abstract class Ordering implements IShowable, ISemigroup, IEq, IOrdering {
-	construct = Ordering._LT;
-	abstract cata: Ordering.Cata;
-	static LT = (): Ordering => new Ordering._LT();
-	static GT = (): Ordering => new Ordering._GT();
-	static EQ = (): Ordering => new Ordering._EQ();
-
-	show = (): String => (
-		this.cata({
-			LT: () => String.Lift('LT'),
-			GT: () => String.Lift('GT'),
-			EQ: () => String.Lift('EQ'),
-		})
-	);
-
-	append = (ordering: Ordering): Ordering => (
-		this.cata({
-			LT: () => this,
-			GT: () => this,
-			EQ: () => ordering,
-		})
-	);
-
-	eq = (ordering: Ordering): Bool => (
-		this.cata({
-			LT: () => (
-				ordering.cata({
-					LT: () => Bool.True(),
-					GT: () => Bool.False(),
-					EQ: () => Bool.False(),
-				})
-			),
-			GT: () => (
-				ordering.cata({
-					LT: () => Bool.False(),
-					GT: () => Bool.True(),
-					EQ: () => Bool.False(),
-				})
-			),
-			EQ: () => (
-				ordering.cata({
-					LT: () => Bool.False(),
-					GT: () => Bool.False(),
-					EQ: () => Bool.True(),
-				})
-			)
-		})
-	);
+export interface LT {
+	readonly tag: 'LT';
 }
-namespace Ordering {
-	export namespace Tag {
-		export let LT = S('LT');
-		export let GT = S('GT');
-		export let EQ = S('EQ');
-	}
-
-	export interface Cata {
-		<T, U, K>(fs: {
-			LT: () => T;
-			GT: () => U;
-			EQ: () => K;
-		}): T | U | K;
-	}
-
-	export class _LT extends Ordering {
-		tag = Tag.LT;
-		cata: Cata = fs => fs[this.tag]();
-	}
-
-	export class _GT extends Ordering {
-		tag = Tag.GT;
-		cata: Cata = fs => fs[this.tag]();
-	}
-
-	export class _EQ extends Ordering {
-		tag = Tag.EQ;
-		cata: Cata = fs => fs[this.tag]();
-	}
+export interface EQ {
+	readonly tag: 'EQ';
 }
-type Ordering_ = Ordering;
-namespace Ordering_ {
-	export type Eq = (_: Ordering) => (_: Ordering) => Bool;
-	export type Invert = (_: Ordering) => Ordering;
+export interface GT {
+	readonly tag: 'GT';
 }
-let Ordering_ = (
-	(Ordering => (
-		Ordering
-	))(Json.assign(Ordering, {
-		invert: <Ordering_.Invert>(ordering => (
-			ordering.cata({
-				LT: () => Ordering.LT(),
-				GT: () => Ordering.LT(),
-				EQ: () => ordering,
-			})
-		)),
-	}))
+
+export let LT: Ordering = Json.assign(
+	<LT>{tag: 'LT'}, <IOrdering>{
+		cata: fs => fs['LT'](),
+	}
 );
-export {Ordering_ as Ordering}
-export default Ordering_
+export let EQ: Ordering = Json.assign(
+	<EQ>{tag: 'EQ'}, <IOrdering>{
+		cata: fs => fs['EQ'](),
+	}
+);
+export let GT: Ordering = Json.assign(
+	<GT>{tag: 'GT'}, <IOrdering>{
+		cata: fs => fs['GT'](),
+	}
+);
+
+export let Show: IShow<Ordering> = ({
+	show: ordering => String(ordering.tag),
+});
+
+export let Eq: IEq<Ordering> & IEq.Ext<Ordering> = (
+	(Eq => (
+		Json.assign(Eq, IEq.Ext(Eq))
+	))(<IEq<Ordering>>{
+		eq: ordering0 => ordering1 => Bool(ordering0.tag === ordering1.tag),
+	})
+);
+
+export let Ord: IOrd<Ordering> & IOrd.Ext<Ordering> = (
+	(Ord => (
+		Json.assign(Ord, IOrd.Ext(Ord))
+	))(Function.define<IOrd<Ordering>>(Ord => ({
+		...Eq,
+		compare: ordering0 => ordering1 => (
+			ordering0.cata({
+				LT: () => (
+					ordering1.cata({
+						LT: () => EQ,
+						EQ: () => LT,
+						GT: () => LT,
+					})
+				),
+				EQ: () => (
+					ordering1.cata({
+						LT: () => GT,
+						EQ: () => EQ,
+						GT: () => LT,
+					})
+				),
+				GT: () => (
+					ordering1.cata({
+						LT: () => GT,
+						EQ: () => GT,
+						GT: () => EQ,
+					})
+				)
+			})
+		),
+		lt: ordering0 => ordering1 => (
+			Ord().compare(ordering0)(ordering1).cata({
+				LT: () => Bool.True,
+				EQ: () => Bool.False,
+				GT: () => Bool.False,
+			})
+		),
+	})))
+);
+
+interface COrdering {
+	invert: (_: Ordering) => Ordering;
+}
+export let invert: COrdering['invert'] = ordering => (
+	ordering.cata({
+		LT: () => GT,
+		EQ: () => EQ,
+		GT: () => LT,
+	})
+);
+
+export type Ordering = IOrdering & (LT | EQ | GT);
+export let Ordering = {
+	LT,
+	EQ,
+	GT,
+	Show,
+	Eq,
+	Ord,
+	invert,
+};

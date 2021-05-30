@@ -2,7 +2,7 @@ let {OrderedMultiSet} = require('../../../dist/container/OrderedMultiSet');
 
 let tree = (
 	new OrderedMultiSet((a, b) => a < b ? 1 : b < a ? -1 : 0)
-		.add([33, 42, 35, 45, 1, 1, 33, 1, 2, 9, 44, 43, 34])
+		.add([33, 42, 35, 45, 1, 1, 33, 1, 2, 9, 44, 43, 34, 45])
 );
 
 console.log(tree.findByKey(2));
@@ -17,7 +17,7 @@ tree.forEach_(v => {
 	return false;
 });
 console.log('remove 1*3, max, min, min');
-tree.removeOne_(1).removeOne_(1).removeOne_(1).removeMax().removeMin().removeMin();
+tree.removeOne_(1).removeOne_(1).removeOne_(1).removeMax().removeMin();
 console.log({size: tree.size()});
 tree.forEach(v => console.log({v}))
 

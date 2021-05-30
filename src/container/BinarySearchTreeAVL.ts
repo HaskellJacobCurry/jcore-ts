@@ -163,11 +163,13 @@ export class BinarySearchTreeAVL<
 	}
 
 	removeMin(): this {
-		return this.removeOne(this.min());
+		let mins = this.min();
+		return this.removeOne(mins.length == 0 ? mins : [mins[0]]);
 	}
 
 	removeMax(): this {
-		return this.removeOne(this.max());
+		let maxs = this.max();
+		return this.removeOne(maxs.length == 0 ? maxs : [maxs[0]]);
 	}
 
 	inorderTraverse(cb: BinarySearchTreeAVL.InorderTraverse.Callback<TKey, TValue>): this {

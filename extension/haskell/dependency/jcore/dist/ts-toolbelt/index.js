@@ -10,7 +10,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 exports.__esModule = true;
-exports.cast = exports.StrictWeakOrdering = exports.Mutex = exports.Semaphore = exports.PromiseCapability = exports.Promise = exports.trampoline = exports.Trampoline = exports.Tuple = exports.Json = exports.strictCurry = exports.StrictCurry = exports.curry = exports.Curry = exports.Function = exports.Number = exports.Int = exports.Any = void 0;
+exports.reinterpret = exports.cast = exports.StrictWeakOrdering = exports.Mutex = exports.Semaphore = exports.PromiseCapability = exports.Promise = exports.trampoline = exports.Trampoline = exports.Tuple = exports.Json = exports.strictCurry = exports.StrictCurry = exports.curry = exports.Curry = exports.Function = exports.Number = exports.Int = exports.Any = void 0;
 var Any_1 = require("./Any");
 exports.Any = Any_1.Any;
 var Int_1 = require("./Int");
@@ -43,5 +43,6 @@ var StrictWeakOrdering_1 = require("./StrictWeakOrdering");
 exports.StrictWeakOrdering = StrictWeakOrdering_1.StrictWeakOrdering;
 var common_1 = require("./common");
 exports.cast = common_1.cast;
+exports.reinterpret = common_1.reinterpret;
 __exportStar(require("./Polymorph"), exports);
 __exportStar(require("./Iterator"), exports);

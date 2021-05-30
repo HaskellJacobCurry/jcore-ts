@@ -1,0 +1,9 @@
+{
+   "compilerOptions": {
+     "outDir": "dist",
+     "strict": true,
+     "declaration": true,
+     "lib": ["dom", "es6"]
+   },
+   "include": ["src"]
+ }

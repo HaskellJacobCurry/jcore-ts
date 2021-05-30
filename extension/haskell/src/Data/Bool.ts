@@ -1,80 +1,49 @@
-import {IBool, Bool as Bool_} from './IBool'
-import {IShowable} from './IShowable'
+import {IBool} from './IBool'
+import {IShow} from './Show'
 import {String} from './String'
-import {S} from '../../dependency/jcore/dist/ts-toolbelt/common'
 import {
-	Construct,
-	Deconstruct,
 	Json,
+	reinterpret,
 } from '../../dependency/jcore/dist/ts-toolbelt'
 
-abstract class Bool implements IBool, IShowable {
-	construct = Bool._True;
-	abstract cata: Bool.Cata;
-	static True = (): Bool => new Bool._True();
-	static False = (): Bool => new Bool._False();
-
-	show = (): String => (
-		this.cata({
-			True: () => String.Lift('True'),
-			False: () => String.Lift('False'),
-		})
-	);
-
-	not = (): Bool => (
-		this.cata({
-			True: () => Bool.False(),
-			False: () => Bool.True(),
-		})
-	);
-
-	and = (bool: Bool): Bool => (
-		this.cata({
-			True: () => bool,
-			False: () => this,
-		})
-	);
-
-	or = (bool: Bool): Bool => (
-		this.cata({
-			True: () => this,
-			False: () => bool,
-		})
-	);
+export interface False {
+	readonly tag: 'False';
 }
-namespace Bool {
-	export namespace Tag {
-		export let True = S('True');
-		export let False = S('False');
-	}
-
-	export interface Cata {
-		<T, U>(fs: {
-			True: () => T;
-			False: () => U;
-		}): T | U;
-	}
-
-	export class _True extends Bool {
-		tag = Tag.True;
-		cata: Cata = fs => fs[this.tag]();
-	}
-
-	export class _False extends Bool {
-		tag = Tag.False;
-		cata: Cata = fs => fs[this.tag]();
-	}
+export interface True {
+	readonly tag: 'True';
 }
-type _Bool = Bool;
-let _Bool = (
-	(Bool => (
-		Bool
-	))(Json.assign(Bool, {
-		Lift: (_: boolean) => _ ? Bool.True() : Bool.False(),
-		not: (bool: Bool) => Bool_.not(bool),
-		and: (bool0: Bool) => (bool1: Bool) => Bool_.and(bool0)(bool1),
-		or: (bool0: Bool) => (bool1: Bool) => Bool_.or(bool0)(bool1),
-	}))
+
+export let False = Json.assign(
+	<False>{tag: 'False'}, <IBool>{
+		cata: fs => fs['False'](),
+		not: () => True,
+		and: other => False,
+		or: other => other,
+	}
+) as Bool;
+export let True = Json.assign(
+	<True>{tag: 'True'}, <IBool>{
+		cata: fs => fs['True'](),
+		not: () => False,
+		and: other => other,
+		or: other => True,
+	}
+) as Bool;
+
+export let Show: IShow<Bool> = ({
+	show: bool => (
+		bool.cata({
+			True: () => String('True'),
+			False: () => String('False'),
+		})
+	)
+});
+
+export type Bool = IBool & (False | True);
+export let Bool = Json.assign(
+	(value: boolean) => value ? True : False, {
+		False,
+		True,
+		Show,
+	}
 );
-export {_Bool as Bool}
-export default _Bool

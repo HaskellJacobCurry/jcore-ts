@@ -19,4 +19,4 @@ import { StrictWeakOrdering } from './StrictWeakOrdering';
 import { Cast, Partial, Record, Required, Readonly, cast, reinterpret } from './common';
 export * from './Polymorph';
 export * from './Iterator';
-export { Any, Bool, Int, Number, Function, Compare, Construct, Deconstruct, Constructible, Curry, curry, StrictCurry, strictCurry, String, Json, Tuple, Trampoline, trampoline, PromisedTrampoline, Promise, Promisable, PromiseCapability, Semaphore, Mutex, StrictWeakOrdering, Cast, Partial, Record, Required, Readonly, cast, reinterpret};
+export { Any, Bool, Int, Number, Function, Compare, Construct, Deconstruct, Constructible, Curry, curry, StrictCurry, strictCurry, String, Json, Tuple, Trampoline, trampoline, PromisedTrampoline, Promise, Promisable, PromiseCapability, Semaphore, Mutex, StrictWeakOrdering, Cast, Partial, Record, Required, Readonly, cast, reinterpret, };

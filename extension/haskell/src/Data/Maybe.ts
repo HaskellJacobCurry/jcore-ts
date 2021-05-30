@@ -1,90 +1,90 @@
-import {IBase, ctor} from '../IBase'
-import {IFunctor} from './IFunctor'
-import {ISemigroup} from './ISemigroup'
-import {IMonoid} from './IMonoid'
-import {S} from '../../dependency/jcore/dist/ts-toolbelt/common'
-import {Int} from './Int'
+import {IShow} from './Show'
+import {Functor1} from './Functor'
+import {ISemigroup} from './Semigroup'
+import {IMonoid} from './Monoid'
+import {String} from './String'
 import {
-	Construct,
-	Deconstruct,
 	Json,
-	Function,
-	cast,
-	reinterpret
+	reinterpret,
 } from '../../dependency/jcore/dist/ts-toolbelt'
+import {S} from '../../dependency/jcore/dist/ts-toolbelt/common'
 
-type Tag = typeof Tag['Just'] | typeof Tag['Nothing'];
-namespace Tag {
-	export let Nothing = S('Nothing');
-	export let Just = S('Just');
+interface IMaybe<A> {
+	cata: <T, U>(
+		fs: {
+			Nothing: () => T;
+			Just: (value: A) => U;
+		}
+	) => T | U;
 }
 
-interface Cata<A extends IBase> {
-	<T, U>(fs: {
-		Nothing: () => T;
-		Just: (a: A) => U;
-	}): T | U;
+export interface Nothing {
+	readonly tag: 'Nothing';
+}
+export interface Just<A> {
+	readonly tag: 'Just';
+	readonly value: A;
 }
 
-export let Maybe = <A extends IBase>(A: Construct<A>) => (
-	((Maybe_ = Maybe) => (
-		class Maybe implements IBase, IFunctor<A> {
-			construct = Maybe;
-			static default = new Maybe();
-			a = cast()<A>();
-			tag: Tag = Tag.Nothing;
-			cata: Cata<A> = fs => fs[Tag.Nothing]();
-			static Just = (_: A) => new (Just(A))(_);
-			static Nothing = () => new (Nothing(A))();
-	
-			map =
-				<B extends IBase>
-				(f: (_: A) => B) => {
-					let MaybeB = Maybe_(cast()<Construct<B>>());
-					let ret = cast()<Deconstruct<typeof MaybeB>>();
-					((A, B = f(cast(A.default)<A>()).construct) => {
-						ret = this.cata({
-							Just: a => Maybe_(B).Just(f(a)),
-							Nothing: () => Maybe_(B).Nothing(),
-						});
-					})(ctor(A));
-					return ret;
-				};
-		}
-	))()
+export let Nothing = (): Maybe<never> => Json.assign(
+	<Nothing>{tag: 'Nothing'}, <Maybe<never>>{
+		cata: fs => fs['Nothing'](),
+	}
+);
+export let Just = <A>(value: A): Maybe<A> => Json.assign(
+	<Just<A>>{tag: 'Just', value}, <Maybe<A>>{
+		cata: fs => fs['Just'](value),
+	}
 );
 
-export let Just = <A extends IBase>(A: Construct<A>) => (
-	((Just_ = Just) => (
-		class Just extends Maybe(A) {
-			tag = Tag.Just;
-			cata: Cata<A> = fs => fs[this.tag](this.a);
-	
-			constructor(a: A) {
-				super();
-				this.a = a;
-			}
-		}
-	))()
-);
+export const URI = S('Maybe');
+export type URI = typeof URI;
+declare module '../util/HKT' {
+	interface KindsByURI1<A> {
+		[URI]: Maybe<A>;
+	}
+}
 
-export let Nothing = <A extends IBase>(A: Construct<A>) => (
-	((Nothing_ = Nothing) => (
-		class Nothing extends Maybe(A) {
-			tag = Tag.Nothing;
-			cata: Cata<A> = fs => fs[this.tag]();
-		}
-	))()
-);
+export let Show = <A>(Show: IShow<A>): IShow<Maybe<A>> => ({
+	show: maybeA => maybeA.cata({
+		Nothing: () => String('Nothing'),
+		Just: value => String(`Just(${Show.show(value)})`),
+	}),
+});
 
-export type Maybe = Function.Ret<typeof Maybe>;
+export let Functor: Functor1<URI> = ({
+	URI,
+	map: f => functorA => (
+		Maybe.reinterpret(
+			functorA.cata({
+				Nothing: () => Nothing(),
+				Just: value => Just(f(value)),
+			})
+		)
+	),
+});
 
-let withMonoid = <A extends ISemigroup>(A: Construct<A>) => (
-	<TBase extends Construct<Maybe>>(Base: TBase) => (
-		class Maybe extends Base implements ISemigroup {
-			construct = Maybe;
-			static default = new Base();
-			append = (maybe: Maybe): Maybe => maybe;
-		}
-	)
-);
+export let Monoid = <A>(Semigroup: ISemigroup<A>): IMonoid<Maybe<A>> => ({
+	append: maybe0 => maybe1 => (
+		maybe0.cata({
+			Nothing: () => maybe1,
+			Just: value0 => (
+				maybe1.cata({
+					Nothing: () => maybe0,
+					Just: value1 => Just(Semigroup.append(value0)(value1)),
+				})
+			)
+		})
+	),
+	mempty: () => reinterpret(Nothing()),
+});
+
+export type Maybe<A> = IMaybe<A> & (Nothing | Just<A>);
+export let Maybe = {
+	URI,
+	reinterpret: <TMaybe>(maybe: TMaybe): Maybe<TMaybe extends Maybe<infer T> ? T : never> => reinterpret(maybe),
+	Nothing,
+	Just,
+	Show,
+	Functor,
+};

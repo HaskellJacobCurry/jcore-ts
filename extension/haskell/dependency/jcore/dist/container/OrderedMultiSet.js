@@ -35,6 +35,16 @@ var OrderedMultiSet = /** @class */ (function (_super) {
     OrderedMultiSet.prototype.forEach = function (cb) {
         return this.inorderTraverse(function (key, values) { return new Array_1.Array(values).forEach(cb); });
     };
+    OrderedMultiSet.prototype.forEach_ = function (cb) {
+        return this.inorderTraverse(function (key, values) {
+            for (var i = 0; i < values.length; i++) {
+                if (!cb(values[i])) {
+                    return false;
+                }
+            }
+            return true;
+        });
+    };
     return OrderedMultiSet;
 }(AVLTree_1.AVLTree));
 exports.OrderedMultiSet = OrderedMultiSet;
