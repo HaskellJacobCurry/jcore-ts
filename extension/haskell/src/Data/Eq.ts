@@ -1,10 +1,9 @@
 import {IBool, Bool} from './IBool'
 
-export interface Eq<A> {
+interface Eq<A> {
 	readonly eq: (_: A) => (_: A) => IBool;
 }
-export type IEq<A> = Eq<A>;
-export namespace Eq {
+namespace Eq {
 	export interface Ext<A> {
 		readonly notEq: (_: A) => (_: A) => IBool;
 	}
@@ -12,4 +11,6 @@ export namespace Eq {
 		notEq: eq0 => eq1 => Bool.not(Eq.eq(eq0)(eq1))
 	});
 }
+export {Eq}
+export {Eq as IEq}
 export default Eq

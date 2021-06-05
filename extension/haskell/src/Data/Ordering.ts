@@ -40,51 +40,49 @@ export let Show: IShow<Ordering> = ({
 });
 
 export let Eq: IEq<Ordering> & IEq.Ext<Ordering> = (
-	(Eq => (
-		Json.assign(Eq, IEq.Ext(Eq))
-	))(<IEq<Ordering>>{
+	Function.assign(() => (<IEq<Ordering>>{
 		eq: ordering0 => ordering1 => Bool(ordering0.tag === ordering1.tag),
-	})
+	}))(Eq => Json.assign(Eq, IEq.Ext(Eq)))
 );
 
 export let Ord: IOrd<Ordering> & IOrd.Ext<Ordering> = (
-	(Ord => (
-		Json.assign(Ord, IOrd.Ext(Ord))
-	))(Function.define<IOrd<Ordering>>(Ord => ({
-		...Eq,
-		compare: ordering0 => ordering1 => (
-			ordering0.cata({
-				LT: () => (
-					ordering1.cata({
-						LT: () => EQ,
-						EQ: () => LT,
-						GT: () => LT,
-					})
-				),
-				EQ: () => (
-					ordering1.cata({
-						LT: () => GT,
-						EQ: () => EQ,
-						GT: () => LT,
-					})
-				),
-				GT: () => (
-					ordering1.cata({
-						LT: () => GT,
-						EQ: () => GT,
-						GT: () => EQ,
-					})
-				)
-			})
-		),
-		lt: ordering0 => ordering1 => (
-			Ord().compare(ordering0)(ordering1).cata({
-				LT: () => Bool.True,
-				EQ: () => Bool.False,
-				GT: () => Bool.False,
-			})
-		),
-	})))
+	Function.assign(() => (
+		Function.define<IOrd<Ordering>>(Ord => ({
+			...Eq,
+			compare: ordering0 => ordering1 => (
+				ordering0.cata({
+					LT: () => (
+						ordering1.cata({
+							LT: () => EQ,
+							EQ: () => LT,
+							GT: () => LT,
+						})
+					),
+					EQ: () => (
+						ordering1.cata({
+							LT: () => GT,
+							EQ: () => EQ,
+							GT: () => LT,
+						})
+					),
+					GT: () => (
+						ordering1.cata({
+							LT: () => GT,
+							EQ: () => GT,
+							GT: () => EQ,
+						})
+					)
+				})
+			),
+			lt: ordering0 => ordering1 => (
+				Ord().compare(ordering0)(ordering1).cata({
+					LT: () => Bool.True,
+					EQ: () => Bool.False,
+					GT: () => Bool.False,
+				})
+			),
+		}))
+	))(Ord => Json.assign(Ord, IOrd.Ext(Ord)))
 );
 
 interface COrdering {

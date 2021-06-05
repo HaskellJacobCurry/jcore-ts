@@ -35,6 +35,8 @@ export namespace Function {
 			(x => x(x))((x: X<T>) => f(() => a || (a = x(x))))
 		))()
 	);
+
+	export let assign = <T>(f: () => T) => <U>(g: (_: T) => U): U => g(f());
 }
 
 export default Function

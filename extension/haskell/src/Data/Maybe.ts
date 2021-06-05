@@ -6,6 +6,7 @@ import {String} from './String'
 import {
 	Json,
 	reinterpret,
+	cast,
 } from '../../dependency/jcore/dist/ts-toolbelt'
 import {S} from '../../dependency/jcore/dist/ts-toolbelt/common'
 

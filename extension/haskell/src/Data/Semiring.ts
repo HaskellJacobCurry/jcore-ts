@@ -4,5 +4,5 @@ export interface Semiring<A> {
 	readonly mul: (_: A) => (_: A) => A;
 	readonly one: () => A;
 }
-export type ISemiring<A> = Semiring<A>;
+export {Semiring as ISemiring};
 export default Semiring

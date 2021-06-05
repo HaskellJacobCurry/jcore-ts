@@ -16,5 +16,6 @@ export declare namespace Function {
         <T>(f: Define.Generator<T>): T;
     }
     let define: Define;
+    let assign: <T>(f: () => T) => <U>(g: (_: T) => U) => U;
 }
 export default Function;

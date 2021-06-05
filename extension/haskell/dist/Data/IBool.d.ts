@@ -5,6 +5,7 @@ interface Bool {
 }
 declare let Bool: Bool;
 export { Bool };
+export { Bool as CBool };
 export interface IBool {
     cata: <T, U>(fs: {
         False: () => T;

@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.Ord = void 0;
+exports.IOrd = exports.Ord = void 0;
 var IBool_1 = require("./IBool");
 var ts_toolbelt_1 = require("../../dependency/jcore/dist/ts-toolbelt");
 var Ord;
@@ -26,5 +26,7 @@ var Ord;
         })); }; }; },
         between: function (min) { return function (max) { return function (ord) { return Ord.eq(Ext().clamp(min)(max)(ord))(ord); }; }; }
     }); }); };
-})(Ord = exports.Ord || (exports.Ord = {}));
+})(Ord || (Ord = {}));
+exports.Ord = Ord;
+exports.IOrd = Ord;
 exports["default"] = Ord;

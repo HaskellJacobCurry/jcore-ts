@@ -14,6 +14,7 @@ let Bool: Bool = {
 	or: bool0 => bool1 => cast(bool0.or(bool1))(),
 };
 export {Bool}
+export {Bool as CBool}
 
 export interface IBool {
 	cata: <T, U>(

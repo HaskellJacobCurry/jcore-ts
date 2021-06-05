@@ -1,12 +1,11 @@
 import { Eq } from './Eq';
 import { IOrdering } from './IOrdering';
 import { IBool } from './IBool';
-export interface Ord<A> extends Eq<A> {
+interface Ord<A> extends Eq<A> {
     readonly compare: (_: A) => (_: A) => IOrdering;
     readonly lt: (_: A) => (_: A) => IBool;
 }
-export declare type IOrd<A> = Ord<A>;
-export declare namespace Ord {
+declare namespace Ord {
     interface Ext<A> {
         readonly notLt: (_: A) => (_: A) => IBool;
         readonly gt: (_: A) => (_: A) => IBool;
@@ -18,4 +17,6 @@ export declare namespace Ord {
     }
     let Ext: <A>(Ord: Ord<A>) => Ext<A>;
 }
+export { Ord };
+export { Ord as IOrd };
 export default Ord;

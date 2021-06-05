@@ -5,12 +5,11 @@ import {
 	Function,
 } from '../../dependency/jcore/dist/ts-toolbelt'
 
-export interface Ord<A> extends Eq<A> {
+interface Ord<A> extends Eq<A> {
 	readonly compare: (_: A) => (_: A) => IOrdering;
 	readonly lt: (_: A) => (_: A) => IBool;
 }
-export type IOrd<A> = Ord<A>;
-export namespace Ord {
+namespace Ord {
 	export interface Ext<A> {
 		readonly notLt: (_: A) => (_: A) => IBool;
 		readonly gt: (_: A) => (_: A) => IBool;
@@ -50,4 +49,6 @@ export namespace Ord {
 		between: min => max => ord => Ord.eq(Ext().clamp(min)(max)(ord))(ord),
 	}));
 }
+export {Ord}
+export {Ord as IOrd}
 export default Ord

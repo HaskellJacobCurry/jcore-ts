@@ -1,4 +1,4 @@
-import {IBool} from './IBool'
+import {IBool, CBool} from './IBool'
 import {IShow} from './Show'
 import {String} from './String'
 import {
@@ -30,6 +30,12 @@ export let True = Json.assign(
 	}
 ) as Bool;
 
+export let and = (bool0: Bool) => (bool1: Bool) => CBool.and(bool0)(bool1);
+
+export let or = (bool0: Bool) => (bool1: Bool) => CBool.or(bool0)(bool1);
+
+export let not = (bool: Bool) => CBool.not(bool);
+
 export let Show: IShow<Bool> = ({
 	show: bool => (
 		bool.cata({
@@ -42,6 +48,9 @@ export let Show: IShow<Bool> = ({
 export type Bool = IBool & (False | True);
 export let Bool = Json.assign(
 	(value: boolean) => value ? True : False, {
+		and,
+		or,
+		not,
 		False,
 		True,
 		Show,
