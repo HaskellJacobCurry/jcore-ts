@@ -35,7 +35,9 @@ namespace Apply1 {
 		Function.define<Ext<URI>>(Ext => ({
 			lift2: f => applyA => applyB => (
 				Function.assign(
-					Function.assign(Apply.map(f)(applyA))(_ => Apply.ap(_)(applyB))
+					Function.assign(
+						Apply.map(f)(applyA)
+					)(_ => Apply.ap(_)(applyB))
 				)(_ => cast(_)())
 			),
 		}))
@@ -50,7 +52,9 @@ namespace Apply2 {
 		Function.define<Ext<URI>>(Ext => ({
 			lift2: f => applyA => applyB => (
 				Function.assign(
-					Function.assign(Apply.map(f)(applyA))(_ => Apply.ap(_)(applyB))
+					Function.assign(
+						Apply.map(f)(applyA)
+					)(_ => Apply.ap(_)(applyB))
 				)(_ => cast(_)())
 			),
 		}))
@@ -65,7 +69,9 @@ namespace Apply2_ {
 		Function.define<Ext<URI, T0>>(Ext => ({
 			lift2: f => applyA => applyB => (
 				Function.assign(
-					Function.assign(Apply.map(f)(applyA))(_ => Apply.ap(_)(applyB))
+					Function.assign(
+						Apply.map(f)(applyA)
+					)(_ => Apply.ap(_)(applyB))
 				)(_ => cast(_)())
 			),
 		}))

@@ -45,7 +45,7 @@ export { Monoid };
 declare let Maybe: {
     URI: "Maybe";
     reinterpret: <TMaybe>(maybe: TMaybe) => Maybe<TMaybe extends Maybe<infer T> ? T : never>;
-    Nothing: IMaybe<never> & Nothing;
+    Nothing: Maybe<never>;
     Just: <A>(value: A) => Maybe<A>;
     Show: <A_1>(Show: IShow<A_1>) => IShow<Maybe<A_1>>;
     Functor: Functor1<"Maybe">;

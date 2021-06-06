@@ -27,12 +27,12 @@ declare namespace Apply2 {
     interface Ext<URI extends URI2> {
         readonly lift2: <T0, A, B, C>(_: (_: A) => (_: B) => C) => (_: Kind2<URI, T0, A>) => (_: Kind2<URI, T0, B>) => Kind2<URI, T0, C>;
     }
-    let Ext: <URI extends "Tuple">(Apply: Apply2<URI>) => Ext<URI>;
+    let Ext: <URI extends "Function" | "Tuple">(Apply: Apply2<URI>) => Ext<URI>;
 }
 declare namespace Apply2_ {
     interface Ext<URI extends URI2, T0> {
         readonly lift2: <A, B, C>(_: (_: A) => (_: B) => C) => (_: Kind2<URI, T0, A>) => (_: Kind2<URI, T0, B>) => Kind2<URI, T0, C>;
     }
-    let Ext: <URI extends "Tuple", T0>(Apply: Apply2_<URI, T0>) => Ext<URI, T0>;
+    let Ext: <URI extends "Function" | "Tuple", T0>(Apply: Apply2_<URI, T0>) => Ext<URI, T0>;
 }
 export default Apply;

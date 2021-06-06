@@ -25,7 +25,7 @@ declare let Bool: ((value: boolean) => Bool) & {
     and: (bool0: Bool) => (bool1: Bool) => Bool;
     or: (bool0: Bool) => (bool1: Bool) => Bool;
     not: (bool: Bool) => Bool;
-    False: IBool & False;
-    True: IBool & True;
+    False: Bool;
+    True: Bool;
     Show: IShow<Bool>;
 };

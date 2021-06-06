@@ -12,7 +12,7 @@ interface Functor1<URI extends URI1> {
 export { Functor1 };
 interface Functor2<URI extends URI2> {
     readonly URI: URI;
-    readonly map: <T0, A, B>(_: (_: A) => B) => (_: Kind2<URI, T0, A>) => Kind2<URI, T0, B>;
+    readonly map: <A, B>(_: (_: A) => B) => <T0>(_: Kind2<URI, T0, A>) => Kind2<URI, T0, B>;
 }
 export { Functor2 };
 interface Functor2_<URI extends URI2, T0> {
