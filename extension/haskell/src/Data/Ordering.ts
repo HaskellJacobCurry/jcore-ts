@@ -40,13 +40,13 @@ export let Show: IShow<Ordering> = ({
 });
 
 export let Eq: IEq<Ordering> & IEq.Ext<Ordering> = (
-	Function.assign(() => (<IEq<Ordering>>{
+	Function.assign(<IEq<Ordering>>{
 		eq: ordering0 => ordering1 => Bool(ordering0.tag === ordering1.tag),
-	}))(Eq => Json.assign(Eq, IEq.Ext(Eq)))
+	})(Eq => Json.assign(Eq, IEq.Ext(Eq)))
 );
 
 export let Ord: IOrd<Ordering> & IOrd.Ext<Ordering> = (
-	Function.assign(() => (
+	Function.assign(
 		Function.define<IOrd<Ordering>>(Ord => ({
 			...Eq,
 			compare: ordering0 => ordering1 => (
@@ -82,7 +82,7 @@ export let Ord: IOrd<Ordering> & IOrd.Ext<Ordering> = (
 				})
 			),
 		}))
-	))(Ord => Json.assign(Ord, IOrd.Ext(Ord)))
+	)(Ord => Json.assign(Ord, IOrd.Ext(Ord)))
 );
 
 interface COrdering {

@@ -1,23 +1,31 @@
 import { IBool } from './IBool';
 import { IShow } from './Show';
-export interface False {
+/** data Bool = True | False */
+declare type Bool = IBool & (False | True);
+export { Bool };
+interface False {
     readonly tag: 'False';
 }
-export interface True {
+declare let False: Bool;
+export { False };
+interface True {
     readonly tag: 'True';
 }
-export declare let False: Bool;
-export declare let True: Bool;
-export declare let and: (bool0: Bool) => (bool1: Bool) => Bool;
-export declare let or: (bool0: Bool) => (bool1: Bool) => Bool;
-export declare let not: (bool: Bool) => Bool;
-export declare let Show: IShow<Bool>;
-export declare type Bool = IBool & (False | True);
-export declare let Bool: ((value: boolean) => Bool) & {
+declare let True: Bool;
+export { True };
+declare let and: (bool0: Bool) => (bool1: Bool) => Bool;
+export { and };
+declare let or: (bool0: Bool) => (bool1: Bool) => Bool;
+export { or };
+declare let not: (bool: Bool) => Bool;
+export { not };
+declare let Show: IShow<Bool>;
+export { Show };
+declare let Bool: ((value: boolean) => Bool) & {
     and: (bool0: Bool) => (bool1: Bool) => Bool;
     or: (bool0: Bool) => (bool1: Bool) => Bool;
     not: (bool: Bool) => Bool;
-    False: Bool;
-    True: Bool;
+    False: IBool & False;
+    True: IBool & True;
     Show: IShow<Bool>;
 };

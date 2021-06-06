@@ -1,5 +1,5 @@
 import { ISemiring } from './Semiring';
-import { IRing } from './RIng';
+import { IRing } from './Ring';
 import { IEq } from './Eq';
 import { IOrd } from './Ord';
 import { IShow } from './Show';

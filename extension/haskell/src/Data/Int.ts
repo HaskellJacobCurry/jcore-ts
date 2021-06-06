@@ -1,5 +1,5 @@
 import {ISemiring} from './Semiring'
-import {IRing} from './RIng'
+import {IRing} from './Ring'
 import {IEq} from './Eq'
 import {IOrd} from './Ord'
 import {IShow} from './Show'
@@ -45,13 +45,13 @@ export let Ring: IRing<Int> = ({
 });
 
 export let Eq: IEq<Int> & IEq.Ext<Int> = (
-	Function.assign(() => <IEq<Int>>({
+	Function.assign(<IEq<Int>>({
 		eq: int0 => int1 => Bool(int0.value == int1.value),
 	}))(Eq => Json.assign(Eq, IEq.Ext(Eq)))
 );
 
 export let Ord: IOrd<Int> & IOrd.Ext<Int> = (
-	Function.assign(() => (
+	Function.assign(
 		Function.define<IOrd<Int>>(Ord => ({
 			...Eq,
 			compare: int0 => int1 => (
@@ -67,7 +67,7 @@ export let Ord: IOrd<Int> & IOrd.Ext<Int> = (
 			),
 			lt: int0 => int1 => Bool(int0.value < int1.value),
 		}))
-	))(Ord => Json.assign(Ord, IOrd.Ext(Ord)))
+	)(Ord => Json.assign(Ord, IOrd.Ext(Ord)))
 );
 
 export interface Int {

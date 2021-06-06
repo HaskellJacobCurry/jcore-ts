@@ -32,16 +32,16 @@ exports.Semiring = ({
     one: function () { return exports.Int(1); }
 });
 exports.Ring = (__assign(__assign({}, exports.Semiring), { sub: function (int0) { return function (int1) { return exports.Int(int0.value - int1.value); }; }, negate: function (int) { return exports.Int(-int.value); } }));
-exports.Eq = (ts_toolbelt_1.Function.assign(function () { return ({
+exports.Eq = (ts_toolbelt_1.Function.assign(({
     eq: function (int0) { return function (int1) { return Bool_1.Bool(int0.value == int1.value); }; }
-}); })(function (Eq) { return ts_toolbelt_1.Json.assign(Eq, Eq_1.IEq.Ext(Eq)); }));
-exports.Ord = (ts_toolbelt_1.Function.assign(function () { return (ts_toolbelt_1.Function.define(function (Ord) { return (__assign(__assign({}, exports.Eq), { compare: function (int0) { return function (int1) { return (Ord().lt(int0)(int1).cata({
+}))(function (Eq) { return ts_toolbelt_1.Json.assign(Eq, Eq_1.IEq.Ext(Eq)); }));
+exports.Ord = (ts_toolbelt_1.Function.assign(ts_toolbelt_1.Function.define(function (Ord) { return (__assign(__assign({}, exports.Eq), { compare: function (int0) { return function (int1) { return (Ord().lt(int0)(int1).cata({
         True: function () { return Ordering_1.Ordering.LT; },
         False: function () { return (Ord().lt(int1)(int0).cata({
             True: function () { return Ordering_1.Ordering.GT; },
             False: function () { return Ordering_1.Ordering.EQ; }
         })); }
-    })); }; }, lt: function (int0) { return function (int1) { return Bool_1.Bool(int0.value < int1.value); }; } })); })); })(function (Ord) { return ts_toolbelt_1.Json.assign(Ord, Ord_1.IOrd.Ext(Ord)); }));
+    })); }; }, lt: function (int0) { return function (int1) { return Bool_1.Bool(int0.value < int1.value); }; } })); }))(function (Ord) { return ts_toolbelt_1.Json.assign(Ord, Ord_1.IOrd.Ext(Ord)); }));
 exports.Int = ts_toolbelt_1.Json.assign(function (value) { return ({ value: value }); }, {
     inc: exports.inc,
     dec: exports.dec,

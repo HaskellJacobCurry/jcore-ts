@@ -1,5 +1,7 @@
 import {IShow} from './Show'
 import {Functor1} from './Functor'
+import {Apply1} from '../Control/Apply'
+import {Bind1} from '../Control/Bind'
 import {ISemigroup} from './Semigroup'
 import {IMonoid} from './Monoid'
 import {String} from './String'
@@ -7,8 +9,13 @@ import {
 	Json,
 	reinterpret,
 	cast,
+	Function,
 } from '../../dependency/jcore/dist/ts-toolbelt'
 import {S} from '../../dependency/jcore/dist/ts-toolbelt/common'
+
+/** data Maybe a = Just a | Nothing */
+type Maybe<A> = IMaybe<A> & (Nothing | Just<A>);
+export {Maybe}
 
 interface IMaybe<A> {
 	cata: <T, U>(
@@ -19,53 +26,82 @@ interface IMaybe<A> {
 	) => T | U;
 }
 
-export interface Nothing {
+interface Nothing {
 	readonly tag: 'Nothing';
 }
-export interface Just<A> {
-	readonly tag: 'Just';
-	readonly value: A;
-}
-
-export let Nothing = (): Maybe<never> => Json.assign(
-	<Nothing>{tag: 'Nothing'}, <Maybe<never>>{
+let Nothing = <Maybe<never>>Json.assign(
+	<Nothing>{tag: 'Nothing'}, <IMaybe<never>>{
 		cata: fs => fs['Nothing'](),
 	}
 );
-export let Just = <A>(value: A): Maybe<A> => Json.assign(
-	<Just<A>>{tag: 'Just', value}, <Maybe<A>>{
+export {Nothing}
+
+interface Just<A> {
+	readonly tag: 'Just';
+	readonly value: A;
+}
+let Just = <A>(value: A) => <Maybe<A>>Json.assign(
+	<Just<A>>{tag: 'Just', value}, <IMaybe<A>>{
 		cata: fs => fs['Just'](value),
 	}
 );
+export {Just}
 
-export const URI = S('Maybe');
-export type URI = typeof URI;
+const URI = S('Maybe');
+type URI = typeof URI;
 declare module '../util/HKT' {
 	interface KindsByURI1<A> {
 		[URI]: Maybe<A>;
 	}
 }
+export {URI}
 
-export let Show = <A>(Show: IShow<A>): IShow<Maybe<A>> => ({
+let Show = <A>(Show: IShow<A>): IShow<Maybe<A>> => ({
 	show: maybeA => maybeA.cata({
 		Nothing: () => String('Nothing'),
 		Just: value => String(`Just(${Show.show(value)})`),
 	}),
 });
+export {Show}
 
-export let Functor: Functor1<URI> = ({
+let Functor: Functor1<URI> = ({
 	URI,
-	map: f => functorA => (
+	map: f => maybeA => (
 		Maybe.reinterpret(
-			functorA.cata({
-				Nothing: () => Nothing(),
+			maybeA.cata({
+				Nothing: () => Nothing,
 				Just: value => Just(f(value)),
 			})
 		)
 	),
 });
+export {Functor}
 
-export let Monoid = <A>(Semigroup: ISemigroup<A>): IMonoid<Maybe<A>> => ({
+let Apply: Apply1<URI> & Apply1.Ext<URI> = (
+	Function.assign(<Apply1<URI>>{
+		...Functor,
+		ap: maybeF => maybeA => Maybe.reinterpret(
+			maybeF.cata({
+				Just: f => Functor.map(f)(reinterpret(maybeA)),
+				Nothing: () => Maybe.Nothing,
+			})
+		),
+	})(Apply => Json.assign(Apply, Apply1.Ext(Apply)))
+);
+export {Apply}
+
+let Bind: Bind1<URI> = ({
+	...Apply,
+	bind: maybeA => f => Maybe.reinterpret(
+		maybeA.cata({
+			Just: f,
+			Nothing: () => Maybe.Nothing,
+		})
+	)
+});
+export {Bind}
+
+let Monoid = <A>(Semigroup: ISemigroup<A>): IMonoid<Maybe<A>> => ({
 	append: maybe0 => maybe1 => (
 		maybe0.cata({
 			Nothing: () => maybe1,
@@ -77,15 +113,16 @@ export let Monoid = <A>(Semigroup: ISemigroup<A>): IMonoid<Maybe<A>> => ({
 			)
 		})
 	),
-	mempty: () => reinterpret(Nothing()),
+	mempty: () => reinterpret(Nothing),
 });
+export {Monoid}
 
-export type Maybe<A> = IMaybe<A> & (Nothing | Just<A>);
-export let Maybe = {
+let Maybe = {
 	URI,
 	reinterpret: <TMaybe>(maybe: TMaybe): Maybe<TMaybe extends Maybe<infer T> ? T : never> => reinterpret(maybe),
 	Nothing,
 	Just,
 	Show,
 	Functor,
+	Apply,
 };

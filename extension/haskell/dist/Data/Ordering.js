@@ -29,10 +29,10 @@ exports.GT = ts_toolbelt_1.Json.assign({ tag: 'GT' }, {
 exports.Show = ({
     show: function (ordering) { return String_1.String(ordering.tag); }
 });
-exports.Eq = (ts_toolbelt_1.Function.assign(function () { return ({
+exports.Eq = (ts_toolbelt_1.Function.assign({
     eq: function (ordering0) { return function (ordering1) { return Bool_1.Bool(ordering0.tag === ordering1.tag); }; }
-}); })(function (Eq) { return ts_toolbelt_1.Json.assign(Eq, Eq_1.Eq.Ext(Eq)); }));
-exports.Ord = (ts_toolbelt_1.Function.assign(function () { return (ts_toolbelt_1.Function.define(function (Ord) { return (__assign(__assign({}, exports.Eq), { compare: function (ordering0) { return function (ordering1) { return (ordering0.cata({
+})(function (Eq) { return ts_toolbelt_1.Json.assign(Eq, Eq_1.Eq.Ext(Eq)); }));
+exports.Ord = (ts_toolbelt_1.Function.assign(ts_toolbelt_1.Function.define(function (Ord) { return (__assign(__assign({}, exports.Eq), { compare: function (ordering0) { return function (ordering1) { return (ordering0.cata({
         LT: function () { return (ordering1.cata({
             LT: function () { return exports.EQ; },
             EQ: function () { return exports.LT; },
@@ -52,7 +52,7 @@ exports.Ord = (ts_toolbelt_1.Function.assign(function () { return (ts_toolbelt_1
         LT: function () { return Bool_1.Bool.True; },
         EQ: function () { return Bool_1.Bool.False; },
         GT: function () { return Bool_1.Bool.False; }
-    })); }; } })); })); })(function (Ord) { return ts_toolbelt_1.Json.assign(Ord, Ord_1.Ord.Ext(Ord)); }));
+    })); }; } })); }))(function (Ord) { return ts_toolbelt_1.Json.assign(Ord, Ord_1.Ord.Ext(Ord)); }));
 exports.invert = function (ordering) { return (ordering.cata({
     LT: function () { return exports.GT; },
     EQ: function () { return exports.EQ; },
