@@ -1,10 +1,15 @@
 import { IBool } from './IBool';
+/**
+ * class Eq f where
+ *  eq :: f -> f -> Bool
+ * notEq :: Eq f => f -> f -> Bool
+ */
 interface Eq<A> {
-    readonly eq: (_: A) => (_: A) => IBool;
+    eq: (_: A) => (_: A) => IBool;
 }
 declare namespace Eq {
     interface Ext<A> {
-        readonly notEq: (_: A) => (_: A) => IBool;
+        notEq: (_: A) => (_: A) => IBool;
     }
     let Ext: <A>(Eq: Eq<A>) => Ext<A>;
 }

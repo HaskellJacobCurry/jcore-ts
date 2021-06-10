@@ -9,4 +9,3 @@ var Bool = {
 };
 exports.Bool = Bool;
 exports.CBool = Bool;
-exports["default"] = Bool;

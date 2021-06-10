@@ -16,16 +16,16 @@ let Bool: Bool = {
 export {Bool}
 export {Bool as CBool}
 
-export interface IBool {
+interface IBool {
 	cata: <T, U>(
 		fs: {
 			False: () => T;
 			True: () => U;
 		}
 	) => T | U;
-	not(): IBool;
-	and(other: IBool): IBool;
-	or(other: IBool): IBool;
+	not: () => IBool;
+	and: (_: IBool) => IBool;
+	or: (_: IBool) => IBool;
 }
-
-export default Bool
+export {IBool}
+export default IBool

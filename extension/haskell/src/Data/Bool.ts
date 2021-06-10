@@ -4,7 +4,7 @@ import {String} from './String'
 import {
 	Json,
 	reinterpret,
-} from '../../dependency/jcore/dist/ts-toolbelt'
+} from '../util/common'
 
 /** data Bool = True | False */
 type Bool = IBool & (False | True);
@@ -17,8 +17,8 @@ let False = <Bool>Json.assign(
 	<False>{tag: 'False'}, <IBool>{
 		cata: fs => fs['False'](),
 		not: () => True,
-		and: other => False,
-		or: other => other,
+		and: _ => False,
+		or: _ => _,
 	}
 );
 export {False}
@@ -30,19 +30,35 @@ let True = <Bool>Json.assign(
 	<True>{tag: 'True'}, <IBool>{
 		cata: fs => fs['True'](),
 		not: () => False,
-		and: other => other,
-		or: other => True,
+		and: _ => _,
+		or: _ => True,
 	}
 );
 export {True}
 
-let and = (bool0: Bool) => (bool1: Bool) => CBool.and(bool0)(bool1);
+let from: (_: IBool) => Bool = (
+	bool => (
+		bool.cata({
+			True: () => True,
+			False: () => False,
+		})
+	)
+);
+export {from}
+
+let and: (_: Bool) => (_: Bool) => Bool = (
+	bool0 => bool1 => CBool.and(bool0)(bool1)
+);
 export {and}
 
-let or = (bool0: Bool) => (bool1: Bool) => CBool.or(bool0)(bool1);
+let or: (_: Bool) => (_: Bool) => Bool = (
+	bool0 => bool1 => CBool.or(bool0)(bool1)
+);
 export {or}
 
-let not = (bool: Bool) => CBool.not(bool);
+let not: (_: Bool) => Bool = (
+	bool => CBool.not(bool)
+);
 export {not}
 
 let Show: IShow<Bool> = ({
@@ -57,6 +73,7 @@ export {Show}
 
 let Bool = Json.assign(
 	(value: boolean) => value ? True : False, {
+		from,
 		and,
 		or,
 		not,

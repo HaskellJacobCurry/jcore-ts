@@ -1,7 +1,13 @@
 import {IString} from './IString'
 
-export interface Show<A> {
-	readonly show: (a: A) => IString;
+/**
+ * class Show f where
+ *  show :: f -> String
+ */
+
+interface Show<A> {
+	show: (a: A) => IString;
 }
+export {Show}
 export {Show as IShow};
 export default Show

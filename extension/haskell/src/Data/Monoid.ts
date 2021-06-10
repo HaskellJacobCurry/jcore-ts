@@ -1,7 +1,13 @@
 import {Semigroup} from './Semigroup'
 
-export interface Monoid<A> extends Semigroup<A> {
-	readonly mempty: () => A;
+/*
+ * class (Semigroup f) <= Monoid f where
+ *  mempty :: Unit -> f
+ */
+
+interface Monoid<A> extends Semigroup<A> {
+	mempty: () => A;
 }
+export {Monoid}
 export {Monoid as IMonoid};
 export default Monoid

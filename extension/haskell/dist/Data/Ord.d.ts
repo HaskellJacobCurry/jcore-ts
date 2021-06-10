@@ -1,19 +1,32 @@
 import { Eq } from './Eq';
 import { IOrdering } from './IOrdering';
 import { IBool } from './IBool';
+/**
+ * class (Eq f) <= Ord f where
+ *  compare :: f -> f -> Ordering
+ * lt :: f -> f -> Bool
+ * notLt :: f -> f -> Bool
+ * gt :: f -> f -> Bool
+ * notGt :: f -> f -> Bool
+ * min :: f -> f -> f
+ * max :: f -> f -> f
+ * clamp :: f -> f -> f -> f
+ * between :: f -> f -> f -> Bool
+ * abs :: Ring f => f -> f
+ */
 interface Ord<A> extends Eq<A> {
-    readonly compare: (_: A) => (_: A) => IOrdering;
-    readonly lt: (_: A) => (_: A) => IBool;
+    compare: (_: A) => (_: A) => IOrdering;
+    lt: (_: A) => (_: A) => IBool;
 }
 declare namespace Ord {
     interface Ext<A> {
-        readonly notLt: (_: A) => (_: A) => IBool;
-        readonly gt: (_: A) => (_: A) => IBool;
-        readonly notGt: (_: A) => (_: A) => IBool;
-        readonly min: (_: A) => (_: A) => A;
-        readonly max: (_: A) => (_: A) => A;
-        readonly clamp: (min: A) => (max: A) => (_: A) => A;
-        readonly between: (min: A) => (max: A) => (_: A) => IBool;
+        notLt: (_: A) => (_: A) => IBool;
+        gt: (_: A) => (_: A) => IBool;
+        notGt: (_: A) => (_: A) => IBool;
+        min: (_: A) => (_: A) => A;
+        max: (_: A) => (_: A) => A;
+        clamp: (min: A) => (max: A) => (_: A) => A;
+        between: (min: A) => (max: A) => (_: A) => IBool;
     }
     let Ext: <A>(Ord: Ord<A>) => Ext<A>;
 }

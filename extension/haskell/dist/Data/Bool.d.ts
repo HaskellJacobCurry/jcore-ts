@@ -13,18 +13,21 @@ interface True {
 }
 declare let True: Bool;
 export { True };
-declare let and: (bool0: Bool) => (bool1: Bool) => Bool;
+declare let from: (_: IBool) => Bool;
+export { from };
+declare let and: (_: Bool) => (_: Bool) => Bool;
 export { and };
-declare let or: (bool0: Bool) => (bool1: Bool) => Bool;
+declare let or: (_: Bool) => (_: Bool) => Bool;
 export { or };
-declare let not: (bool: Bool) => Bool;
+declare let not: (_: Bool) => Bool;
 export { not };
 declare let Show: IShow<Bool>;
 export { Show };
 declare let Bool: ((value: boolean) => Bool) & {
-    and: (bool0: Bool) => (bool1: Bool) => Bool;
-    or: (bool0: Bool) => (bool1: Bool) => Bool;
-    not: (bool: Bool) => Bool;
+    from: (_: IBool) => Bool;
+    and: (_: Bool) => (_: Bool) => Bool;
+    or: (_: Bool) => (_: Bool) => Bool;
+    not: (_: Bool) => Bool;
     False: Bool;
     True: Bool;
     Show: IShow<Bool>;

@@ -1,18 +1,28 @@
 import {IString} from './IString'
 import {IShow} from './Show'
 import {
-	Json
-} from '../../dependency/jcore/dist/ts-toolbelt'
+	Json,
+	cast,
+} from '../util/common'
 
-export let Show: IShow<String> = ({
+interface String extends IString {}
+export {String}
+
+let from: (_: IString) => String = (
+	string => cast(string)()
+);
+export {from}
+
+let Show: IShow<String> = ({
 	show: string => `"${string.toString()}"`,
 });
+export {Show}
 
-export interface String extends IString {}
-export let String = Json.assign(
+let String = Json.assign(
 	(value: string): String => ({
 		toString: () => value,
 	}), {
+		from,
 		Show
 	}
 );

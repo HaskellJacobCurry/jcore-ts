@@ -11,59 +11,74 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 exports.__esModule = true;
-exports.Ordering = exports.invert = exports.Ord = exports.Eq = exports.Show = exports.GT = exports.EQ = exports.LT = void 0;
+exports.Ord = exports.Eq = exports.Show = exports.invert = exports.from = exports.GT = exports.EQ = exports.LT = exports.Ordering = void 0;
 var Eq_1 = require("./Eq");
 var Ord_1 = require("./Ord");
 var String_1 = require("./String");
 var Bool_1 = require("./Bool");
-var ts_toolbelt_1 = require("../../dependency/jcore/dist/ts-toolbelt");
-exports.LT = ts_toolbelt_1.Json.assign({ tag: 'LT' }, {
+var common_1 = require("../util/common");
+var LT = common_1.Json.assign({ tag: 'LT' }, {
     cata: function (fs) { return fs['LT'](); }
 });
-exports.EQ = ts_toolbelt_1.Json.assign({ tag: 'EQ' }, {
+exports.LT = LT;
+var EQ = common_1.Json.assign({ tag: 'EQ' }, {
     cata: function (fs) { return fs['EQ'](); }
 });
-exports.GT = ts_toolbelt_1.Json.assign({ tag: 'GT' }, {
+exports.EQ = EQ;
+var GT = common_1.Json.assign({ tag: 'GT' }, {
     cata: function (fs) { return fs['GT'](); }
 });
-exports.Show = ({
+exports.GT = GT;
+var from = (function (ordering) { return (ordering.cata({
+    LT: function () { return LT; },
+    EQ: function () { return EQ; },
+    GT: function () { return GT; }
+})); });
+exports.from = from;
+var invert = (function (ordering) { return (ordering.cata({
+    LT: function () { return GT; },
+    EQ: function () { return EQ; },
+    GT: function () { return LT; }
+})); });
+exports.invert = invert;
+var Show = ({
     show: function (ordering) { return String_1.String(ordering.tag); }
 });
-exports.Eq = (ts_toolbelt_1.Function.assign({
+exports.Show = Show;
+var Eq = (common_1.Function.assign({
     eq: function (ordering0) { return function (ordering1) { return Bool_1.Bool(ordering0.tag === ordering1.tag); }; }
-})(function (Eq) { return ts_toolbelt_1.Json.assign(Eq, Eq_1.Eq.Ext(Eq)); }));
-exports.Ord = (ts_toolbelt_1.Function.assign(ts_toolbelt_1.Function.define(function (Ord) { return (__assign(__assign({}, exports.Eq), { compare: function (ordering0) { return function (ordering1) { return (ordering0.cata({
+})(function (Eq) { return common_1.Json.assign(Eq, Eq_1.Eq.Ext(Eq)); }));
+exports.Eq = Eq;
+var Ord = (common_1.Function.assign(common_1.Function.define(function (Ord) { return (__assign(__assign({}, Eq), { compare: function (ordering0) { return function (ordering1) { return (ordering0.cata({
         LT: function () { return (ordering1.cata({
-            LT: function () { return exports.EQ; },
-            EQ: function () { return exports.LT; },
-            GT: function () { return exports.LT; }
+            LT: function () { return EQ; },
+            EQ: function () { return LT; },
+            GT: function () { return LT; }
         })); },
         EQ: function () { return (ordering1.cata({
-            LT: function () { return exports.GT; },
-            EQ: function () { return exports.EQ; },
-            GT: function () { return exports.LT; }
+            LT: function () { return GT; },
+            EQ: function () { return EQ; },
+            GT: function () { return LT; }
         })); },
         GT: function () { return (ordering1.cata({
-            LT: function () { return exports.GT; },
-            EQ: function () { return exports.GT; },
-            GT: function () { return exports.EQ; }
+            LT: function () { return GT; },
+            EQ: function () { return GT; },
+            GT: function () { return EQ; }
         })); }
     })); }; }, lt: function (ordering0) { return function (ordering1) { return (Ord().compare(ordering0)(ordering1).cata({
         LT: function () { return Bool_1.Bool.True; },
         EQ: function () { return Bool_1.Bool.False; },
         GT: function () { return Bool_1.Bool.False; }
-    })); }; } })); }))(function (Ord) { return ts_toolbelt_1.Json.assign(Ord, Ord_1.Ord.Ext(Ord)); }));
-exports.invert = function (ordering) { return (ordering.cata({
-    LT: function () { return exports.GT; },
-    EQ: function () { return exports.EQ; },
-    GT: function () { return exports.LT; }
-})); };
-exports.Ordering = {
-    LT: exports.LT,
-    EQ: exports.EQ,
-    GT: exports.GT,
-    Show: exports.Show,
-    Eq: exports.Eq,
-    Ord: exports.Ord,
-    invert: exports.invert
+    })); }; } })); }))(function (Ord) { return common_1.Json.assign(Ord, Ord_1.Ord.Ext(Ord)); }));
+exports.Ord = Ord;
+var Ordering = {
+    LT: LT,
+    EQ: EQ,
+    GT: GT,
+    from: from,
+    invert: invert,
+    Show: Show,
+    Eq: Eq,
+    Ord: Ord
 };
+exports.Ordering = Ordering;
