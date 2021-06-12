@@ -1,6 +1,6 @@
 import { Semigroupoid2 } from '../Control/Semigroupoid';
 import { Category2 } from '../Control/Category';
-import { Function as IFunction } from '../../dependency/jcore/dist/ts-toolbelt';
+import { Function as IFunction } from '../util/common';
 declare const URI: "Function";
 declare type URI = typeof URI;
 export { URI };
@@ -18,7 +18,10 @@ export { flip };
 /** const :: a -> b -> a */
 declare let const_: <A>(_: A) => <B>(_: B) => A;
 export { const_ };
-/** apply :: (a -> b) -> a -> b */
+/**
+ * apply :: (a -> b) -> a -> b
+ * alias :: [($)]
+ */
 declare let apply: <A, B>(_: (_: A) => B) => (_: A) => B;
 export { apply };
 /** on :: (b -> b -> c) -> (a -> b) -> a -> a -> c */

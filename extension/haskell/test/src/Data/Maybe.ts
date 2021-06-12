@@ -12,7 +12,7 @@ console.log({
 */
 
 let maybeStr = (
-	Maybe.Apply.lift2((a: Int) => (b: Int) => (
+	Maybe.Apply.liftA2((a: Int) => (b: Int) => (
 		Int.Show.show(Int.Ring.mul(a)(b))
 	))(Maybe.Just(Int(33)))(Maybe.Just(Int(11)))
 );

@@ -36,7 +36,7 @@ let True = <Bool>Json.assign(
 );
 export {True}
 
-let from: (_: IBool) => Bool = (
+let fromI: (_: IBool) => Bool = (
 	bool => (
 		bool.cata({
 			True: () => True,
@@ -44,7 +44,7 @@ let from: (_: IBool) => Bool = (
 		})
 	)
 );
-export {from}
+export {fromI}
 
 let and: (_: Bool) => (_: Bool) => Bool = (
 	bool0 => bool1 => CBool.and(bool0)(bool1)
@@ -73,7 +73,7 @@ export {Show}
 
 let Bool = Json.assign(
 	(value: boolean) => value ? True : False, {
-		from,
+		fromI,
 		and,
 		or,
 		not,

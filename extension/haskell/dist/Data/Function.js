@@ -12,8 +12,7 @@ var __assign = (this && this.__assign) || function () {
 };
 exports.__esModule = true;
 exports.id = exports.Category = exports.Semigroupoid = exports.assign = exports.define = exports.on = exports.apply = exports.const_ = exports.flip = exports.Function = exports.URI = void 0;
-var ts_toolbelt_1 = require("../../dependency/jcore/dist/ts-toolbelt");
-var common_1 = require("../../dependency/jcore/dist/ts-toolbelt/common");
+var common_1 = require("../util/common");
 var URI = common_1.S('Function');
 exports.URI = URI;
 /** flip :: (a -> b -> c) -> b -> a -> c */
@@ -22,15 +21,18 @@ exports.flip = flip;
 /** const :: a -> b -> a */
 var const_ = (function (a) { return function (_) { return a; }; });
 exports.const_ = const_;
-/** apply :: (a -> b) -> a -> b */
+/**
+ * apply :: (a -> b) -> a -> b
+ * alias :: [($)]
+ */
 var apply = (function (f) { return function (a) { return f(a); }; });
 exports.apply = apply;
 /** on :: (b -> b -> c) -> (a -> b) -> a -> a -> c */
 var on = (function (f) { return function (g) { return function (a0) { return function (a1) { return f(g(a0))(g(a1)); }; }; }; });
 exports.on = on;
-var define = ts_toolbelt_1.Function.define;
+var define = common_1.Function.define;
 exports.define = define;
-var assign = ts_toolbelt_1.Function.assign;
+var assign = common_1.Function.assign;
 exports.assign = assign;
 /** compose :: Semigroupoid Function => Function b c -> Function a b -> Function a c */
 var Semigroupoid = {

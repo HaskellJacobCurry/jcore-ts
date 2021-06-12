@@ -1,7 +1,7 @@
 import {
 	reinterpret,
 	cast,
-} from '../../dependency/jcore/dist/ts-toolbelt'
+} from '../util/common'
 
 interface Bool {
 	not: <TBool extends IBool>(_: TBool) => TBool;

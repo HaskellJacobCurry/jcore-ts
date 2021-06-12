@@ -9,8 +9,14 @@ import {Function} from './Function'
 import {
 	Json,
 	reinterpret,
-} from '../../dependency/jcore/dist/ts-toolbelt'
-import {S} from '../../dependency/jcore/dist/ts-toolbelt/common'
+	S,
+} from '../util/common'
+
+interface Tuple<A, B> {
+	fst: A;
+	snd: B;
+}
+export {Tuple}
 
 export const URI = S('Tuple');
 export type URI = typeof URI;
@@ -69,7 +75,7 @@ export {Monoid}
 /** map :: Functor (Tuple a) => (b -> c) -> Tuple a b -> Tuple a c */
 let Functor: Functor2<URI> = {
 	URI,
-	map: f => tupleA => Tuple(tupleA.fst, f(tupleA.snd)),
+	fmap: f => tupleA => Tuple(tupleA.fst, f(tupleA.snd)),
 };
 export {Functor}
 
@@ -98,10 +104,6 @@ let Bifunctor: Bifunctor2<URI> & Bifunctor2.Ext<URI> = (
 );
 export {Bifunctor}
 
-interface Tuple<A, B> {
-	fst: A;
-	snd: B;
-}
 let Tuple = Json.assign(
 	<A, B>(fst: A, snd: B) => <Tuple<A, B>>{fst, snd}, {
 		fst,
@@ -115,4 +117,4 @@ let Tuple = Json.assign(
 		Bifunctor,
 	}
 );
-export {Tuple}
+export default Tuple

@@ -19,8 +19,8 @@ interface GT {
 }
 declare let GT: Ordering;
 export { GT };
-declare let from: (_: IOrdering) => Ordering;
-export { from };
+declare let fromI: (_: IOrdering) => Ordering;
+export { fromI };
 declare let invert: (_: Ordering) => Ordering;
 export { invert };
 declare let Show: IShow<Ordering>;
@@ -33,7 +33,7 @@ declare let Ordering: {
     LT: IOrdering & LT;
     EQ: IOrdering & EQ;
     GT: IOrdering & GT;
-    from: (_: IOrdering) => Ordering;
+    fromI: (_: IOrdering) => Ordering;
     invert: (_: Ordering) => Ordering;
     Show: IShow<Ordering>;
     Eq: IEq<Ordering> & IEq.Ext<Ordering>;

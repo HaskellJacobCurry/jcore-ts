@@ -11,45 +11,56 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 exports.__esModule = true;
-exports.Int = exports.Ord = exports.Eq = exports.Ring = exports.Semiring = exports.Show = exports.odd = exports.even = exports.dec = exports.inc = void 0;
+exports.Ord = exports.Eq = exports.Ring = exports.Semiring = exports.Show = exports.odd = exports.even = exports.dec = exports.inc = exports.Int = void 0;
 var Eq_1 = require("./Eq");
 var Ord_1 = require("./Ord");
 var String_1 = require("./String");
 var Bool_1 = require("./Bool");
 var Ordering_1 = require("./Ordering");
-var ts_toolbelt_1 = require("../../dependency/jcore/dist/ts-toolbelt");
-exports.inc = function (int) { return (int.value++, int); };
-exports.dec = function (int) { return (int.value--, int); };
-exports.even = function (int) { return Bool_1.Bool(int.value % 2 == 0); };
-exports.odd = function (int) { return Bool_1.Bool(int.value % 2 != 0); };
-exports.Show = ({
+var common_1 = require("../util/common");
+var inc = (function (int) { return Int(int.value + 1); });
+exports.inc = inc;
+var dec = (function (int) { return Int(int.value - 1); });
+exports.dec = dec;
+var even = (function (int) { return Bool_1.Bool(int.value % 2 == 0); });
+exports.even = even;
+var odd = (function (int) { return Bool_1.Bool(int.value % 2 != 0); });
+exports.odd = odd;
+var Show = ({
     show: function (int) { return String_1.String("" + int.value); }
 });
-exports.Semiring = ({
-    add: function (int0) { return function (int1) { return exports.Int(int0.value + int1.value); }; },
-    zero: function () { return exports.Int(0); },
-    mul: function (int0) { return function (int1) { return exports.Int(int0.value * int1.value); }; },
-    one: function () { return exports.Int(1); }
+exports.Show = Show;
+var Semiring = ({
+    add: function (int0) { return function (int1) { return Int(int0.value + int1.value); }; },
+    zero: function () { return Int(0); },
+    mul: function (int0) { return function (int1) { return Int(int0.value * int1.value); }; },
+    one: function () { return Int(1); }
 });
-exports.Ring = (__assign(__assign({}, exports.Semiring), { sub: function (int0) { return function (int1) { return exports.Int(int0.value - int1.value); }; }, negate: function (int) { return exports.Int(-int.value); } }));
-exports.Eq = (ts_toolbelt_1.Function.assign(({
+exports.Semiring = Semiring;
+var Ring = (__assign(__assign({}, Semiring), { sub: function (int0) { return function (int1) { return Int(int0.value - int1.value); }; }, negate: function (int) { return Int(-int.value); } }));
+exports.Ring = Ring;
+var Eq = (common_1.Function.assign(({
     eq: function (int0) { return function (int1) { return Bool_1.Bool(int0.value == int1.value); }; }
-}))(function (Eq) { return ts_toolbelt_1.Json.assign(Eq, Eq_1.IEq.Ext(Eq)); }));
-exports.Ord = (ts_toolbelt_1.Function.assign(ts_toolbelt_1.Function.define(function (Ord) { return (__assign(__assign({}, exports.Eq), { compare: function (int0) { return function (int1) { return (Ord().lt(int0)(int1).cata({
+}))(function (Eq) { return common_1.Json.assign(Eq, Eq_1.IEq.Ext(Eq)); }));
+exports.Eq = Eq;
+var Ord = (common_1.Function.assign(common_1.Function.define(function (Ord) { return (__assign(__assign({}, Eq), { compare: function (int0) { return function (int1) { return (Ord().lt(int0)(int1).cata({
         True: function () { return Ordering_1.Ordering.LT; },
         False: function () { return (Ord().lt(int1)(int0).cata({
             True: function () { return Ordering_1.Ordering.GT; },
             False: function () { return Ordering_1.Ordering.EQ; }
         })); }
-    })); }; }, lt: function (int0) { return function (int1) { return Bool_1.Bool(int0.value < int1.value); }; } })); }))(function (Ord) { return ts_toolbelt_1.Json.assign(Ord, Ord_1.IOrd.Ext(Ord)); }));
-exports.Int = ts_toolbelt_1.Json.assign(function (value) { return ({ value: value }); }, {
-    inc: exports.inc,
-    dec: exports.dec,
-    even: exports.even,
-    odd: exports.odd,
-    Show: exports.Show,
-    Semiring: exports.Semiring,
-    Ring: exports.Ring,
-    Eq: exports.Eq,
-    Ord: exports.Ord
+    })); }; }, lt: function (int0) { return function (int1) { return Bool_1.Bool(int0.value < int1.value); }; } })); }))(function (Ord) { return common_1.Json.assign(Ord, Ord_1.IOrd.Ext(Ord)); }));
+exports.Ord = Ord;
+var Int = common_1.Json.assign(function (value) { return ({ value: value }); }, {
+    inc: inc,
+    dec: dec,
+    even: even,
+    odd: odd,
+    Show: Show,
+    Semiring: Semiring,
+    Ring: Ring,
+    Eq: Eq,
+    Ord: Ord
 });
+exports.Int = Int;
+exports["default"] = Int;

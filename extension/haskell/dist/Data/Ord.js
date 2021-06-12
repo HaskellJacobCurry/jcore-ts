@@ -2,10 +2,10 @@
 exports.__esModule = true;
 exports.IOrd = exports.Ord = void 0;
 var IBool_1 = require("./IBool");
-var ts_toolbelt_1 = require("../../dependency/jcore/dist/ts-toolbelt");
+var common_1 = require("../util/common");
 var Ord;
 (function (Ord_1) {
-    Ord_1.Ext = function (Ord) { return ts_toolbelt_1.Function.define(function (Ext) { return ({
+    Ord_1.Ext = function (Ord) { return common_1.Function.define(function (Ext) { return ({
         notLt: function (ord0) { return function (ord1) { return IBool_1.Bool.not(Ord.lt(ord0)(ord1)); }; },
         gt: function (ord0) { return function (ord1) { return Ord.lt(ord1)(ord0); }; },
         notGt: function (ord0) { return function (ord1) { return IBool_1.Bool.not(Ext().gt(ord0)(ord1)); }; },

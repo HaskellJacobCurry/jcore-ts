@@ -11,7 +11,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 exports.__esModule = true;
-exports.Ord = exports.Eq = exports.Show = exports.invert = exports.from = exports.GT = exports.EQ = exports.LT = exports.Ordering = void 0;
+exports.Ord = exports.Eq = exports.Show = exports.invert = exports.fromI = exports.GT = exports.EQ = exports.LT = exports.Ordering = void 0;
 var Eq_1 = require("./Eq");
 var Ord_1 = require("./Ord");
 var String_1 = require("./String");
@@ -29,12 +29,12 @@ var GT = common_1.Json.assign({ tag: 'GT' }, {
     cata: function (fs) { return fs['GT'](); }
 });
 exports.GT = GT;
-var from = (function (ordering) { return (ordering.cata({
+var fromI = (function (ordering) { return (ordering.cata({
     LT: function () { return LT; },
     EQ: function () { return EQ; },
     GT: function () { return GT; }
 })); });
-exports.from = from;
+exports.fromI = fromI;
 var invert = (function (ordering) { return (ordering.cata({
     LT: function () { return GT; },
     EQ: function () { return EQ; },
@@ -75,7 +75,7 @@ var Ordering = {
     LT: LT,
     EQ: EQ,
     GT: GT,
-    from: from,
+    fromI: fromI,
     invert: invert,
     Show: Show,
     Eq: Eq,

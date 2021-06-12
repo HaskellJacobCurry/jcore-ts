@@ -4,6 +4,11 @@ import { IMonoid } from './Monoid';
 import { Functor2 } from './Functor';
 import { Apply2_ } from '../Control/Apply';
 import { Bifunctor2 } from './Bifunctor';
+interface Tuple<A, B> {
+    fst: A;
+    snd: B;
+}
+export { Tuple };
 export declare const URI: "Tuple";
 export declare type URI = typeof URI;
 declare module '../util/HKT' {
@@ -38,10 +43,6 @@ export { Apply };
 /** bimap :: Bifunctor Tuple => (a -> c) -> (b -> d) -> Tuple a b -> Tuple c d */
 declare let Bifunctor: Bifunctor2<URI> & Bifunctor2.Ext<URI>;
 export { Bifunctor };
-interface Tuple<A, B> {
-    fst: A;
-    snd: B;
-}
 declare let Tuple: (<A, B>(fst: A, snd: B) => Tuple<A, B>) & {
     fst: <A_1>(_: Tuple<A_1, any>) => A_1;
     snd: <B_1>(_: Tuple<any, B_1>) => B_1;
@@ -53,4 +54,4 @@ declare let Tuple: (<A, B>(fst: A, snd: B) => Tuple<A, B>) & {
     Apply: <T0>(_: ISemigroup<T0>) => Apply2_<"Tuple", T0> & Apply2_.Ext<"Tuple", T0>;
     Bifunctor: Bifunctor2<"Tuple"> & Bifunctor2.Ext<"Tuple">;
 };
-export { Tuple };
+export default Tuple;

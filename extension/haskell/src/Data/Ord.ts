@@ -3,7 +3,7 @@ import {IOrdering} from './IOrdering'
 import {IBool, Bool} from './IBool'
 import {
 	Function,
-} from '../../dependency/jcore/dist/ts-toolbelt'
+} from '../util/common'
 
 /**
  * class (Eq f) <= Ord f where

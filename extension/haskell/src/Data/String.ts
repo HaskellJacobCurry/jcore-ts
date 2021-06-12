@@ -8,10 +8,10 @@ import {
 interface String extends IString {}
 export {String}
 
-let from: (_: IString) => String = (
+let fromI: (_: IString) => String = (
 	string => cast(string)()
 );
-export {from}
+export {fromI}
 
 let Show: IShow<String> = ({
 	show: string => `"${string.toString()}"`,
@@ -22,7 +22,7 @@ let String = Json.assign(
 	(value: string): String => ({
 		toString: () => value,
 	}), {
-		from,
+		fromI,
 		Show
 	}
 );

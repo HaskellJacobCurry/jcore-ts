@@ -1,9 +1,9 @@
 import {Semigroupoid2} from '../Control/Semigroupoid'
 import {Category2} from '../Control/Category'
 import {
-	Function as IFunction
-} from '../../dependency/jcore/dist/ts-toolbelt'
-import {S} from '../../dependency/jcore/dist/ts-toolbelt/common'
+	Function as IFunction,
+	S,
+} from '../util/common'
 
 const URI = S('Function');
 type URI = typeof URI;
@@ -30,7 +30,10 @@ let const_: <A>(_: A) => <B>(_: B) => A = (
 );
 export {const_}
 
-/** apply :: (a -> b) -> a -> b */
+/** 
+ * apply :: (a -> b) -> a -> b
+ * alias :: [($)]
+ */
 let apply: <A, B>(_: (_: A) => B) => (_: A) => B = (
 	f => a => f(a)
 );

@@ -11,12 +11,11 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 exports.__esModule = true;
-exports.Tuple = exports.Bifunctor = exports.Apply = exports.Functor = exports.Monoid = exports.Semigroup = exports.Show = exports.swap = exports.snd = exports.fst = exports.URI = void 0;
+exports.Bifunctor = exports.Apply = exports.Functor = exports.Monoid = exports.Semigroup = exports.Show = exports.swap = exports.snd = exports.fst = exports.URI = exports.Tuple = void 0;
 var Apply_1 = require("../Control/Apply");
 var Bifunctor_1 = require("./Bifunctor");
 var String_1 = require("./String");
-var ts_toolbelt_1 = require("../../dependency/jcore/dist/ts-toolbelt");
-var common_1 = require("../../dependency/jcore/dist/ts-toolbelt/common");
+var common_1 = require("../util/common");
 exports.URI = common_1.S('Tuple');
 /** fst :: Tuple a b -> a */
 var fst = function (tuple) { return tuple.fst; };
@@ -54,21 +53,21 @@ exports.Monoid = Monoid;
 /** map :: Functor (Tuple a) => (b -> c) -> Tuple a b -> Tuple a c */
 var Functor = {
     URI: exports.URI,
-    map: function (f) { return function (tupleA) { return Tuple(tupleA.fst, f(tupleA.snd)); }; }
+    fmap: function (f) { return function (tupleA) { return Tuple(tupleA.fst, f(tupleA.snd)); }; }
 };
 exports.Functor = Functor;
 /** ap :: Semigroup a => Apply (Tuple a) => Tuple a (b -> c) -> Tuple a b -> Tuple a c */
-var Apply = (function (Semigroup) { return ((function (Apply) { return (ts_toolbelt_1.Json.assign(Apply, Apply_1.Apply2_.Ext(Apply))); })(__assign(__assign({}, Functor), { ap: function (tupleF) { return function (tupleA) { return (Tuple(Semigroup.append(tupleF.fst)(tupleA.fst), tupleF.snd(tupleA.snd))); }; } }))); });
+var Apply = (function (Semigroup) { return ((function (Apply) { return (common_1.Json.assign(Apply, Apply_1.Apply2_.Ext(Apply))); })(__assign(__assign({}, Functor), { ap: function (tupleF) { return function (tupleA) { return (Tuple(Semigroup.append(tupleF.fst)(tupleA.fst), tupleF.snd(tupleA.snd))); }; } }))); });
 exports.Apply = Apply;
 /** bimap :: Bifunctor Tuple => (a -> c) -> (b -> d) -> Tuple a b -> Tuple c d */
-var Bifunctor = ((function (Bifunctor) { return (ts_toolbelt_1.Json.assign(Bifunctor, Bifunctor_1.Bifunctor2.Ext(Bifunctor))); })({
+var Bifunctor = ((function (Bifunctor) { return (common_1.Json.assign(Bifunctor, Bifunctor_1.Bifunctor2.Ext(Bifunctor))); })({
     bimap: function (f) { return function (g) { return function (_a) {
         var fst = _a.fst, snd = _a.snd;
         return Tuple(f(fst), g(snd));
     }; }; }
 }));
 exports.Bifunctor = Bifunctor;
-var Tuple = ts_toolbelt_1.Json.assign(function (fst, snd) { return ({ fst: fst, snd: snd }); }, {
+var Tuple = common_1.Json.assign(function (fst, snd) { return ({ fst: fst, snd: snd }); }, {
     fst: fst,
     snd: snd,
     swap: swap,
@@ -80,3 +79,4 @@ var Tuple = ts_toolbelt_1.Json.assign(function (fst, snd) { return ({ fst: fst, 
     Bifunctor: Bifunctor
 });
 exports.Tuple = Tuple;
+exports["default"] = Tuple;

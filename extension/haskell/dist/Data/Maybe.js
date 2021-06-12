@@ -14,13 +14,12 @@ exports.__esModule = true;
 exports.Monoid = exports.Bind = exports.Apply = exports.Functor = exports.Show = exports.URI = exports.Just = exports.Nothing = exports.Maybe = void 0;
 var Apply_1 = require("../Control/Apply");
 var String_1 = require("./String");
-var ts_toolbelt_1 = require("../../dependency/jcore/dist/ts-toolbelt");
-var common_1 = require("../../dependency/jcore/dist/ts-toolbelt/common");
-var Nothing = ts_toolbelt_1.Json.assign({ tag: 'Nothing' }, {
+var common_1 = require("../util/common");
+var Nothing = common_1.Json.assign({ tag: 'Nothing' }, {
     cata: function (fs) { return fs['Nothing'](); }
 });
 exports.Nothing = Nothing;
-var Just = function (value) { return ts_toolbelt_1.Json.assign({ tag: 'Just', value: value }, {
+var Just = function (value) { return common_1.Json.assign({ tag: 'Just', value: value }, {
     cata: function (fs) { return fs['Just'](value); }
 }); };
 exports.Just = Just;
@@ -35,16 +34,16 @@ var Show = function (Show) { return ({
 exports.Show = Show;
 var Functor = ({
     URI: URI,
-    map: function (f) { return function (maybeA) { return (Maybe.reinterpret(maybeA.cata({
+    fmap: function (f) { return function (maybeA) { return (Maybe.reinterpret(maybeA.cata({
         Nothing: function () { return Nothing; },
         Just: function (value) { return Just(f(value)); }
     }))); }; }
 });
 exports.Functor = Functor;
-var Apply = (ts_toolbelt_1.Function.assign(__assign(__assign({}, Functor), { ap: function (maybeF) { return function (maybeA) { return Maybe.reinterpret(maybeF.cata({
-        Just: function (f) { return Functor.map(f)(ts_toolbelt_1.reinterpret(maybeA)); },
+var Apply = (common_1.Function.assign(common_1.Function.assign(__assign(__assign({}, Functor), { ap: function (maybeF) { return function (maybeA) { return Maybe.reinterpret(maybeF.cata({
+        Just: function (f) { return Functor.fmap(f)(common_1.reinterpret(maybeA)); },
         Nothing: function () { return Maybe.Nothing; }
-    })); }; } }))(function (Apply) { return ts_toolbelt_1.Json.assign(Apply, Apply_1.Apply1.Ext(Apply)); }));
+    })); }; } }))(function (Apply) { return common_1.Json.assign(Apply_1.Apply1.Def(Apply), Apply); }))(function (Apply) { return common_1.Json.assign(Apply, Apply_1.Apply1.Ext(Apply)); }));
 exports.Apply = Apply;
 var Bind = (__assign(__assign({}, Apply), { bind: function (maybeA) { return function (f) { return Maybe.reinterpret(maybeA.cata({
         Just: f,
@@ -59,12 +58,12 @@ var Monoid = function (Semigroup) { return ({
             Just: function (value1) { return Just(Semigroup.append(value0)(value1)); }
         })); }
     })); }; },
-    mempty: function () { return ts_toolbelt_1.reinterpret(Nothing); }
+    mempty: function () { return common_1.reinterpret(Nothing); }
 }); };
 exports.Monoid = Monoid;
 var Maybe = {
     URI: URI,
-    reinterpret: function (maybe) { return ts_toolbelt_1.reinterpret(maybe); },
+    reinterpret: function (maybe) { return common_1.reinterpret(maybe); },
     Nothing: Nothing,
     Just: Just,
     Show: Show,

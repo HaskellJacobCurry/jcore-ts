@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.Show = exports.not = exports.or = exports.and = exports.from = exports.True = exports.False = exports.Bool = void 0;
+exports.Show = exports.not = exports.or = exports.and = exports.fromI = exports.True = exports.False = exports.Bool = void 0;
 var IBool_1 = require("./IBool");
 var String_1 = require("./String");
 var common_1 = require("../util/common");
@@ -18,11 +18,11 @@ var True = common_1.Json.assign({ tag: 'True' }, {
     or: function (_) { return True; }
 });
 exports.True = True;
-var from = (function (bool) { return (bool.cata({
+var fromI = (function (bool) { return (bool.cata({
     True: function () { return True; },
     False: function () { return False; }
 })); });
-exports.from = from;
+exports.fromI = fromI;
 var and = (function (bool0) { return function (bool1) { return IBool_1.CBool.and(bool0)(bool1); }; });
 exports.and = and;
 var or = (function (bool0) { return function (bool1) { return IBool_1.CBool.or(bool0)(bool1); }; });
@@ -37,7 +37,7 @@ var Show = ({
 });
 exports.Show = Show;
 var Bool = common_1.Json.assign(function (value) { return value ? True : False; }, {
-    from: from,
+    fromI: fromI,
     and: and,
     or: or,
     not: not,

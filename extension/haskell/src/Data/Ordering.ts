@@ -42,7 +42,7 @@ let GT: Ordering = Json.assign(
 );
 export {GT}
 
-let from: (_: IOrdering) => Ordering = (
+let fromI: (_: IOrdering) => Ordering = (
 	ordering => (
 		ordering.cata({
 			LT: () => LT,
@@ -51,7 +51,7 @@ let from: (_: IOrdering) => Ordering = (
 		})
 	)
 );
-export {from}
+export {fromI}
 
 let invert: (_: Ordering) => Ordering = (
 	ordering => (
@@ -121,7 +121,7 @@ let Ordering = {
 	LT,
 	EQ,
 	GT,
-	from,
+	fromI,
 	invert,
 	Show,
 	Eq,

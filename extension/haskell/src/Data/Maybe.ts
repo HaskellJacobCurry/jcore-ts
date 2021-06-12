@@ -10,8 +10,8 @@ import {
 	reinterpret,
 	cast,
 	Function,
-} from '../../dependency/jcore/dist/ts-toolbelt'
-import {S} from '../../dependency/jcore/dist/ts-toolbelt/common'
+	S
+} from '../util/common'
 
 /** data Maybe a = Just a | Nothing */
 type Maybe<A> = IMaybe<A> & (Nothing | Just<A>);
@@ -66,7 +66,7 @@ export {Show}
 
 let Functor: Functor1<URI> = ({
 	URI,
-	map: f => maybeA => (
+	fmap: f => maybeA => (
 		Maybe.reinterpret(
 			maybeA.cata({
 				Nothing: () => Nothing,
@@ -78,15 +78,17 @@ let Functor: Functor1<URI> = ({
 export {Functor}
 
 let Apply: Apply1<URI> & Apply1.Ext<URI> = (
-	Function.assign(<Apply1<URI>>{
-		...Functor,
-		ap: maybeF => maybeA => Maybe.reinterpret(
-			maybeF.cata({
-				Just: f => Functor.map(f)(reinterpret(maybeA)),
-				Nothing: () => Maybe.Nothing,
-			})
-		),
-	})(Apply => Json.assign(Apply, Apply1.Ext(Apply)))
+	Function.assign(
+		Function.assign(<Apply1<URI>>{
+			...Functor,
+			ap: maybeF => maybeA => Maybe.reinterpret(
+				maybeF.cata({
+					Just: f => Functor.fmap(f)(reinterpret(maybeA)),
+					Nothing: () => Maybe.Nothing,
+				})
+			),
+		})(Apply => Json.assign(Apply1.Def(Apply), Apply))
+	)(Apply => Json.assign(Apply, Apply1.Ext(Apply)))
 );
 export {Apply}
 

@@ -4,25 +4,29 @@ import { IEq } from './Eq';
 import { IOrd } from './Ord';
 import { IShow } from './Show';
 import { Bool } from './Bool';
-interface IInt {
-    inc: (_: Int) => Int;
-    dec: (_: Int) => Int;
-    even: (_: Int) => Bool;
-    odd: (_: Int) => Bool;
-}
-export declare let inc: IInt['inc'];
-export declare let dec: IInt['dec'];
-export declare let even: IInt['even'];
-export declare let odd: IInt['odd'];
-export declare let Show: IShow<Int>;
-export declare let Semiring: ISemiring<Int>;
-export declare let Ring: IRing<Int>;
-export declare let Eq: IEq<Int> & IEq.Ext<Int>;
-export declare let Ord: IOrd<Int> & IOrd.Ext<Int>;
-export interface Int {
+interface Int {
     value: number;
 }
-export declare let Int: ((value: number) => Int) & {
+export { Int };
+declare let inc: (_: Int) => Int;
+export { inc };
+declare let dec: (_: Int) => Int;
+export { dec };
+declare let even: (_: Int) => Bool;
+export { even };
+declare let odd: (_: Int) => Bool;
+export { odd };
+declare let Show: IShow<Int>;
+export { Show };
+declare let Semiring: ISemiring<Int>;
+export { Semiring };
+declare let Ring: IRing<Int>;
+export { Ring };
+declare let Eq: IEq<Int> & IEq.Ext<Int>;
+export { Eq };
+declare let Ord: IOrd<Int> & IOrd.Ext<Int>;
+export { Ord };
+declare let Int: ((value: number) => Int) & {
     inc: (_: Int) => Int;
     dec: (_: Int) => Int;
     even: (_: Int) => Bool;
@@ -33,4 +37,4 @@ export declare let Int: ((value: number) => Int) & {
     Eq: IEq<Int> & IEq.Ext<Int>;
     Ord: IOrd<Int> & IOrd.Ext<Int>;
 };
-export {};
+export default Int;

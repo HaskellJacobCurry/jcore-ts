@@ -10,47 +10,61 @@ import {
 	Json,
 	Function,
 	reinterpret,
-} from '../../dependency/jcore/dist/ts-toolbelt'
+} from '../util/common'
 
-interface IInt {
-	inc: (_: Int) => Int;
-	dec: (_: Int) => Int;
-	even: (_: Int) => Bool;
-	odd: (_: Int) => Bool;
+interface Int {
+	value: number;
 }
+export {Int}
 
-export let inc: IInt['inc'] = int => (int.value++, int);
+let inc: (_: Int) => Int = (
+	int => Int(int.value + 1)
+);
+export {inc}
 
-export let dec: IInt['dec'] = int => (int.value--, int);
+let dec: (_: Int) => Int = (
+	int => Int(int.value - 1)
+);
+export {dec}
 
-export let even: IInt['even'] = int => Bool(int.value % 2 == 0);
+let even: (_: Int) => Bool = (
+	int => Bool(int.value % 2 == 0)
+);
+export {even}
 
-export let odd: IInt['odd'] = int => Bool(int.value % 2 != 0);
+let odd: (_: Int) => Bool = (
+	int => Bool(int.value % 2 != 0)
+);
+export {odd}
 
-export let Show: IShow<Int> = ({
+let Show: IShow<Int> = ({
 	show: int => String(`${int.value}`),
 });
+export {Show}
 
-export let Semiring: ISemiring<Int> = ({
+let Semiring: ISemiring<Int> = ({
 	add: int0 => int1 => Int(int0.value + int1.value),
 	zero: () => Int(0),
 	mul: int0 => int1 => Int(int0.value * int1.value),
 	one: () => Int(1),
 });
+export {Semiring}
 
-export let Ring: IRing<Int> = ({
+let Ring: IRing<Int> = ({
 	...Semiring,
 	sub: int0 => int1 => Int(int0.value - int1.value),
 	negate: int => Int(-int.value),
 });
+export {Ring}
 
-export let Eq: IEq<Int> & IEq.Ext<Int> = (
+let Eq: IEq<Int> & IEq.Ext<Int> = (
 	Function.assign(<IEq<Int>>({
 		eq: int0 => int1 => Bool(int0.value == int1.value),
 	}))(Eq => Json.assign(Eq, IEq.Ext(Eq)))
 );
+export {Eq}
 
-export let Ord: IOrd<Int> & IOrd.Ext<Int> = (
+let Ord: IOrd<Int> & IOrd.Ext<Int> = (
 	Function.assign(
 		Function.define<IOrd<Int>>(Ord => ({
 			...Eq,
@@ -69,11 +83,9 @@ export let Ord: IOrd<Int> & IOrd.Ext<Int> = (
 		}))
 	)(Ord => Json.assign(Ord, IOrd.Ext(Ord)))
 );
+export {Ord}
 
-export interface Int {
-	value: number;
-}
-export let Int = Json.assign(
+let Int = Json.assign(
 	(value: number) => <Int>({value}), {
 		inc,
 		dec,
@@ -86,3 +98,4 @@ export let Int = Json.assign(
 		Ord,
 	}
 );
+export default Int
