@@ -9,10 +9,15 @@ import {Ordering} from './Ordering'
 import {
 	Json,
 	Function,
-	reinterpret,
+	S,
 } from '../util/common'
 
+const URI = S('Int');
+type URI = typeof URI;
+export {URI}
+
 interface Int {
+	URI: URI;
 	value: number;
 }
 export {Int}
@@ -86,7 +91,11 @@ let Ord: IOrd<Int> & IOrd.Ext<Int> = (
 export {Ord}
 
 let Int = Json.assign(
-	(value: number) => <Int>({value}), {
+	(value: number) => <Int>({
+		URI,
+		value
+	}), {
+		URI,
 		inc,
 		dec,
 		even,

@@ -4,7 +4,11 @@ import { IEq } from './Eq';
 import { IOrd } from './Ord';
 import { IShow } from './Show';
 import { Bool } from './Bool';
+declare const URI: "Int";
+declare type URI = typeof URI;
+export { URI };
 interface Int {
+    URI: URI;
     value: number;
 }
 export { Int };
@@ -27,6 +31,7 @@ export { Eq };
 declare let Ord: IOrd<Int> & IOrd.Ext<Int>;
 export { Ord };
 declare let Int: ((value: number) => Int) & {
+    URI: "Int";
     inc: (_: Int) => Int;
     dec: (_: Int) => Int;
     even: (_: Int) => Bool;

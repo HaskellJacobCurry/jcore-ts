@@ -18,5 +18,11 @@ export namespace Json {
 		TKey extends keyof TJson
 	> = Pick<TJson, Exclude<keyof TJson, TKey>>;
 
-	export let assign = <T, U>(dest: T, ...srcs: U[]): T & U => Object.assign(<any>dest, ...srcs);
+	export function assign<A, B>(dest: A, src0: B): A & B;
+	export function assign<A, B, C>(dest: A, src0: B, src1: C): A & B & C;
+	export function assign<A, B, C, D>(dest: A, src0: B, src1: C, src2: D): A & B & C & D;
+	export function assign<A, B, C, D, E>(dest: A, src0: B, src1: C, src2: D, src3: E): A & B & C & D & E;
+	export function assign(dest: any, ...srcs: any[]): any {
+		return Object.assign(dest, ...srcs);
+	}
 }

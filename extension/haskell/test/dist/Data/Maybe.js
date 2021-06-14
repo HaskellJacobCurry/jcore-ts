@@ -3,13 +3,10 @@ exports.__esModule = true;
 var Maybe_1 = require("../../../dist/Data/Maybe");
 var String_1 = require("../../../dist/Data/String");
 var Int_1 = require("../../../dist/Data/Int");
-/*
-console.log({
-    v: Maybe.Show(String.Show).show(Maybe.Just(String('shit'))).toString(),
-    g: Maybe.Show(String.Show).show(
-        Maybe.Functor.map((s: String) => s)(Maybe.Just(String('shit')))
-    ).toString(),
-})
-*/
-var maybeStr = (Maybe_1.Maybe.Apply.liftA2(function (a) { return function (b) { return (Int_1.Int.Show.show(Int_1.Int.Ring.mul(a)(b))); }; })(Maybe_1.Maybe.Just(Int_1.Int(33)))(Maybe_1.Maybe.Just(Int_1.Int(11))));
+var common_1 = require("../../../dist/util/common");
+var maybeStr = (Maybe_1.Maybe.Apply.liftA2(function (a) { return function (b) { return (common_1.Function.assign(Int_1.Int.Show.show(Int_1.Int.Ring.mul(a)(b)))(function (_) { return String_1.String.fromI(_); })); }; })(Maybe_1.Maybe.Just(Int_1.Int(33)))(Maybe_1.Maybe.Just(Int_1.Int(11))));
 console.log(Maybe_1.Maybe.Show(String_1.String.Show).show(maybeStr).toString());
+var a = (Maybe_1.Maybe.Apply.fstAp(Maybe_1.Maybe.Just(Int_1.Int(3)))(Maybe_1.Maybe.Just(String_1.String('shit'))));
+var b = (common_1.Function.assign(function (b) { return function (a) { return (String_1.String.Semigroup.append(b)(String_1.String.fromI(Int_1.Int.Show.show(a)))); }; })(function (_) { return Maybe_1.Maybe.Foldable.foldl(_)(String_1.String('-101-'))(a); }));
+console.log(Maybe_1.Maybe.Show(Int_1.Int.Show).show(a).toString());
+console.log(b.toString());

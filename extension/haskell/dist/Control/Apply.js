@@ -9,8 +9,8 @@ var Apply;
         liftA2: function (f) { return function (applyA) { return function (applyB) { return (common_1.Function.assign(Apply.fmap(f)(applyA))(function (_) { return Apply.ap(_)(applyB); })); }; }; }
     }); });
     Apply_1.Ext = (function (Apply) { return (common_1.Function.define(function (Ext) { return ({
-        fstAp: function (applyA) { return function (applyB) { return (common_1.Function.assign(Apply.fmap(common_1.const_)(applyA))(function (_) { return Apply.ap(_)(applyB); })); }; },
-        sndAp: function (applyA) { return function (applyB) { return (common_1.Function.assign(Apply.fmap(common_1.const_)(applyB))(function (_) { return Apply.ap(_)(applyA); })); }; }
+        fstAp: function (_0) { return function (_1) { return Apply.liftA2(common_1.const_)(_0)(_1); }; },
+        sndAp: function (_0) { return function (_1) { return (common_1.Function.assign(Apply.fmap(common_1.const_(common_1.id_()))(_0))(function (_) { return Apply.ap(_)(_1); })); }; }
     }); })); });
 })(Apply || (Apply = {}));
 exports.Apply = Apply;
@@ -21,7 +21,10 @@ var Apply1;
         ap: function (_0) { return function (_1) { return (Apply.liftA2(common_1.id_())(_0)(_1)); }; },
         liftA2: function (f) { return function (applyA) { return function (applyB) { return (common_1.Function.assign(Apply.fmap(f)(applyA))(function (_) { return Apply.ap(_)(applyB); })); }; }; }
     }); });
-    Apply1.Ext = (function (Apply) { return (common_1.Function.define(function (Ext) { return ({}); })); });
+    Apply1.Ext = (function (Apply) { return (common_1.Function.define(function (Ext) { return ({
+        fstAp: function (_0) { return function (_1) { return (Apply.liftA2(common_1.const_)(_0)(_1)); }; },
+        sndAp: function (_0) { return function (_1) { return (common_1.Function.assign(Apply.fmap(common_1.const_(common_1.id_()))(_0))(function (_) { return Apply.ap(_)(_1); })); }; }
+    }); })); });
 })(Apply1 || (Apply1 = {}));
 exports.Apply1 = Apply1;
 var Apply2;
@@ -30,7 +33,10 @@ var Apply2;
         ap: function (_0) { return function (_1) { return (Apply.liftA2(common_1.id)(_0)(_1)); }; },
         liftA2: function (f) { return function (applyA) { return function (applyB) { return (common_1.Function.assign(Apply.fmap(f)(applyA))(function (_) { return Apply.ap(_)(applyB); })); }; }; }
     }); });
-    Apply2.Ext = (function (Apply) { return (common_1.Function.define(function (Ext) { return ({}); })); });
+    Apply2.Ext = (function (Apply) { return (common_1.Function.define(function (Ext) { return ({
+        fstAp: function (_0) { return function (_1) { return (Apply.liftA2(common_1.const_)(_0)(_1)); }; },
+        sndAp: function (_0) { return function (_1) { return (common_1.Function.assign(Apply.fmap(common_1.const_(common_1.id_()))(_0))(function (_) { return Apply.ap(_)(_1); })); }; }
+    }); })); });
 })(Apply2 || (Apply2 = {}));
 exports.Apply2 = Apply2;
 var Apply2_;
@@ -39,7 +45,10 @@ var Apply2_;
         ap: function (_0) { return function (_1) { return (Apply.liftA2(common_1.id_())(_0)(_1)); }; },
         liftA2: function (f) { return function (applyA) { return function (applyB) { return (common_1.Function.assign(Apply.fmap(f)(applyA))(function (_) { return Apply.ap(_)(applyB); })); }; }; }
     }); });
-    Apply2_.Ext = (function (Apply) { return (common_1.Function.define(function (Ext) { return ({}); })); });
+    Apply2_.Ext = (function (Apply) { return (common_1.Function.define(function (Ext) { return ({
+        fstAp: function (_0) { return function (_1) { return (Apply.liftA2(common_1.const_)(_0)(_1)); }; },
+        sndAp: function (_0) { return function (_1) { return (common_1.Function.assign(Apply.fmap(common_1.const_(common_1.id_()))(_0))(function (_) { return Apply.ap(_)(_1); })); }; }
+    }); })); });
 })(Apply2_ || (Apply2_ = {}));
 exports.Apply2_ = Apply2_;
 exports["default"] = Apply;

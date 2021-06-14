@@ -1,6 +1,8 @@
 export * from '../../dependency/jcore/dist/ts-toolbelt'
 export * from '../../dependency/jcore/dist/ts-toolbelt/common'
 export * from '../../dependency/jcore/dist/common/compose'
+export * from '../../dependency/jcore/dist/common/pipe'
+import {Function} from '../../dependency/jcore/dist/ts-toolbelt'
 
 let id: <A>(_: A) => A = a => a;
 export {id}
@@ -17,3 +19,9 @@ let flip: <A, B, C>(_: (_: A) => (_: B) => C) => (_: B) => (_: A) => C = (
 	f => b => a => f(a)(b)
 );
 export {flip}
+
+let assign = Function.assign;
+export {assign}
+
+let define = Function.define;
+export {define}

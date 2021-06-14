@@ -10,11 +10,12 @@ exports.__esModule = true;
 exports.Json = void 0;
 var Json;
 (function (Json) {
-    Json.assign = function (dest) {
+    function assign(dest) {
         var srcs = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             srcs[_i - 1] = arguments[_i];
         }
         return Object.assign.apply(Object, __spreadArrays([dest], srcs));
-    };
+    }
+    Json.assign = assign;
 })(Json = exports.Json || (exports.Json = {}));
