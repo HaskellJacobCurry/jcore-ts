@@ -1,3 +1,4 @@
+import {IInt} from './IInt'
 import {ISemiring} from './Semiring'
 import {IRing} from './Ring'
 import {IEq} from './Eq'
@@ -16,11 +17,15 @@ const URI = S('Int');
 type URI = typeof URI;
 export {URI}
 
-interface Int {
+interface Int extends IInt {
 	URI: URI;
-	value: number;
 }
 export {Int}
+
+let fromI: (_: IInt) => Int = (
+	int => ({URI, value: int.value})
+);
+export {fromI}
 
 let inc: (_: Int) => Int = (
 	int => Int(int.value + 1)
@@ -48,17 +53,17 @@ let Show: IShow<Int> = ({
 export {Show}
 
 let Semiring: ISemiring<Int> = ({
-	add: int0 => int1 => Int(int0.value + int1.value),
+	add: int0 => int1 => IInt.add(int0)(int1),
 	zero: () => Int(0),
-	mul: int0 => int1 => Int(int0.value * int1.value),
+	mul: int0 => int1 => IInt.multiply(int0)(int1),
 	one: () => Int(1),
 });
 export {Semiring}
 
 let Ring: IRing<Int> = ({
 	...Semiring,
-	sub: int0 => int1 => Int(int0.value - int1.value),
-	negate: int => Int(-int.value),
+	sub: int0 => int1 => IInt.subtract(int0)(int1),
+	negate: int => IInt.negate(int),
 });
 export {Ring}
 
@@ -96,6 +101,7 @@ let Int = Json.assign(
 		value
 	}), {
 		URI,
+		fromI,
 		inc,
 		dec,
 		even,

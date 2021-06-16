@@ -1,4 +1,4 @@
-import {IBool, CBool} from './IBool'
+import {IBool} from './IBool'
 import {IShow} from './Show'
 import {String} from './String'
 import {
@@ -47,17 +47,17 @@ let fromI: (_: IBool) => Bool = (
 export {fromI}
 
 let and: (_: Bool) => (_: Bool) => Bool = (
-	bool0 => bool1 => CBool.and(bool0)(bool1)
+	bool0 => bool1 => IBool.and(bool0)(bool1)
 );
 export {and}
 
 let or: (_: Bool) => (_: Bool) => Bool = (
-	bool0 => bool1 => CBool.or(bool0)(bool1)
+	bool0 => bool1 => IBool.or(bool0)(bool1)
 );
 export {or}
 
 let not: (_: Bool) => Bool = (
-	bool => CBool.not(bool)
+	bool => IBool.not(bool)
 );
 export {not}
 

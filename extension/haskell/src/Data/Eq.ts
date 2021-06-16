@@ -1,4 +1,4 @@
-import {IBool, Bool} from './IBool'
+import {IBool} from './IBool'
 
 /**
  * class Eq f where
@@ -14,7 +14,7 @@ namespace Eq {
 		notEq: (_: A) => (_: A) => IBool;
 	}
 	export let Ext = <A>(Eq: Eq<A>): Ext<A> => ({
-		notEq: eq0 => eq1 => Bool.not(Eq.eq(eq0)(eq1))
+		notEq: eq0 => eq1 => IBool.not(Eq.eq(eq0)(eq1))
 	});
 }
 export {Eq}

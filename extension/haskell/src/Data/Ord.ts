@@ -1,6 +1,6 @@
 import {Eq} from './Eq'
 import {IOrdering} from './IOrdering'
-import {IBool, Bool} from './IBool'
+import {IBool} from './IBool'
 import {
 	Function,
 } from '../util/common'
@@ -34,9 +34,9 @@ namespace Ord {
 		between: (min: A) => (max: A) => (_: A) => IBool;
 	}
 	export let Ext = <A>(Ord: Ord<A>) => Function.define<Ext<A>>(Ext => ({
-		notLt: ord0 => ord1 => Bool.not(Ord.lt(ord0)(ord1)),
+		notLt: ord0 => ord1 => IBool.not(Ord.lt(ord0)(ord1)),
 		gt: ord0 => ord1 => Ord.lt(ord1)(ord0),
-		notGt: ord0 => ord1 => Bool.not(Ext().gt(ord0)(ord1)),
+		notGt: ord0 => ord1 => IBool.not(Ext().gt(ord0)(ord1)),
 		min: ord0 => ord1 => (
 			Ord.lt(ord0)(ord1).cata({
 				True: () => ord0,

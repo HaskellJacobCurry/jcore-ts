@@ -1,4 +1,3 @@
-import { IShow } from '../Show';
 import { ISemigroup } from '../Semigroup';
 import { IMonoid } from '../Monoid';
 declare const URI: "Dual";
@@ -11,20 +10,15 @@ interface Dual<A> {
 export { Dual };
 declare let get: <A>(_: Dual<A>) => A;
 export { get };
-/** Show a => Show (Dual a) */
-declare let Show: <A>(_: IShow<A>) => IShow<Dual<A>>;
-export { Show };
 /** Semigroup a => Semigroup (Dual a) */
 declare let Semigroup: <A>(_: ISemigroup<A>) => ISemigroup<Dual<A>>;
 export { Semigroup };
-/** Monoid a => Monoid (Dual a) */
 declare let Monoid: <A>(_: IMonoid<A>) => IMonoid<Dual<A>> & IMonoid.Ext<Dual<A>>;
 export { Monoid };
 declare let Dual: (<A>(value: A) => Dual<A>) & {
     URI: "Dual";
     get: <A_1>(_: Dual<A_1>) => A_1;
-    Show: <A_2>(_: IShow<A_2>) => IShow<Dual<A_2>>;
-    Semigroup: <A_3>(_: ISemigroup<A_3>) => ISemigroup<Dual<A_3>>;
-    Monoid: <A_4>(_: IMonoid<A_4>) => IMonoid<Dual<A_4>> & IMonoid.Ext<Dual<A_4>>;
+    Semigroup: <A_2>(_: ISemigroup<A_2>) => ISemigroup<Dual<A_2>>;
+    Monoid: <A_3>(_: IMonoid<A_3>) => IMonoid<Dual<A_3>> & IMonoid.Ext<Dual<A_3>>;
 };
 export default Dual;

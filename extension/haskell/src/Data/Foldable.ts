@@ -2,12 +2,14 @@ import {HKT, URI1, URI2, Kind1, Kind2} from '../util/HKT'
 import {Monoid} from './Monoid'
 import {Applicative1} from '../Control/Applicative'
 import {IUnit} from './IUnit'
+import {IInt} from './IInt'
 import {Endo} from './Monoid/Endo'
-import {Dual} from './Monoid/Dual'
+import {Dual} from './Monoid/Dual_'
 import {
 	define,
 	assign,
 	flip,
+	id,
 } from '../util/common'
 
 /**
@@ -15,11 +17,15 @@ import {
  *  foldMap :: Monoid g => (a -> g) -> f a -> g
  * foldl :: (b -> a -> b) -> b -> f a -> b
  * foldr :: (a -> b -> b) -> b -> f a -> b
+ * fold :: Monoid g => f g -> g
+ * length :: f a -> Int
  * traverse_ :: Applicative g => (a -> g b) -> f a -> g Unit
  * 
  * default
  *  foldr f z t = appEndo (foldMap (Endo . f) t) z
  *  foldl f z t = appEndo (getDual (foldMap (Dual . Endo . flip f) t)) z
+ *  fold = foldMap id
+ *  length = getSum . foldMap (Sum . const 1)
  */
 interface IFoldable<F> {
 	foldMap: <G>(_: Monoid<G>) => <A>(_: (_: A) => G) => (_: HKT<F, A>) => G;
@@ -27,6 +33,7 @@ interface IFoldable<F> {
 interface IExtFoldable<F> {
 	foldl: <A, B>(_: (_: B) => (_: A) => B) => (_: B) => (_: HKT<F, A>) => B;
 	foldr: <A, B>(_: (_: A) => (_: B) => B) => (_: B) => (_: HKT<F, A>) => B;
+	fold: <G>(_: Monoid<G>) => (_: HKT<F, G>) => G;
 }
 interface Foldable<F> extends IFoldable<F> {
 	URI: F;
@@ -55,7 +62,8 @@ namespace Foldable {
 					))(_ => assign(
 						Endo.get(Dual.get(_(foldableA)))
 					))(_ => _(b))
-				)
+				),
+				fold: Monoid => Foldable.foldMap(Monoid)(id),
 			}))
 		)
 	);
@@ -67,6 +75,7 @@ interface IFoldable1<F extends URI1> {
 interface IExtFoldable1<F extends URI1> {
 	foldl: <A, B>(_: (_: B) => (_: A) => B) => (_: B) => (_: Kind1<F, A>) => B;
 	foldr: <A, B>(_: (_: A) => (_: B) => B) => (_: B) => (_: Kind1<F, A>) => B;
+	fold: <G>(_: Monoid<G>) => (_: Kind1<F, G>) => G;
 }
 interface Foldable1<F extends URI1> extends IFoldable1<F> {
 	URI: F;
@@ -113,7 +122,8 @@ namespace Foldable1 {
 					))(_ => assign(
 						Endo.get(Dual.get(_(foldableA)))
 					))(_ => _(b))
-				)
+				),
+				fold: Monoid => Foldable.foldMap(Monoid)(id),
 			}))
 		)
 	);

@@ -11,7 +11,8 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 exports.__esModule = true;
-exports.Ord = exports.Eq = exports.Ring = exports.Semiring = exports.Show = exports.odd = exports.even = exports.dec = exports.inc = exports.Int = exports.URI = void 0;
+exports.Ord = exports.Eq = exports.Ring = exports.Semiring = exports.Show = exports.odd = exports.even = exports.dec = exports.inc = exports.fromI = exports.Int = exports.URI = void 0;
+var IInt_1 = require("./IInt");
 var Eq_1 = require("./Eq");
 var Ord_1 = require("./Ord");
 var String_1 = require("./String");
@@ -20,6 +21,8 @@ var Ordering_1 = require("./Ordering");
 var common_1 = require("../util/common");
 var URI = common_1.S('Int');
 exports.URI = URI;
+var fromI = (function (int) { return ({ URI: URI, value: int.value }); });
+exports.fromI = fromI;
 var inc = (function (int) { return Int(int.value + 1); });
 exports.inc = inc;
 var dec = (function (int) { return Int(int.value - 1); });
@@ -33,13 +36,13 @@ var Show = ({
 });
 exports.Show = Show;
 var Semiring = ({
-    add: function (int0) { return function (int1) { return Int(int0.value + int1.value); }; },
+    add: function (int0) { return function (int1) { return IInt_1.IInt.add(int0)(int1); }; },
     zero: function () { return Int(0); },
-    mul: function (int0) { return function (int1) { return Int(int0.value * int1.value); }; },
+    mul: function (int0) { return function (int1) { return IInt_1.IInt.multiply(int0)(int1); }; },
     one: function () { return Int(1); }
 });
 exports.Semiring = Semiring;
-var Ring = (__assign(__assign({}, Semiring), { sub: function (int0) { return function (int1) { return Int(int0.value - int1.value); }; }, negate: function (int) { return Int(-int.value); } }));
+var Ring = (__assign(__assign({}, Semiring), { sub: function (int0) { return function (int1) { return IInt_1.IInt.subtract(int0)(int1); }; }, negate: function (int) { return IInt_1.IInt.negate(int); } }));
 exports.Ring = Ring;
 var Eq = (common_1.Function.assign(({
     eq: function (int0) { return function (int1) { return Bool_1.Bool(int0.value == int1.value); }; }
@@ -58,6 +61,7 @@ var Int = common_1.Json.assign(function (value) { return ({
     value: value
 }); }, {
     URI: URI,
+    fromI: fromI,
     inc: inc,
     dec: dec,
     even: even,

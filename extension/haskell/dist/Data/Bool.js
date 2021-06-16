@@ -23,11 +23,11 @@ var fromI = (function (bool) { return (bool.cata({
     False: function () { return False; }
 })); });
 exports.fromI = fromI;
-var and = (function (bool0) { return function (bool1) { return IBool_1.CBool.and(bool0)(bool1); }; });
+var and = (function (bool0) { return function (bool1) { return IBool_1.IBool.and(bool0)(bool1); }; });
 exports.and = and;
-var or = (function (bool0) { return function (bool1) { return IBool_1.CBool.or(bool0)(bool1); }; });
+var or = (function (bool0) { return function (bool1) { return IBool_1.IBool.or(bool0)(bool1); }; });
 exports.or = or;
-var not = (function (bool) { return IBool_1.CBool.not(bool); });
+var not = (function (bool) { return IBool_1.IBool.not(bool); });
 exports.not = not;
 var Show = ({
     show: function (bool) { return (bool.cata({

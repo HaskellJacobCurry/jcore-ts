@@ -3,19 +3,6 @@ import {
 	cast,
 } from '../util/common'
 
-interface Bool {
-	not: <TBool extends IBool>(_: TBool) => TBool;
-	and: <TBool extends IBool>(_: TBool) => (_: TBool) => TBool;
-	or: <TBool extends IBool>(_: TBool) => (_: TBool) => TBool;
-}
-let Bool: Bool = {
-	not: bool0 => cast(bool0.not())(),
-	and: bool0 => bool1 => cast(bool0.and(bool1))(),
-	or: bool0 => bool1 => cast(bool0.or(bool1))(),
-};
-export {Bool}
-export {Bool as CBool}
-
 interface IBool {
 	cata: <T, U>(
 		fs: {
@@ -28,4 +15,25 @@ interface IBool {
 	or: (_: IBool) => IBool;
 }
 export {IBool}
+
+let not: <TBool extends IBool>(_: TBool) => TBool = (
+	bool => cast(bool.not())()
+);
+export {not}
+
+let and: <TBool extends IBool>(_: TBool) => (_: TBool) => TBool = (
+	bool0 => bool1 => cast(bool0.and(bool1))()
+);
+export {and}
+
+let or: <TBool extends IBool>(_: TBool) => (_: TBool) => TBool = (
+	bool0 => bool1 => cast(bool0.or(bool1))()
+);
+export {or}
+
+let IBool = {
+	not,
+	and,
+	or,
+};
 export default IBool

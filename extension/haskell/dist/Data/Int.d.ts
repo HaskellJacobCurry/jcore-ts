@@ -1,3 +1,4 @@
+import { IInt } from './IInt';
 import { ISemiring } from './Semiring';
 import { IRing } from './Ring';
 import { IEq } from './Eq';
@@ -7,11 +8,12 @@ import { Bool } from './Bool';
 declare const URI: "Int";
 declare type URI = typeof URI;
 export { URI };
-interface Int {
+interface Int extends IInt {
     URI: URI;
-    value: number;
 }
 export { Int };
+declare let fromI: (_: IInt) => Int;
+export { fromI };
 declare let inc: (_: Int) => Int;
 export { inc };
 declare let dec: (_: Int) => Int;
@@ -32,6 +34,7 @@ declare let Ord: IOrd<Int> & IOrd.Ext<Int>;
 export { Ord };
 declare let Int: ((value: number) => Int) & {
     URI: "Int";
+    fromI: (_: IInt) => Int;
     inc: (_: Int) => Int;
     dec: (_: Int) => Int;
     even: (_: Int) => Bool;

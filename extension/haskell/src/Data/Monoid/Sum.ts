@@ -9,45 +9,44 @@ import {
 	S,
 } from '../../util/common'
 
-const URI = S('Dual');
+const URI = S('Sum');
 type URI = typeof URI;
 export {URI}
 
-interface Dual<A> {
+interface Sum<A> {
 	URI: URI;
 	value: A;
 }
-export {Dual}
+export {Sum}
 
-let get: <A>(_: Dual<A>) => A = _ => _.value;
+let get: <A>(_: Sum<A>) => A = _ => _.value;
 export {get}
 
-/** Show a => Show (Dual a) */
-let Show: <A>(_: IShow<A>) => IShow<Dual<A>> = (
+/** Show a => Show (Sum a) */
+let Show: <A>(_: IShow<A>) => IShow<Sum<A>> = (
 	ShowA => ({
-		show: dualA => (
+		show: sumA => (
 			assign(
-				String('Dual(')
+				String('Sum(')
 			)(_ => assign(
-				String.Semigroup.append(_)(String.fromI(ShowA.show(dualA.value)))
+				String.Semigroup.append(_)(String.fromI(ShowA.show(sumA.value)))
 			))(_ => String.Semigroup.append(_)(String(')')))
 		),
 	})
 );
 export {Show}
 
-/** Semigroup a => Semigroup (Dual a) */
-let Semigroup: <A>(_: ISemigroup<A>) => ISemigroup<Dual<A>> = (
+/** Semigroup a => Semigroup (Sum a) */
+let Semigroup: <A>(_: ISemigroup<A>) => ISemigroup<Sum<A>> = (
 	SemigroupA => ({
 		append: dual0 => dual1 => Dual(SemigroupA.append(dual1.value)(dual0.value))
 	})
 );
 export {Semigroup}
 
-/** Monoid a => Monoid (Dual a) */
-let Monoid: <A>(_: IMonoid<A>) => IMonoid<Dual<A>> & IMonoid.Ext<Dual<A>> = (
+let Monoid: <A>(_: IMonoid<A>) => IMonoid<Sum<A>> & IMonoid.Ext<Sum<A>> = (
 	<A>(MonoidA: IMonoid<A>) => (
-		assign(<IMonoid<Dual<A>>>{
+		assign(<IMonoid<Sum<A>>>{
 			...Semigroup(MonoidA),
 			mempty: () => Dual(MonoidA.mempty()),
 		})(_ => Json.assign(_, IMonoid.Ext(_)))
@@ -56,7 +55,7 @@ let Monoid: <A>(_: IMonoid<A>) => IMonoid<Dual<A>> & IMonoid.Ext<Dual<A>> = (
 export {Monoid}
 
 let Dual = Json.assign(
-	<A>(value: A) => <Dual<A>>{URI, value}, {
+	<A>(value: A) => <Sum<A>>{URI, value}, {
 		URI,
 		get,
 		Show,
@@ -64,4 +63,4 @@ let Dual = Json.assign(
 		Monoid,
 	}
 );
-export default Dual
+export default Sum
