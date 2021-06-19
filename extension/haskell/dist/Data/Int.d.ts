@@ -1,4 +1,5 @@
 import { IInt } from './IInt';
+import { INum } from '../GHC/Num';
 import { ISemiring } from './Semiring';
 import { IRing } from './Ring';
 import { IEq } from './Eq';
@@ -14,6 +15,12 @@ interface Int extends IInt {
 export { Int };
 declare let fromI: (_: IInt) => Int;
 export { fromI };
+declare let add: (_: Int) => (_: Int) => Int;
+export { add };
+declare let mul: (_: Int) => (_: Int) => Int;
+export { mul };
+declare let sub: (_: Int) => (_: Int) => Int;
+export { sub };
 declare let inc: (_: Int) => Int;
 export { inc };
 declare let dec: (_: Int) => Int;
@@ -22,6 +29,8 @@ declare let even: (_: Int) => Bool;
 export { even };
 declare let odd: (_: Int) => Bool;
 export { odd };
+declare let Num: INum<Int> & INum.Ext<Int>;
+export { Num };
 declare let Show: IShow<Int>;
 export { Show };
 declare let Semiring: ISemiring<Int>;
@@ -35,6 +44,9 @@ export { Ord };
 declare let Int: ((value: number) => Int) & {
     URI: "Int";
     fromI: (_: IInt) => Int;
+    add: (_: Int) => (_: Int) => Int;
+    mul: (_: Int) => (_: Int) => Int;
+    sub: (_: Int) => (_: Int) => Int;
     inc: (_: Int) => Int;
     dec: (_: Int) => Int;
     even: (_: Int) => Bool;

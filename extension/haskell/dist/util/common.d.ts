@@ -8,6 +8,7 @@ export { id };
 declare let id_: <A>() => (_: A) => A;
 export { id_ };
 declare let const_: <A>(_: A) => <B>(_: B) => A;
+export { const_ as const };
 export { const_ };
 declare let flip: <A, B, C>(_: (_: A) => (_: B) => C) => (_: B) => (_: A) => C;
 export { flip };

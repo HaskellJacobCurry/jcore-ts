@@ -1,8 +1,6 @@
-import {IShow} from '../Show'
 import {ISemigroup} from '../Semigroup'
 import {IMonoid} from '../Monoid'
 import {INum} from '../../GHC/Num'
-import {String} from '../String'
 import {
 	Json,
 	assign,
@@ -21,20 +19,6 @@ export {Sum}
 
 let get: <A>(_: Sum<A>) => A = _ => _.value;
 export {get}
-
-/** Show a => Show (Sum a) */
-let Show: <A>(_: IShow<A>) => IShow<Sum<A>> = (
-	ShowA => ({
-		show: sumA => (
-			assign(
-				String('Sum(')
-			)(_ => assign(
-				String.Semigroup.append(_)(String.fromI(ShowA.show(sumA.value)))
-			))(_ => String.Semigroup.append(_)(String(')')))
-		),
-	})
-);
-export {Show}
 
 /** Num a => Semigroup (Sum a) */
 let Semigroup: <A>(_: INum<A>) => ISemigroup<Sum<A>> = (
@@ -59,7 +43,6 @@ let Sum = Json.assign(
 	<A>(value: A) => <Sum<A>>{URI, value}, {
 		URI,
 		get,
-		Show,
 		Semigroup,
 		Monoid,
 	}

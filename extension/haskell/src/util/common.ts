@@ -13,6 +13,7 @@ export {id_}
 let const_: <A>(_: A) => <B>(_: B) => A = (
 	a => _ => a
 );
+export {const_ as const}
 export {const_}
 
 let flip: <A, B, C>(_: (_: A) => (_: B) => C) => (_: B) => (_: A) => C = (

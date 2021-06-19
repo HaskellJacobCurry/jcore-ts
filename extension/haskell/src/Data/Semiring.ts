@@ -5,13 +5,13 @@
  *  mul :: f -> f -> f
  *  one :: Unit -> f
  */
-
-interface Semiring<A> {
+interface ISemiring<A> {
 	add: (_: A) => (_: A) => A;
 	zero: () => A;
 	mul: (_: A) => (_: A) => A;
 	one: () => A;
 }
+interface Semiring<A> extends ISemiring<A> {}
 export {Semiring}
 export {Semiring as ISemiring};
 export default Semiring

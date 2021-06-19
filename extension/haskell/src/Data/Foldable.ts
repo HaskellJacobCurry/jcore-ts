@@ -1,15 +1,21 @@
 import {HKT, URI1, URI2, Kind1, Kind2} from '../util/HKT'
 import {Monoid} from './Monoid'
-import {Applicative1} from '../Control/Applicative'
+import {Apply, Apply1} from '../Control/Apply'
+import {Applicative, Applicative1} from '../Control/Applicative'
+import {Eq} from './Eq'
 import {IUnit} from './IUnit'
 import {IInt} from './IInt'
+import {IBool} from './IBool'
 import {Endo} from './Monoid/Endo'
 import {Dual} from './Monoid/Dual_'
+import {Sum} from './Monoid/Sum_'
+import {Any} from './Monoid/Any_'
 import {
 	define,
 	assign,
 	flip,
 	id,
+	const_,
 } from '../util/common'
 
 /**
@@ -19,13 +25,22 @@ import {
  * foldr :: (a -> b -> b) -> b -> f a -> b
  * fold :: Monoid g => f g -> g
  * length :: f a -> Int
- * traverse_ :: Applicative g => (a -> g b) -> f a -> g Unit
+ * null :: f a -> Bool
+ * elem :: Eq a => a -> f a -> Bool
+ * notElem :: Eq a => a -> f a -> Bool
+ * - Applicative actions
+ * traverse_ :: Applicative g => (a -> g b) -> f a -> g ()
+ * for_ :: Applicative g => f a -> (a -> g b) -> g ()
  * 
  * default
  *  foldr f z t = appEndo (foldMap (Endo . f) t) z
  *  foldl f z t = appEndo (getDual (foldMap (Dual . Endo . flip f) t)) z
  *  fold = foldMap id
  *  length = getSum . foldMap (Sum . const 1)
+ *  elem a = getAny . foldMap (Any . eq a)
+ *  notElem = not . elem
+ *  traverse_ f = foldr (/x k -> f x *> k) (pure ())
+ *  for_ = flip traverse_
  */
 interface IFoldable<F> {
 	foldMap: <G>(_: Monoid<G>) => <A>(_: (_: A) => G) => (_: HKT<F, A>) => G;
@@ -34,6 +49,12 @@ interface IExtFoldable<F> {
 	foldl: <A, B>(_: (_: B) => (_: A) => B) => (_: B) => (_: HKT<F, A>) => B;
 	foldr: <A, B>(_: (_: A) => (_: B) => B) => (_: B) => (_: HKT<F, A>) => B;
 	fold: <G>(_: Monoid<G>) => (_: HKT<F, G>) => G;
+	length: <A>(_: HKT<F, A>) => IInt;
+	null: <A>(_: HKT<F, A>) => IBool;
+	elem: <A>(_: Eq<A>) => (_: A) => (_: HKT<F, A>) => IBool;
+	notElem: <A>(_: Eq<A>) => (_: A) => (_: HKT<F, A>) => IBool;
+	traverse_: <G>(_: Applicative<G>) => <A, B>(_: (_: A) => HKT<G, B>) => (_: HKT<F, A>) => HKT<G, IUnit>;
+	for_: <G>(_: Applicative<G>) => <A>(_: HKT<F, A>) => <B>(_: (_: A) => HKT<G, B>) => HKT<G, IUnit>;
 }
 interface Foldable<F> extends IFoldable<F> {
 	URI: F;
@@ -64,6 +85,38 @@ namespace Foldable {
 					))(_ => _(b))
 				),
 				fold: Monoid => Foldable.foldMap(Monoid)(id),
+				length: foldableA => (
+					assign(
+						Foldable.foldMap(Sum.Monoid(IInt.Num))
+					)(_ => assign(
+						_<any>(_ => Sum(const_(IInt.Num.one())(_)))
+					))(_ => assign(
+						_(foldableA)
+					))(Sum.get)
+				),
+				null: foldableA => (
+					assign(
+						Ext().length(foldableA)
+					)(IInt.Eq.eq(IInt.Num.zero()))
+				),
+				elem: EqA => a => foldableA => (
+					assign(
+						Foldable.foldMap(Any.Monoid)
+					)(_ => assign(
+						_<any>(_ => Any(EqA.eq(a)(_)))
+					))(_ => Any.get(_(foldableA)))
+				),
+				notElem: EqA => _0 => _1 => IBool.not(Ext().elem(EqA)(_0)(_1)),
+				traverse_: <G>(ApplicativeG: Applicative<G>) => <A, B>(f: (_: A) => HKT<G, B>) => (foldableA: HKT<F, A>) => (
+					((ApplyExtG = Apply.Ext(ApplicativeG)) => (
+						assign(
+							Ext().foldr<A, HKT<G, IUnit>>(a => b => ApplyExtG.sndAp(f(a))(b))
+						)(_ => assign(
+							_(ApplicativeG.pure(IUnit()))
+						))(_ => _(foldableA))
+					))()
+				),
+				for_: ApplicativeG => _0 => _1 => Ext().traverse_(ApplicativeG)(_1)(_0),
 			}))
 		)
 	);
@@ -76,6 +129,12 @@ interface IExtFoldable1<F extends URI1> {
 	foldl: <A, B>(_: (_: B) => (_: A) => B) => (_: B) => (_: Kind1<F, A>) => B;
 	foldr: <A, B>(_: (_: A) => (_: B) => B) => (_: B) => (_: Kind1<F, A>) => B;
 	fold: <G>(_: Monoid<G>) => (_: Kind1<F, G>) => G;
+	length: <A>(_: Kind1<F, A>) => IInt;
+	null: <A>(_: Kind1<F, A>) => IBool;
+	elem: <A>(_: Eq<A>) => (_: A) => (_: Kind1<F, A>) => IBool;
+	notElem: <A>(_: Eq<A>) => (_: A) => (_: Kind1<F, A>) => IBool;
+	traverse_: <G extends URI1>(_: Applicative1<G>) => <A, B>(_: (_: A) => Kind1<G, B>) => (_: Kind1<F, A>) => Kind1<G, IUnit>;
+	for_: <G extends URI1>(_: Applicative1<G>) => <A>(_: Kind1<F, A>) => <B>(_: (_: A) => Kind1<G, B>) => Kind1<G, IUnit>;
 }
 interface Foldable1<F extends URI1> extends IFoldable1<F> {
 	URI: F;
@@ -99,9 +158,7 @@ interface Foldable2_<F extends URI2, T0> {
 export {Foldable2_}
 
 namespace Foldable1 {
-	export interface Ext<F extends URI1> extends IExtFoldable1<F> {
-		//traverse_: <G extends URI1>(_: Applicative1<G>) => <A, B>(_: (_: A) => Kind1<G, B>) => (_: Kind1<F, A>) => Kind1<G, IUnit>;
-	}
+	export interface Ext<F extends URI1> extends IExtFoldable1<F> {}
 	export let Ext: <F extends URI1>(_: Foldable1<F>) => Ext<F> = (
 		<F extends URI1>(Foldable: Foldable1<F>) => (
 			define<Ext<F>>(Ext => ({
@@ -124,6 +181,38 @@ namespace Foldable1 {
 					))(_ => _(b))
 				),
 				fold: Monoid => Foldable.foldMap(Monoid)(id),
+				length: foldableA => (
+					assign(
+						Foldable.foldMap(Sum.Monoid(IInt.Num))
+					)(_ => assign(
+						_<any>(_ => Sum(const_(IInt.Num.one())(_)))
+					))(_ => assign(
+						_(foldableA)
+					))(Sum.get)
+				),
+				null: foldableA => (
+					assign(
+						Ext().length(foldableA)
+					)(IInt.Eq.eq(IInt.Num.zero()))
+				),
+				elem: EqA => a => foldableA => (
+					assign(
+						Foldable.foldMap(Any.Monoid)
+					)(_ => assign(
+						_<any>(_ => Any(EqA.eq(a)(_)))
+					))(_ => Any.get(_(foldableA)))
+				),
+				notElem: EqA => _0 => _1 => IBool.not(Ext().elem(EqA)(_0)(_1)),
+				traverse_: <G extends URI1>(ApplicativeG: Applicative1<G>) => <A, B>(f: (_: A) => Kind1<G, B>) => (foldableA: Kind1<F, A>) => (
+					((ApplyExtG = Apply1.Ext(ApplicativeG)) => (
+						assign(
+							Ext().foldr<A, Kind1<G, IUnit>>(a => b => ApplyExtG.sndAp(f(a))(b))
+						)(_ => assign(
+							_(ApplicativeG.pure(IUnit()))
+						))(_ => _(foldableA))
+					))()
+				),
+				for_: ApplicativeG => _0 => _1 => Ext().traverse_(ApplicativeG)(_1)(_0),
 			}))
 		)
 	);

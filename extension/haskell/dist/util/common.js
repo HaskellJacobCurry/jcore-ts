@@ -10,7 +10,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 exports.__esModule = true;
-exports.define = exports.assign = exports.flip = exports.const_ = exports.id_ = exports.id = void 0;
+exports.define = exports.assign = exports.flip = exports.const_ = exports["const"] = exports.id_ = exports.id = void 0;
 __exportStar(require("../../dependency/jcore/dist/ts-toolbelt"), exports);
 __exportStar(require("../../dependency/jcore/dist/ts-toolbelt/common"), exports);
 __exportStar(require("../../dependency/jcore/dist/common/compose"), exports);
@@ -21,6 +21,7 @@ exports.id = id;
 var id_ = function () { return function (a) { return a; }; };
 exports.id_ = id_;
 var const_ = (function (a) { return function (_) { return a; }; });
+exports["const"] = const_;
 exports.const_ = const_;
 var flip = (function (f) { return function (b) { return function (a) { return f(a)(b); }; }; });
 exports.flip = flip;

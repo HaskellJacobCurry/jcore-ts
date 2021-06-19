@@ -1,4 +1,5 @@
 import {
+	Json,
 	reinterpret,
 	cast,
 } from '../util/common'
@@ -31,9 +32,29 @@ let or: <TBool extends IBool>(_: TBool) => (_: TBool) => TBool = (
 );
 export {or}
 
-let IBool = {
-	not,
-	and,
-	or,
+let True: IBool = {
+	cata: fs => fs['True'](),
+	not: () => False,
+	and: _ => _,
+	or: _ => True,
 };
+export {True}
+
+let False: IBool = {
+	cata: fs => fs['False'](),
+	not: () => True,
+	and: _ => False,
+	or: _ => _,
+}; 
+export {False}
+
+let IBool = Json.assign(
+	(value: boolean): IBool => value ? True : False, {
+		not,
+		and,
+		or,
+		True,
+		False,
+	}
+);
 export default IBool
