@@ -1,11 +1,4 @@
 "use strict";
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
-};
 exports.__esModule = true;
 exports.Json = void 0;
 var Json;
@@ -15,7 +8,15 @@ var Json;
         for (var _i = 1; _i < arguments.length; _i++) {
             srcs[_i - 1] = arguments[_i];
         }
-        return Object.assign.apply(Object, __spreadArrays([dest], srcs));
+        for (var _a = 0, srcs_1 = srcs; _a < srcs_1.length; _a++) {
+            var src = srcs_1[_a];
+            for (var k in src) {
+                if (typeof src[k] !== 'undefined') {
+                    dest[k] = src[k];
+                }
+            }
+        }
+        return dest;
     }
     Json.assign = assign;
 })(Json = exports.Json || (exports.Json = {}));

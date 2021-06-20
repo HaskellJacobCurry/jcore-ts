@@ -15,6 +15,8 @@ interface Int extends IInt {
 export { Int };
 declare let fromI: (_: IInt) => Int;
 export { fromI };
+declare let create: (value: number) => Int;
+export { create };
 declare let add: (_: Int) => (_: Int) => Int;
 export { add };
 declare let mul: (_: Int) => (_: Int) => Int;

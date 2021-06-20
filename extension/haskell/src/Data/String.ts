@@ -22,26 +22,27 @@ let fromI: (_: IString) => String = (
 );
 export {fromI}
 
-let Show: IShow<String> = ({
+let create = (value: string): String => ({
+	URI,
+	value,
+	toString: () => value,
+});
+export {create}
+
+let Show = IShow.enhance<String>({
 	show: string => `"${string.toString()}"`,
 });
 export {Show}
 
-let Semigroup: ISemigroup<String> = ({
-	append: _0 => _1 => String(`${_0.value}${_1.value}`)
+let Semigroup = ISemigroup.enhance<String>({
+	append: _0 => _1 => create(`${_0.value}${_1.value}`)
 });
 export {Semigroup}
 
-let String = Json.assign(
-	(value: string): String => ({
-		URI,
-		value,
-		toString: () => value,
-	}), {
-		URI,
-		fromI,
-		Show,
-		Semigroup,
-	}
-);
+let String = Json.assign(create, {
+	URI,
+	fromI,
+	Show,
+	Semigroup,
+});
 export default String

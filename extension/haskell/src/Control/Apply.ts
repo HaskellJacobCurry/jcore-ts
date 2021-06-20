@@ -1,8 +1,9 @@
 import {HKT, URI1, URI2, Kind1, Kind2} from '../util/HKT'
 import {Functor, Functor1, Functor2, Functor2_} from '../Data/Functor'
 import {
-	Function,
-	reinterpret,
+	Json,
+	assign,
+	define,
 	id_,
 	id,
 	const_,
@@ -41,14 +42,14 @@ export {Apply as IApply}
 
 namespace Apply {
 	export let Def: <F>(_: Apply<F>) => IApply<F> = (
-		<F>(Apply: Apply<F>) => <IApply<F>>{
+		<F>(ApplyF: Apply<F>) => <IApply<F>>{
 			ap: <A, B>(_0: HKT<F, (_: A) => B>) => (_1: HKT<F, A>) => (
-				Apply.liftA2(id_<(_: A) => B>())(_0)(_1)
+				ApplyF.liftA2(id_<(_: A) => B>())(_0)(_1)
 			),
 			liftA2: f => applyA => applyB => (
-				Function.assign(
-					Apply.fmap(f)(applyA)
-				)(_ => Apply.ap(_)(applyB))
+				assign(
+					ApplyF.fmap(f)(applyA)
+				)(_ => ApplyF.ap(_)(applyB))
 			),
 		}
 	);
@@ -56,15 +57,19 @@ namespace Apply {
 	export interface Ext<F> extends IExtApply<F> {}
 	export let Ext: <F>(_: Apply<F>) => Ext<F> = (
 		<F>(Apply: Apply<F>) => (
-			Function.define<Ext<F>>(Ext => ({
+			define<Ext<F>>(Ext => ({
 				fstAp: _0 => _1 => Apply.liftA2(const_)(_0)(_1),
 				sndAp: <A>(_0: HKT<F, A>) => <B>(_1: HKT<F, B>) => (
-					Function.assign(
+					assign(
 						Apply.fmap(const_(id_<B>()))(_0)
 					)(_ => Apply.ap(_)(_1))
 				),
 			}))
 		)
+	);
+
+	export let enhance = <F>(_: Apply<F>) => (
+		assign(Json.assign(Def(_), _))((_: Apply<F>) => Json.assign(_, Ext(_)))
 	);
 }
 
@@ -108,7 +113,7 @@ namespace Apply1 {
 				Apply.liftA2(id_<(_: A) => B>())(_0)(_1)
 			),
 			liftA2: f => applyA => applyB => (
-				Function.assign(
+				assign(
 					Apply.fmap(f)(applyA)
 				)(_ => Apply.ap(_)(applyB))
 			),
@@ -118,17 +123,21 @@ namespace Apply1 {
 	export interface Ext<F extends URI1> extends IExtApply1<F> {}
 	export let Ext: <F extends URI1>(_: Apply1<F>) => Ext<F> = (
 		<F extends URI1>(Apply: Apply1<F>) => (
-			Function.define<Ext<F>>(Ext => ({
+			define<Ext<F>>(Ext => ({
 				fstAp: <A>(_0: Kind1<F, A>) => <B>(_1: Kind1<F, B>) => (
 					Apply.liftA2<A, B, A>(const_)(_0)(_1)
 				),
 				sndAp: <A>(_0: Kind1<F, A>) => <B>(_1: Kind1<F, B>) => (
-					Function.assign(
+					assign(
 						Apply.fmap(const_(id_<B>()))(_0)
 					)(_ => Apply.ap(_)(_1))
 				),
 			}))
 		)
+	);
+
+	export let enhance = <F extends URI1>(_: Apply1<F>) => (
+		assign(Json.assign(Def(_), _))((_: Apply1<F>) => Json.assign(_, Ext(_)))
 	);
 }
 
@@ -139,7 +148,7 @@ namespace Apply2 {
 				Apply.liftA2<T0, (_: A) => B, A, B>(id)(_0)(_1)
 			),
 			liftA2: f => applyA => applyB => (
-				Function.assign(
+				assign(
 					Apply.fmap(f)(applyA)
 				)(_ => Apply.ap(_)(applyB))
 			),
@@ -149,17 +158,21 @@ namespace Apply2 {
 	export interface Ext<F extends URI2> extends IExtApply2<F> {}
 	export let Ext: <F extends URI2>(_: Apply2<F>) => Ext<F> = (
 		<F extends URI2>(Apply: Apply2<F>) => (
-			Function.define<Ext<F>>(Ext => ({
+			define<Ext<F>>(Ext => ({
 				fstAp: <T0, A>(_0: Kind2<F, T0, A>) => <B>(_1: Kind2<F, T0, B>) => (
 					Apply.liftA2<T0, A, B, A>(const_)(_0)(_1)
 				),
 				sndAp: <T0, A>(_0: Kind2<F, T0, A>) => <B>(_1: Kind2<F, T0, B>) => (
-					Function.assign(
+					assign(
 						Apply.fmap(const_(id_<B>()))(_0)
 					)(_ => Apply.ap(_)(_1))
 				),
 			}))
 		)
+	);
+
+	export let enhance = <F extends URI2>(_: Apply2<F>) => (
+		assign(Json.assign(Def(_), _))((_: Apply2<F>) => Json.assign(_, Ext(_)))
 	);
 }
 
@@ -170,7 +183,7 @@ namespace Apply2_ {
 				Apply.liftA2(id_<(_: A) => B>())(_0)(_1)
 			),
 			liftA2: f => applyA => applyB => (
-				Function.assign(
+				assign(
 					Apply.fmap(f)(applyA)
 				)(_ => Apply.ap(_)(applyB))
 			),
@@ -180,17 +193,21 @@ namespace Apply2_ {
 	export interface Ext<F extends URI2, T0> extends IExtApply2_<F, T0> {}
 	export let Ext: <F extends URI2, T0>(_: Apply2_<F, T0>) => Ext<F, T0> = (
 		<F extends URI2, T0>(Apply: Apply2_<F, T0>) => (
-			Function.define<Ext<F, T0>>(Ext => ({
+			define<Ext<F, T0>>(Ext => ({
 				fstAp: <A>(_0: Kind2<F, T0, A>) => <B>(_1: Kind2<F, T0, B>) => (
 					Apply.liftA2<A, B, A>(const_)(_0)(_1)
 				),
 				sndAp: <A>(_0: Kind2<F, T0, A>) => <B>(_1: Kind2<F, T0, B>) => (
-					Function.assign(
+					assign(
 						Apply.fmap(const_(id_<B>()))(_0)
 					)(_ => Apply.ap(_)(_1))
 				),
 			}))
 		)
+	);
+
+	export let enhance = <F extends URI2, T0>(_: Apply2_<F, T0>) => (
+		assign(Json.assign(Def(_), _))((_: Apply2_<F, T0>) => Json.assign(_, Ext(_)))
 	);
 }
 

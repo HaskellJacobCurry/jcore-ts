@@ -12,7 +12,6 @@ import {
 	Json,
 	reinterpret,
 	cast,
-	Function,
 	assign,
 	S
 } from '../util/common'
@@ -40,7 +39,7 @@ interface IMaybe<A> {
 }
 
 interface Nothing {
-	readonly tag: 'Nothing';
+	tag: 'Nothing';
 }
 let Nothing = <Maybe<never>>(
 	Json.assign(
@@ -52,8 +51,8 @@ let Nothing = <Maybe<never>>(
 export {Nothing}
 
 interface Just<A> {
-	readonly tag: 'Just';
-	readonly value: A;
+	tag: 'Just';
+	value: A;
 }
 let Just: <A>(_: A) => Maybe<A> = (
 	<A>(value: A) => <Maybe<A>>(
@@ -82,99 +81,98 @@ let maybe: <B>(_: B) => <A>(_: (_: A) => B) => (_: Maybe<A>) => B = (
 );
 export {maybe}
 
-let Show: <A>(_: IShow<A>) => IShow<Maybe<A>> = (
-	Show => ({
-		show: maybeA => maybeA.cata({
-			Nothing: () => String('Nothing'),
-			Just: value => String(`Just(${Show.show(value)})`),
-		}),
-	})
-);
+let Show = <A>(_: IShow<A>) => (
+	((ShowA = _) => (
+		IShow.enhance<Maybe<A>>({
+			show: maybeA => maybeA.cata({
+				Nothing: () => String('Nothing'),
+				Just: value => String(`Just(${ShowA.show(value)})`),
+			}),
+		})
+	))()
+)
 export {Show}
 
-let Functor: Functor1<URI> = ({
+let Functor = Functor1.enhance<URI>({
 	URI,
-	fmap: f => maybeA => (
-		Maybe.infer(
-			maybeA.cata({
-				Nothing: () => Nothing,
-				Just: value => Just(f(value)),
-			})
-		)
+	fmap: f => maybeA => infer(
+		maybeA.cata({
+			Nothing: () => Nothing,
+			Just: value => Just(f(value)),
+		})
 	),
 });
 export {Functor}
 
-let Apply: Apply1<URI> & Apply1.Ext<URI> = (
-	Function.assign(
-		Function.assign(<Apply1<URI>>{
-			...Functor,
-			ap: maybeF => maybeA => Maybe.infer(
-				maybeF.cata({
-					Just: f => Functor.fmap(f)(reinterpret(maybeA)),
-					Nothing: () => Maybe.Nothing,
-				})
-			),
-		})(Apply => Json.assign(Apply1.Def(Apply), Apply))
-	)(Apply => Json.assign(Apply, Apply1.Ext(Apply)))
-);
+let Apply = Apply1.enhance<URI>({
+	...Functor,
+	ap: maybeF => maybeA => infer(
+		maybeF.cata({
+			Just: f => Functor.fmap(f)(reinterpret(maybeA)),
+			Nothing: () => Nothing,
+		})
+	),
+	liftA2: reinterpret(),
+});
 export {Apply}
 
-let Applicative: Applicative1<URI> = {
+let Applicative = Applicative1.enhance<URI>({
 	...Apply,
 	pure: Just,
-};
+});
 export {Applicative}
 
-let Bind: Bind1<URI> = ({
+let Bind = Bind1.enhance<URI>({
 	...Apply,
-	bind: maybeA => f => Maybe.infer(
+	bind: maybeA => f => infer(
 		maybeA.cata({
 			Just: f,
-			Nothing: () => Maybe.Nothing,
+			Nothing: () => Nothing,
 		})
 	)
 });
 export {Bind}
 
-let Monad: Monad1<URI> & Monad1.Ext<URI> = {
+let Monad = Monad1.enhance<URI>({
 	...Applicative,
 	...Bind,
-	return: Applicative.pure,
-};
+});
 export {Monad}
 
-let Semigroup: <A>(_: ISemigroup<A>) => ISemigroup<Maybe<A>> = (
-	Semigroup => ({
-		append: maybe0 => maybe1 => (
-			maybe0.cata({
-				Nothing: () => maybe1,
-				Just: value0 => (
-					maybe1.cata({
-						Nothing: () => maybe0,
-						Just: value1 => Just(Semigroup.append(value0)(value1)),
-					})
-				)
-			})
-		),
-	})
+let Semigroup = <A>(_: ISemigroup<A>) => (
+	((SemigroupA = _) => (
+		ISemigroup.enhance<Maybe<A>>({
+			append: maybe0 => maybe1 => (
+				maybe0.cata({
+					Nothing: () => maybe1,
+					Just: value0 => (
+						maybe1.cata({
+							Nothing: () => maybe0,
+							Just: value1 => Just(SemigroupA.append(value0)(value1)),
+						})
+					)
+				})
+			),
+		})
+	))()
 );
+export {Semigroup}
 
-let Monoid: <A>(_: ISemigroup<A>) => IMonoid<Maybe<A>> & IMonoid.Ext<Maybe<A>> = (
-	<A>(SemigroupA: ISemigroup<A>) => (
-		Function.assign(<IMonoid<Maybe<A>>>{
+let Monoid = <A>(_: ISemigroup<A>) => (
+	((SemigroupA = _) => (
+		IMonoid.enhance<Maybe<A>>({
 			...Semigroup(SemigroupA),
 			mempty: () => reinterpret(Nothing),
-		})(_ => Json.assign(_, IMonoid.Ext(_)))
-	)
+		})
+	))()
 );
 export {Monoid}
 
-let Foldable: Foldable1<URI> & Foldable1.Ext<URI> = (
-	assign(<Foldable1<URI>>{
-		foldMap: Monoid => maybe(Monoid.mempty()),
-	})(_ => Json.assign(_, Foldable1.Ext(_)))
-);
+let Foldable = Foldable1.enhance<URI>({
+	URI,
+	foldMap: Monoid => maybe(Monoid.mempty()),
+	foldr: reinterpret(),
+});
 export {Foldable}
 
 let Maybe = {

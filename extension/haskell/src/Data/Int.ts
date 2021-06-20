@@ -29,6 +29,11 @@ let fromI: (_: IInt) => Int = (
 );
 export {fromI}
 
+let create: (value: number) => Int = (
+	value => ({URI, value})
+);
+export {create}
+
 let add: (_: Int) => (_: Int) => Int = IInt.add;
 export {add}
 
@@ -58,85 +63,74 @@ let odd: (_: Int) => Bool = (
 );
 export {odd}
 
-let Num: INum<Int> & INum.Ext<Int> = (
-	assign(<INum<Int>>{
-		add,
-		sub,
-		mul,
-		zero: () => ({value: 0}),
-		one: () => ({value: 1}),
-		abs: int => ({value: Math.abs(int.value)})
-	})(_ => Json.assign(_, INum.Ext(_)))
-);
+let Num = INum.enhance<Int>({
+	add,
+	sub,
+	mul,
+	zero: () => create(0),
+	one: () => create(1),
+	abs: int => create(Math.abs(int.value)),
+});
 export {Num}
 
-let Show: IShow<Int> = ({
+let Show = IShow.enhance<Int>({
 	show: int => String(`${int.value}`),
 });
 export {Show}
 
-let Semiring: ISemiring<Int> = ({
+let Semiring = ISemiring.enhance<Int>({
 	add: int0 => int1 => IInt.add(int0)(int1),
-	zero: () => Int(0),
+	zero: () => create(0),
 	mul: int0 => int1 => IInt.mul(int0)(int1),
-	one: () => Int(1),
+	one: () => create(1),
 });
 export {Semiring}
 
-let Ring: IRing<Int> = ({
+let Ring = IRing.enhance<Int>({
 	...Semiring,
 	sub: int0 => int1 => IInt.sub(int0)(int1),
 	negate: int => IInt.negate(int),
 });
 export {Ring}
 
-let Eq: IEq<Int> & IEq.Ext<Int> = (
-	assign(<IEq<Int>>({
-		eq: int0 => int1 => Bool(int0.value == int1.value),
-	}))(Eq => Json.assign(Eq, IEq.Ext(Eq)))
-);
+let Eq = IEq.enhance<Int>({
+	eq: int0 => int1 => Bool(int0.value == int1.value),
+});
 export {Eq}
 
-let Ord: IOrd<Int> & IOrd.Ext<Int> = (
-	assign(
-		define<IOrd<Int>>(Ord => ({
-			...Eq,
-			compare: int0 => int1 => (
-				Ord().lt(int0)(int1).cata({
-					True: () => Ordering.LT,
-					False: () => (
-						Ord().lt(int1)(int0).cata({
-							True: () => Ordering.GT,
-							False: () => Ordering.EQ,
-						})
-					)
-				})
-			),
-			lt: int0 => int1 => Bool(int0.value < int1.value),
-		}))
-	)(Ord => Json.assign(Ord, IOrd.Ext(Ord)))
+let Ord = IOrd.enhance<Int>(
+	define<IOrd<Int>>(Ord => ({
+		...Eq,
+		compare: int0 => int1 => (
+			Ord().lt(int0)(int1).cata({
+				True: () => Ordering.LT,
+				False: () => (
+					Ord().lt(int1)(int0).cata({
+						True: () => Ordering.GT,
+						False: () => Ordering.EQ,
+					})
+				)
+			})
+		),
+		lt: int0 => int1 => Bool(int0.value < int1.value),
+	}))
 );
 export {Ord}
 
-let Int = Json.assign(
-	(value: number) => <Int>({
-		URI,
-		value
-	}), {
-		URI,
-		fromI,
-		add,
-		mul,
-		sub,
-		inc,
-		dec,
-		even,
-		odd,
-		Show,
-		Semiring,
-		Ring,
-		Eq,
-		Ord,
-	}
-);
+let Int = Json.assign(create, {
+	URI,
+	fromI,
+	add,
+	mul,
+	sub,
+	inc,
+	dec,
+	even,
+	odd,
+	Show,
+	Semiring,
+	Ring,
+	Eq,
+	Ord,
+});
 export default Int

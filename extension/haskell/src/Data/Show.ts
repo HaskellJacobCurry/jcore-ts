@@ -4,10 +4,15 @@ import {IString} from './IString'
  * class Show f where
  *  show :: f -> String
  */
-
-interface Show<A> {
+interface IShow<A> {
 	show: (a: A) => IString;
 }
+interface Show<A> extends IShow<A> {}
 export {Show}
 export {Show as IShow};
+namespace Show {
+	export let enhance = <A>(_: Show<A>) => (
+		_
+	);
+}
 export default Show

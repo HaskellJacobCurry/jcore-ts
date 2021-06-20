@@ -1,3 +1,8 @@
+import {
+	Json,
+	assign,
+} from '../util/common'
+
 /**
  * class Num a where
  *  add :: a -> a -> a
@@ -32,6 +37,10 @@ namespace Num {
 		Num => ({
 			negate: a => Num.sub(Num.zero())(a),
 		})
+	);
+
+	export let enhance = <A>(_: Num<A>) => (
+		assign(_)((_: Num<A>) => Json.assign(_, Ext(_)))
 	);
 }
 export default Num

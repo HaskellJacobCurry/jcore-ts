@@ -1,4 +1,9 @@
 import {IBool} from './IBool'
+import {
+	Json,
+	define,
+	assign,
+} from '../util/common'
 
 /**
  * class Eq f where
@@ -19,5 +24,9 @@ namespace Eq {
 	export let Ext = <A>(Eq: Eq<A>): Ext<A> => ({
 		notEq: eq0 => eq1 => IBool.not(Eq.eq(eq0)(eq1))
 	});
+
+	export let enhance = <A>(_: Eq<A>) => (
+		assign(_)((_: Eq<A>) => Json.assign(_, Ext(_)))
+	);
 }
 export default Eq

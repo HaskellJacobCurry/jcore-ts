@@ -14,7 +14,7 @@ let fromI: (_: IUnit) => Unit = (
 );
 export {fromI}
 
-let Show: IShow<Unit> = ({
+let Show = IShow.enhance<Unit>({
 	show: _ => String('Unit'),
 });
 export {Show}

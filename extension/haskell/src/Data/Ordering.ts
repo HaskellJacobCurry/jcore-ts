@@ -6,7 +6,7 @@ import {String} from './String'
 import {Bool} from './Bool'
 import {
 	Json,
-	Function,
+	define,
 } from '../util/common'
 
 type Ordering = IOrdering & (LT | EQ | GT);
@@ -64,56 +64,52 @@ let invert: (_: Ordering) => Ordering = (
 );
 export {invert}
 
-let Show: IShow<Ordering> = ({
+let Show = IShow.enhance<Ordering>({
 	show: ordering => String(ordering.tag),
 });
 export {Show}
 
-let Eq: IEq<Ordering> & IEq.Ext<Ordering> = (
-	Function.assign(<IEq<Ordering>>{
-		eq: ordering0 => ordering1 => Bool(ordering0.tag === ordering1.tag),
-	})(Eq => Json.assign(Eq, IEq.Ext(Eq)))
-);
+let Eq = IEq.enhance<Ordering>({
+	eq: ordering0 => ordering1 => Bool(ordering0.tag === ordering1.tag),
+});
 export {Eq}
 
-let Ord: IOrd<Ordering> & IOrd.Ext<Ordering> = (
-	Function.assign(
-		Function.define<IOrd<Ordering>>(Ord => ({
-			...Eq,
-			compare: ordering0 => ordering1 => (
-				ordering0.cata({
-					LT: () => (
-						ordering1.cata({
-							LT: () => EQ,
-							EQ: () => LT,
-							GT: () => LT,
-						})
-					),
-					EQ: () => (
-						ordering1.cata({
-							LT: () => GT,
-							EQ: () => EQ,
-							GT: () => LT,
-						})
-					),
-					GT: () => (
-						ordering1.cata({
-							LT: () => GT,
-							EQ: () => GT,
-							GT: () => EQ,
-						})
-					)
-				})
-			),
-			lt: ordering0 => ordering1 => (
-				Ord().compare(ordering0)(ordering1).cata({
-					LT: () => Bool.True,
-					EQ: () => Bool.False,
-					GT: () => Bool.False,
-				})
-			),
-		}))
-	)(Ord => Json.assign(Ord, IOrd.Ext(Ord)))
+let Ord = IOrd.enhance<Ordering>(
+	define<IOrd<Ordering>>(Ord => ({
+		...Eq,
+		compare: ordering0 => ordering1 => (
+			ordering0.cata({
+				LT: () => (
+					ordering1.cata({
+						LT: () => EQ,
+						EQ: () => LT,
+						GT: () => LT,
+					})
+				),
+				EQ: () => (
+					ordering1.cata({
+						LT: () => GT,
+						EQ: () => EQ,
+						GT: () => LT,
+					})
+				),
+				GT: () => (
+					ordering1.cata({
+						LT: () => GT,
+						EQ: () => GT,
+						GT: () => EQ,
+					})
+				)
+			})
+		),
+		lt: ordering0 => ordering1 => (
+			Ord().compare(ordering0)(ordering1).cata({
+				LT: () => Bool.True,
+				EQ: () => Bool.False,
+				GT: () => Bool.False,
+			})
+		),
+	}))
 );
 export {Ord}
 

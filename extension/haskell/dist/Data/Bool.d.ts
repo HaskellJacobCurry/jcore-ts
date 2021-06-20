@@ -4,17 +4,19 @@ import { IShow } from './Show';
 declare type Bool = IBool & (False | True);
 export { Bool };
 interface False {
-    readonly tag: 'False';
+    tag: 'False';
 }
 declare let False: Bool;
 export { False };
 interface True {
-    readonly tag: 'True';
+    tag: 'True';
 }
 declare let True: Bool;
 export { True };
 declare let fromI: (_: IBool) => Bool;
 export { fromI };
+declare let create: (value: boolean) => Bool;
+export { create };
 declare let and: (_: Bool) => (_: Bool) => Bool;
 export { and };
 declare let or: (_: Bool) => (_: Bool) => Bool;
@@ -32,3 +34,4 @@ declare let Bool: ((value: boolean) => Bool) & {
     True: Bool;
     Show: IShow<Bool>;
 };
+export default Bool;

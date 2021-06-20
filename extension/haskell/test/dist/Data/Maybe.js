@@ -10,7 +10,7 @@ console.log(Maybe_1.Maybe.Show(String_1.String.Show).show(maybeStr).toString());
 var a = (Maybe_1.Maybe.Apply.fstAp(Maybe_1.Maybe.Just(Int_1.Int(3)))(Maybe_1.Maybe.Just(String_1.String('shit'))));
 var b = (common_1.assign(function (b) { return function (a) { return (String_1.String.Semigroup.append(b)(String_1.String.fromI(Int_1.Int.Show.show(a)))); }; })(function (_) { return Maybe_1.Maybe.Foldable.foldl(_)(String_1.String('-101-'))(a); }));
 var c = (common_1.assign(Maybe_1.Maybe.Foldable.length(a))(function (_) { return common_1.assign(Int_1.Int.fromI(_)); })(function (_) { return common_1.assign(Int_1.Int.Show.show(_)); })(function (_) { return _.toString(); }));
-var d = (common_1.assign(Maybe_1.Maybe.Foldable.notElem(Int_1.Int.Eq))(function (_) { return common_1.assign(_(Int_1.Int(3))(Maybe_1.Maybe.Nothing)); })(function (_) { return Bool_1.Bool.Show.show(Bool_1.Bool.fromI(_)).toString(); }));
+var d = (common_1.assign(Maybe_1.Maybe.Foldable.notElem(Int_1.Int.Eq))(function (_) { return common_1.assign(_(Int_1.Int(3))(a)); })(function (_) { return Bool_1.Bool.Show.show(Bool_1.Bool.fromI(_)).toString(); }));
 console.log(Maybe_1.Maybe.Show(Int_1.Int.Show).show(a).toString());
 console.log(b.toString());
 console.log({ c: c });

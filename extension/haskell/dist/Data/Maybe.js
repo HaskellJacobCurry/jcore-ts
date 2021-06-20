@@ -11,8 +11,14 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 exports.__esModule = true;
-exports.Foldable = exports.Monoid = exports.Monad = exports.Bind = exports.Applicative = exports.Apply = exports.Functor = exports.Show = exports.maybe = exports.infer = exports.Just = exports.Nothing = exports.Maybe = exports.URI = void 0;
+exports.Foldable = exports.Monoid = exports.Semigroup = exports.Monad = exports.Bind = exports.Applicative = exports.Apply = exports.Functor = exports.Show = exports.maybe = exports.infer = exports.Just = exports.Nothing = exports.Maybe = exports.URI = void 0;
+var Show_1 = require("./Show");
+var Functor_1 = require("./Functor");
 var Apply_1 = require("../Control/Apply");
+var Applicative_1 = require("../Control/Applicative");
+var Bind_1 = require("../Control/Bind");
+var Monad_1 = require("../Control/Monad");
+var Semigroup_1 = require("./Semigroup");
 var Monoid_1 = require("./Monoid");
 var Foldable_1 = require("./Foldable");
 var String_1 = require("./String");
@@ -35,49 +41,61 @@ var maybe = (function (b) { return function (f) { return function (maybeA) { ret
     Just: function (a) { return f(a); }
 })); }; }; });
 exports.maybe = maybe;
-var Show = (function (Show) { return ({
-    show: function (maybeA) { return maybeA.cata({
-        Nothing: function () { return String_1.String('Nothing'); },
-        Just: function (value) { return String_1.String("Just(" + Show.show(value) + ")"); }
-    }); }
-}); });
+var Show = function (_) { return ((function (ShowA) {
+    if (ShowA === void 0) { ShowA = _; }
+    return (Show_1.IShow.enhance({
+        show: function (maybeA) { return maybeA.cata({
+            Nothing: function () { return String_1.String('Nothing'); },
+            Just: function (value) { return String_1.String("Just(" + ShowA.show(value) + ")"); }
+        }); }
+    }));
+})()); };
 exports.Show = Show;
-var Functor = ({
+var Functor = Functor_1.Functor1.enhance({
     URI: URI,
-    fmap: function (f) { return function (maybeA) { return (Maybe.infer(maybeA.cata({
+    fmap: function (f) { return function (maybeA) { return infer(maybeA.cata({
         Nothing: function () { return Nothing; },
         Just: function (value) { return Just(f(value)); }
-    }))); }; }
+    })); }; }
 });
 exports.Functor = Functor;
-var Apply = (common_1.Function.assign(common_1.Function.assign(__assign(__assign({}, Functor), { ap: function (maybeF) { return function (maybeA) { return Maybe.infer(maybeF.cata({
+var Apply = Apply_1.Apply1.enhance(__assign(__assign({}, Functor), { ap: function (maybeF) { return function (maybeA) { return infer(maybeF.cata({
         Just: function (f) { return Functor.fmap(f)(common_1.reinterpret(maybeA)); },
-        Nothing: function () { return Maybe.Nothing; }
-    })); }; } }))(function (Apply) { return common_1.Json.assign(Apply_1.Apply1.Def(Apply), Apply); }))(function (Apply) { return common_1.Json.assign(Apply, Apply_1.Apply1.Ext(Apply)); }));
+        Nothing: function () { return Nothing; }
+    })); }; }, liftA2: common_1.reinterpret() }));
 exports.Apply = Apply;
-var Applicative = __assign(__assign({}, Apply), { pure: Just });
+var Applicative = Applicative_1.Applicative1.enhance(__assign(__assign({}, Apply), { pure: Just }));
 exports.Applicative = Applicative;
-var Bind = (__assign(__assign({}, Apply), { bind: function (maybeA) { return function (f) { return Maybe.infer(maybeA.cata({
+var Bind = Bind_1.Bind1.enhance(__assign(__assign({}, Apply), { bind: function (maybeA) { return function (f) { return infer(maybeA.cata({
         Just: f,
-        Nothing: function () { return Maybe.Nothing; }
+        Nothing: function () { return Nothing; }
     })); }; } }));
 exports.Bind = Bind;
-var Monad = __assign(__assign(__assign({}, Applicative), Bind), { "return": Applicative.pure });
+var Monad = Monad_1.Monad1.enhance(__assign(__assign({}, Applicative), Bind));
 exports.Monad = Monad;
-var Semigroup = (function (Semigroup) { return ({
-    append: function (maybe0) { return function (maybe1) { return (maybe0.cata({
-        Nothing: function () { return maybe1; },
-        Just: function (value0) { return (maybe1.cata({
-            Nothing: function () { return maybe0; },
-            Just: function (value1) { return Just(Semigroup.append(value0)(value1)); }
-        })); }
-    })); }; }
-}); });
-var Monoid = (function (SemigroupA) { return (common_1.Function.assign(__assign(__assign({}, Semigroup(SemigroupA)), { mempty: function () { return common_1.reinterpret(Nothing); } }))(function (_) { return common_1.Json.assign(_, Monoid_1.IMonoid.Ext(_)); })); });
+var Semigroup = function (_) { return ((function (SemigroupA) {
+    if (SemigroupA === void 0) { SemigroupA = _; }
+    return (Semigroup_1.ISemigroup.enhance({
+        append: function (maybe0) { return function (maybe1) { return (maybe0.cata({
+            Nothing: function () { return maybe1; },
+            Just: function (value0) { return (maybe1.cata({
+                Nothing: function () { return maybe0; },
+                Just: function (value1) { return Just(SemigroupA.append(value0)(value1)); }
+            })); }
+        })); }; }
+    }));
+})()); };
+exports.Semigroup = Semigroup;
+var Monoid = function (_) { return ((function (SemigroupA) {
+    if (SemigroupA === void 0) { SemigroupA = _; }
+    return (Monoid_1.IMonoid.enhance(__assign(__assign({}, Semigroup(SemigroupA)), { mempty: function () { return common_1.reinterpret(Nothing); } })));
+})()); };
 exports.Monoid = Monoid;
-var Foldable = (common_1.assign({
-    foldMap: function (Monoid) { return maybe(Monoid.mempty()); }
-})(function (_) { return common_1.Json.assign(_, Foldable_1.Foldable1.Ext(_)); }));
+var Foldable = Foldable_1.Foldable1.enhance({
+    URI: URI,
+    foldMap: function (Monoid) { return maybe(Monoid.mempty()); },
+    foldr: common_1.reinterpret()
+});
 exports.Foldable = Foldable;
 var Maybe = {
     URI: URI,

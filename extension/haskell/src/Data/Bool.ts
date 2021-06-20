@@ -11,28 +11,32 @@ type Bool = IBool & (False | True);
 export {Bool}
 
 interface False {
-	readonly tag: 'False';
+	tag: 'False';
 }
-let False = <Bool>Json.assign(
-	<False>{tag: 'False'}, <IBool>{
-		cata: fs => fs['False'](),
-		not: () => True,
-		and: _ => False,
-		or: _ => _,
-	}
+let False = <Bool>(
+	Json.assign(
+		<False>{tag: 'False'}, <IBool>{
+			cata: fs => fs['False'](),
+			not: () => True,
+			and: _ => False,
+			or: _ => _,
+		}
+	)
 );
 export {False}
 
 interface True {
-	readonly tag: 'True';
+	tag: 'True';
 }
-let True = <Bool>Json.assign(
-	<True>{tag: 'True'}, <IBool>{
-		cata: fs => fs['True'](),
-		not: () => False,
-		and: _ => _,
-		or: _ => True,
-	}
+let True = <Bool>(
+	Json.assign(
+		<True>{tag: 'True'}, <IBool>{
+			cata: fs => fs['True'](),
+			not: () => False,
+			and: _ => _,
+			or: _ => True,
+		}
+	)
 );
 export {True}
 
@@ -45,6 +49,11 @@ let fromI: (_: IBool) => Bool = (
 	)
 );
 export {fromI}
+
+let create: (value: boolean) => Bool = (
+	value => value ? True : False
+);
+export {create}
 
 let and: (_: Bool) => (_: Bool) => Bool = (
 	bool0 => bool1 => IBool.and(bool0)(bool1)
@@ -61,7 +70,7 @@ let not: (_: Bool) => Bool = (
 );
 export {not}
 
-let Show: IShow<Bool> = ({
+let Show = IShow.enhance<Bool>({
 	show: bool => (
 		bool.cata({
 			True: () => String('True'),
@@ -71,14 +80,13 @@ let Show: IShow<Bool> = ({
 });
 export {Show}
 
-let Bool = Json.assign(
-	(value: boolean) => value ? True : False, {
-		fromI,
-		and,
-		or,
-		not,
-		False,
-		True,
-		Show,
-	}
-);
+let Bool = Json.assign(create, {
+	fromI,
+	and,
+	or,
+	not,
+	False,
+	True,
+	Show,
+});
+export default Bool

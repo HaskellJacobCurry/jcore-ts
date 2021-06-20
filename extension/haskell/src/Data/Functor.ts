@@ -1,10 +1,12 @@
 import {HKT, URI1, URI2, Kind1, Kind2} from '../util/HKT'
 import {IUnit} from './IUnit'
 import {
+	Json,
+	assign,
+	define,
 	reinterpret,
 	compose,
 	id,
-	Function,
 	const_,
 	flip,
 } from '../util/common'
@@ -49,13 +51,17 @@ namespace Functor {
 	export interface Ext<F> extends IExtFunctor<F> {}
 	export let Ext: <F>(_: Functor<F>) => Ext<F> = (
 		<F>(Functor: Functor<F>) => (
-			Function.define<Ext<F>>(Ext => ({
+			define<Ext<F>>(Ext => ({
 				lfmap: _ => Functor.fmap(const_(_)),
 				rfmap: _0 => _1 => Ext().lfmap(_1)(_0),
 				ffmap: _0 => _1 => Functor.fmap(_1)(_0),
-				void: Ext().lfmap(IUnit()),
+				void: _ => Ext().lfmap(IUnit())(_),
 			}))
 		)
+	);
+
+	export let enhance = <F>(_: Functor<F>) => (
+		assign(_)((_: Functor<F>) => Json.assign(_, Ext(_)))
 	);
 }
 
@@ -115,13 +121,17 @@ namespace Functor1 {
 	export interface Ext<F extends URI1> extends IExtFunctor1<F> {}
 	export let Ext: <F extends URI1>(_: Functor1<F>) => Ext<F> = (
 		<F extends URI1>(Functor: Functor1<F>) => (
-			Function.define<Ext<F>>(Ext => ({
+			define<Ext<F>>(Ext => ({
 				lfmap: _ => Functor.fmap(const_(_)),
 				rfmap: _0 => _1 => Ext().lfmap(_1)(_0),
 				ffmap: _0 => _1 => Functor.fmap(_1)(_0),
-				void: Ext().lfmap(IUnit()),
+				void: _ => Ext().lfmap(IUnit())(_),
 			}))
 		)
+	);
+
+	export let enhance = <F extends URI1>(_: Functor1<F>) => (
+		assign(_)((_: Functor1<F>) => Json.assign(_, Ext(_)))
 	);
 }
 
@@ -129,13 +139,17 @@ namespace Functor2 {
 	export interface Ext<F extends URI2> extends IExtFunctor2<F> {}
 	export let Ext: <F extends URI2>(_: Functor2<F>) => Ext<F> = (
 		<F extends URI2>(Functor: Functor2<F>) => (
-			Function.define<Ext<F>>(Ext => ({
+			define<Ext<F>>(Ext => ({
 				lfmap: _0 => _1 => Functor.fmap(const_(_0))(_1),
 				rfmap: _0 => _1 => Ext().lfmap(_1)(_0),
 				ffmap: _0 => _1 => Functor.fmap(_1)(_0),
-				void: Ext().lfmap(IUnit()),
+				void: _ => Ext().lfmap(IUnit())(_),
 			}))
 		)
+	);
+
+	export let enhance = <F extends URI2>(_: Functor2<F>) => (
+		assign(_)((_: Functor2<F>) => Json.assign(_, Ext(_)))
 	);
 }
 
@@ -143,13 +157,17 @@ namespace Functor2_ {
 	export interface Ext<F extends URI2, T0> extends IExtFunctor2_<F, T0> {}
 	export let Ext: <F extends URI2, T0>(_: Functor2_<F, T0>) => Ext<F, T0> = (
 		<F extends URI2, T0>(Functor: Functor2_<F, T0>) => (
-			Function.define<Ext<F, T0>>(Ext => ({
+			define<Ext<F, T0>>(Ext => ({
 				lfmap: _0 => _1 => Functor.fmap(const_(_0))(_1),
 				rfmap: _0 => _1 => Ext().lfmap(_1)(_0),
 				ffmap: _0 => _1 => Functor.fmap(_1)(_0),
-				void: Ext().lfmap(IUnit()),
+				void: _ => Ext().lfmap(IUnit())(_),
 			}))
 		)
+	);
+
+	export let enhance = <F extends URI2, T0>(_: Functor2_<F, T0>) => (
+		assign(_)((_: Functor2_<F, T0>) => Json.assign(_, Ext(_)))
 	);
 }
 

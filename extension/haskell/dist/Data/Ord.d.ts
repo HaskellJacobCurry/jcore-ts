@@ -14,21 +14,26 @@ import { IBool } from './IBool';
  * between :: f -> f -> f -> Bool
  * abs :: Ring f => f -> f
  */
-interface Ord<A> extends Eq<A> {
+interface IOrd<A> {
     compare: (_: A) => (_: A) => IOrdering;
     lt: (_: A) => (_: A) => IBool;
 }
+interface IExtOrd<A> {
+    notLt: (_: A) => (_: A) => IBool;
+    gt: (_: A) => (_: A) => IBool;
+    notGt: (_: A) => (_: A) => IBool;
+    min: (_: A) => (_: A) => A;
+    max: (_: A) => (_: A) => A;
+    clamp: (min: A) => (max: A) => (_: A) => A;
+    between: (min: A) => (max: A) => (_: A) => IBool;
+}
+interface Ord<A> extends IOrd<A>, Eq<A> {
+}
 declare namespace Ord {
-    interface Ext<A> {
-        notLt: (_: A) => (_: A) => IBool;
-        gt: (_: A) => (_: A) => IBool;
-        notGt: (_: A) => (_: A) => IBool;
-        min: (_: A) => (_: A) => A;
-        max: (_: A) => (_: A) => A;
-        clamp: (min: A) => (max: A) => (_: A) => A;
-        between: (min: A) => (max: A) => (_: A) => IBool;
+    interface Ext<A> extends IExtOrd<A> {
     }
-    let Ext: <A>(Ord: Ord<A>) => Ext<A>;
+    let Ext: <A>(_: Ord<A>) => Ext<A>;
+    let enhance: <A>(_: Ord<A>) => Ord<A> & Ext<A>;
 }
 export { Ord };
 export { Ord as IOrd };

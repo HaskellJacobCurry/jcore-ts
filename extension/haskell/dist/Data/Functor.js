@@ -5,12 +5,13 @@ var IUnit_1 = require("./IUnit");
 var common_1 = require("../util/common");
 var Functor;
 (function (Functor_1) {
-    Functor_1.Ext = (function (Functor) { return (common_1.Function.define(function (Ext) { return ({
+    Functor_1.Ext = (function (Functor) { return (common_1.define(function (Ext) { return ({
         lfmap: function (_) { return Functor.fmap(common_1.const_(_)); },
         rfmap: function (_0) { return function (_1) { return Ext().lfmap(_1)(_0); }; },
         ffmap: function (_0) { return function (_1) { return Functor.fmap(_1)(_0); }; },
-        "void": Ext().lfmap(IUnit_1.IUnit())
+        "void": function (_) { return Ext().lfmap(IUnit_1.IUnit())(_); }
     }); })); });
+    Functor_1.enhance = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Functor_1.Ext(_)); })); };
 })(Functor || (Functor = {}));
 exports.Functor = Functor;
 exports.IFunctor = Functor;
@@ -25,32 +26,35 @@ function laws(IFunctor, fa, g, f) {
 ;
 var Functor1;
 (function (Functor1) {
-    Functor1.Ext = (function (Functor) { return (common_1.Function.define(function (Ext) { return ({
+    Functor1.Ext = (function (Functor) { return (common_1.define(function (Ext) { return ({
         lfmap: function (_) { return Functor.fmap(common_1.const_(_)); },
         rfmap: function (_0) { return function (_1) { return Ext().lfmap(_1)(_0); }; },
         ffmap: function (_0) { return function (_1) { return Functor.fmap(_1)(_0); }; },
-        "void": Ext().lfmap(IUnit_1.IUnit())
+        "void": function (_) { return Ext().lfmap(IUnit_1.IUnit())(_); }
     }); })); });
+    Functor1.enhance = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Functor1.Ext(_)); })); };
 })(Functor1 || (Functor1 = {}));
 exports.Functor1 = Functor1;
 var Functor2;
 (function (Functor2) {
-    Functor2.Ext = (function (Functor) { return (common_1.Function.define(function (Ext) { return ({
+    Functor2.Ext = (function (Functor) { return (common_1.define(function (Ext) { return ({
         lfmap: function (_0) { return function (_1) { return Functor.fmap(common_1.const_(_0))(_1); }; },
         rfmap: function (_0) { return function (_1) { return Ext().lfmap(_1)(_0); }; },
         ffmap: function (_0) { return function (_1) { return Functor.fmap(_1)(_0); }; },
-        "void": Ext().lfmap(IUnit_1.IUnit())
+        "void": function (_) { return Ext().lfmap(IUnit_1.IUnit())(_); }
     }); })); });
+    Functor2.enhance = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Functor2.Ext(_)); })); };
 })(Functor2 || (Functor2 = {}));
 exports.Functor2 = Functor2;
 var Functor2_;
 (function (Functor2_) {
-    Functor2_.Ext = (function (Functor) { return (common_1.Function.define(function (Ext) { return ({
+    Functor2_.Ext = (function (Functor) { return (common_1.define(function (Ext) { return ({
         lfmap: function (_0) { return function (_1) { return Functor.fmap(common_1.const_(_0))(_1); }; },
         rfmap: function (_0) { return function (_1) { return Ext().lfmap(_1)(_0); }; },
         ffmap: function (_0) { return function (_1) { return Functor.fmap(_1)(_0); }; },
-        "void": Ext().lfmap(IUnit_1.IUnit())
+        "void": function (_) { return Ext().lfmap(IUnit_1.IUnit())(_); }
     }); })); });
+    Functor2_.enhance = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Functor2_.Ext(_)); })); };
 })(Functor2_ || (Functor2_ = {}));
 exports.Functor2_ = Functor2_;
 exports["default"] = Functor;

@@ -39,82 +39,85 @@ export {snd}
 let swap: <A, B>(_: Tuple<A, B>) => Tuple<B, A> = ({fst, snd}) => Tuple(snd, fst);
 export {swap}
 
+let create = <A, B>(fst: A, snd: B) => <Tuple<A, B>>{fst, snd};
+export {create}
+
 /** show :: (Show a, Show b) => Show (Tuple a b) => Tuple a b -> String */
-let Show: <A, B>(_0: IShow<A>, _1: IShow<B>) => IShow<Tuple<A, B>> = (
-	(ShowFst, ShowSnd) => ({
-		show: tuple => (
-			((fst = ShowFst.show(tuple.fst), snd = ShowSnd.show(tuple.snd)) => (
-				String(`Tuple(${fst},${snd})`)
-			))()
-		)
-	})
-);
+let Show = <A, B>(_0: IShow<A>, _1: IShow<B>) => (
+	((ShowFst = _0, ShowSnd = _1) => (
+		IShow.enhance<Tuple<A, B>>({
+			show: tuple => (
+				((fst = ShowFst.show(tuple.fst), snd = ShowSnd.show(tuple.snd)) => (
+					String(`Tuple(${fst},${snd})`)
+				))()
+			)
+		})
+	))()
+);;
 export {Show}
 
 /** append :: (Semigroup a, Semigroup b) => Semigroup (Tuple a b) => Tuple a b -> Tuple a b -> Tuple a b */
-let Semigroup: <A, B>(_0: ISemigroup<A>, _1: ISemigroup<B>) => ISemigroup<Tuple<A, B>> = (
-	(SemigroupFst, SemigroupSnd) => ({
-		append: tuple0 => tuple1 => (
-			((fst = SemigroupFst.append(tuple0.fst)(tuple1.fst), snd = SemigroupSnd.append(tuple0.snd)(tuple1.snd)) => (
-				Tuple(fst, snd)
-			))()
-		)
-	})
+let Semigroup = <A, B>(_0: ISemigroup<A>, _1: ISemigroup<B>) => (
+	((SemigroupFst = _0, SemigroupSnd = _1) => (
+		ISemigroup.enhance<Tuple<A, B>>({
+			append: tuple0 => tuple1 => (
+				((fst = SemigroupFst.append(tuple0.fst)(tuple1.fst), snd = SemigroupSnd.append(tuple0.snd)(tuple1.snd)) => (
+					Tuple(fst, snd)
+				))()
+			)
+		})
+	))()
 );
 export {Semigroup}
 
 /** mempty :: (Monoid a, Monoid b) => Monoid (Tuple a b) => Unit -> Tuple a b */
-let Monoid: <A, B>(_0: IMonoid<A>, _1: IMonoid<B>) => IMonoid<Tuple<A, B>> = (
-	(MonoidFst, MonoidSnd) => ({
-		...Semigroup(MonoidFst, MonoidSnd),
-		mempty: () => Tuple(MonoidFst.mempty(), MonoidSnd.mempty()),
-	})
+let Monoid = <A, B>(_0: IMonoid<A>, _1: IMonoid<B>) => (
+	((MonoidFst = _0, MonoidSnd = _1) => (
+		IMonoid.enhance<Tuple<A, B>>({
+			...Semigroup(MonoidFst, MonoidSnd),
+			mempty: () => Tuple(MonoidFst.mempty(), MonoidSnd.mempty()),
+		})
+	))()
 );
 export {Monoid}
 
 /** map :: Functor (Tuple a) => (b -> c) -> Tuple a b -> Tuple a c */
-let Functor: Functor2<URI> = {
+let Functor = Functor2.enhance<URI>({
 	URI,
-	fmap: f => tupleA => Tuple(tupleA.fst, f(tupleA.snd)),
-};
+	fmap: f => tupleA => create(tupleA.fst, f(tupleA.snd)),
+});
 export {Functor}
 
 /** ap :: Semigroup a => Apply (Tuple a) => Tuple a (b -> c) -> Tuple a b -> Tuple a c */
-let Apply: <T0>(_: ISemigroup<T0>) => Apply2_<URI, T0> & Apply2_.Ext<URI, T0> = (
-	<T0>(Semigroup: ISemigroup<T0>): Apply2_<URI, T0> & Apply2_.Ext<URI, T0> => (
-		(Apply => (
-			Json.assign(Apply, Apply2_.Ext(Apply))
-		))(<Apply2_<URI, T0>>{
+let Apply = <T0>(_: ISemigroup<T0>) => (
+	((SemigroupT0 = _) => (
+		Apply2_.enhance<URI, T0>({
 			...Functor,
 			ap: tupleF => tupleA => (
-				Tuple(Semigroup.append(tupleF.fst)(tupleA.fst), tupleF.snd(tupleA.snd))
+				Tuple(SemigroupT0.append(tupleF.fst)(tupleA.fst), tupleF.snd(tupleA.snd))
 			),
+			liftA2: reinterpret(),
 		})
-	)
+	))()
 );
 export {Apply}
 
 /** bimap :: Bifunctor Tuple => (a -> c) -> (b -> d) -> Tuple a b -> Tuple c d */
-let Bifunctor: Bifunctor2<URI> & Bifunctor2.Ext<URI> = (
-	(Bifunctor => (
-		Json.assign(Bifunctor, Bifunctor2.Ext(Bifunctor))
-	))(<Bifunctor2<URI>>{
-		bimap: f => g => ({fst, snd}) => Tuple(f(fst), g(snd))
-	})
-);
+let Bifunctor = Bifunctor2.enhance<URI>({
+	URI,
+	bimap: f => g => ({fst, snd}) => create(f(fst), g(snd))
+});
 export {Bifunctor}
 
-let Tuple = Json.assign(
-	<A, B>(fst: A, snd: B) => <Tuple<A, B>>{fst, snd}, {
-		fst,
-		snd,
-		swap,
-		Show,
-		Semigroup,
-		Monoid,
-		Functor,
-		Apply,
-		Bifunctor,
-	}
-);
+let Tuple = Json.assign(create, {
+	fst,
+	snd,
+	swap,
+	Show,
+	Semigroup,
+	Monoid,
+	Functor,
+	Apply,
+	Bifunctor,
+});
 export default Tuple

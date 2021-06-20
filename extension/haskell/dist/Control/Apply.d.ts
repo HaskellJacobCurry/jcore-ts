@@ -36,6 +36,7 @@ declare namespace Apply {
     interface Ext<F> extends IExtApply<F> {
     }
     let Ext: <F>(_: Apply<F>) => Ext<F>;
+    let enhance: <F>(_: Apply<F>) => Apply<F> & Ext<F>;
 }
 interface IApply1<F extends URI1> {
     ap: <A, B>(_: Kind1<F, (_: A) => B>) => (_: Kind1<F, A>) => Kind1<F, B>;
@@ -75,17 +76,20 @@ declare namespace Apply1 {
     interface Ext<F extends URI1> extends IExtApply1<F> {
     }
     let Ext: <F extends URI1>(_: Apply1<F>) => Ext<F>;
+    let enhance: <F extends "Endo" | "Maybe">(_: Apply1<F>) => Apply1<F> & Ext<F>;
 }
 declare namespace Apply2 {
     let Def: <F extends URI2>(_: Apply2<F>) => IApply2<F>;
     interface Ext<F extends URI2> extends IExtApply2<F> {
     }
     let Ext: <F extends URI2>(_: Apply2<F>) => Ext<F>;
+    let enhance: <F extends "Function" | "Tuple">(_: Apply2<F>) => Apply2<F> & Ext<F>;
 }
 declare namespace Apply2_ {
     let Def: <F extends URI2, T0>(_: Apply2_<F, T0>) => IApply2_<F, T0>;
     interface Ext<F extends URI2, T0> extends IExtApply2_<F, T0> {
     }
     let Ext: <F extends URI2, T0>(_: Apply2_<F, T0>) => Ext<F, T0>;
+    let enhance: <F extends "Function" | "Tuple", T0>(_: Apply2_<F, T0>) => Apply2_<F, T0> & Ext<F, T0>;
 }
 export default Apply;

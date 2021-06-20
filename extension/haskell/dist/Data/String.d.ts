@@ -11,6 +11,8 @@ interface String extends IString {
 export { String };
 declare let fromI: (_: IString) => String;
 export { fromI };
+declare let create: (value: string) => String;
+export { create };
 declare let Show: IShow<String>;
 export { Show };
 declare let Semigroup: ISemigroup<String>;

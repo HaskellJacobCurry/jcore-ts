@@ -25,6 +25,8 @@ export { snd };
 /** swap :: Tuple a b -> Tuple b a */
 declare let swap: <A, B>(_: Tuple<A, B>) => Tuple<B, A>;
 export { swap };
+declare let create: <A, B>(fst: A, snd: B) => Tuple<A, B>;
+export { create };
 /** show :: (Show a, Show b) => Show (Tuple a b) => Tuple a b -> String */
 declare let Show: <A, B>(_0: IShow<A>, _1: IShow<B>) => IShow<Tuple<A, B>>;
 export { Show };
@@ -32,16 +34,16 @@ export { Show };
 declare let Semigroup: <A, B>(_0: ISemigroup<A>, _1: ISemigroup<B>) => ISemigroup<Tuple<A, B>>;
 export { Semigroup };
 /** mempty :: (Monoid a, Monoid b) => Monoid (Tuple a b) => Unit -> Tuple a b */
-declare let Monoid: <A, B>(_0: IMonoid<A>, _1: IMonoid<B>) => IMonoid<Tuple<A, B>>;
+declare let Monoid: <A, B>(_0: IMonoid<A>, _1: IMonoid<B>) => IMonoid<Tuple<A, B>> & IMonoid.Ext<Tuple<A, B>>;
 export { Monoid };
 /** map :: Functor (Tuple a) => (b -> c) -> Tuple a b -> Tuple a c */
-declare let Functor: Functor2<URI>;
+declare let Functor: Functor2<"Tuple"> & Functor2.Ext<"Tuple">;
 export { Functor };
 /** ap :: Semigroup a => Apply (Tuple a) => Tuple a (b -> c) -> Tuple a b -> Tuple a c */
-declare let Apply: <T0>(_: ISemigroup<T0>) => Apply2_<URI, T0> & Apply2_.Ext<URI, T0>;
+declare let Apply: <T0>(_: ISemigroup<T0>) => Apply2_<"Tuple", T0> & Apply2_.Ext<"Tuple", T0>;
 export { Apply };
 /** bimap :: Bifunctor Tuple => (a -> c) -> (b -> d) -> Tuple a b -> Tuple c d */
-declare let Bifunctor: Bifunctor2<URI> & Bifunctor2.Ext<URI>;
+declare let Bifunctor: Bifunctor2<"Tuple"> & Bifunctor2.Ext<"Tuple">;
 export { Bifunctor };
 declare let Tuple: (<A, B>(fst: A, snd: B) => Tuple<A, B>) & {
     fst: <A_1>(_: Tuple<A_1, any>) => A_1;
@@ -49,8 +51,8 @@ declare let Tuple: (<A, B>(fst: A, snd: B) => Tuple<A, B>) & {
     swap: <A_2, B_2>(_: Tuple<A_2, B_2>) => Tuple<B_2, A_2>;
     Show: <A_3, B_3>(_0: IShow<A_3>, _1: IShow<B_3>) => IShow<Tuple<A_3, B_3>>;
     Semigroup: <A_4, B_4>(_0: ISemigroup<A_4>, _1: ISemigroup<B_4>) => ISemigroup<Tuple<A_4, B_4>>;
-    Monoid: <A_5, B_5>(_0: IMonoid<A_5>, _1: IMonoid<B_5>) => IMonoid<Tuple<A_5, B_5>>;
-    Functor: Functor2<"Tuple">;
+    Monoid: <A_5, B_5>(_0: IMonoid<A_5>, _1: IMonoid<B_5>) => IMonoid<Tuple<A_5, B_5>> & IMonoid.Ext<Tuple<A_5, B_5>>;
+    Functor: Functor2<"Tuple"> & Functor2.Ext<"Tuple">;
     Apply: <T0>(_: ISemigroup<T0>) => Apply2_<"Tuple", T0> & Apply2_.Ext<"Tuple", T0>;
     Bifunctor: Bifunctor2<"Tuple"> & Bifunctor2.Ext<"Tuple">;
 };

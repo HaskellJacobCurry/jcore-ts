@@ -1,6 +1,8 @@
 import {Semigroup} from './Semigroup'
 import {
-	define
+	Json,
+	define,
+	assign
 } from '../util/common'
 
 /*
@@ -25,6 +27,10 @@ namespace Monoid {
 				mappend: Monoid.append,
 			}))
 		)
+	);
+
+	export let enhance = <A>(_: Monoid<A>) => (
+		assign(_)((_: Monoid<A>) => Json.assign(_, Ext(_)))
 	);
 }
 export default Monoid

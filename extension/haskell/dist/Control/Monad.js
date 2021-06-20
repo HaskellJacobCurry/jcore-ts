@@ -4,31 +4,35 @@ exports.Monad2_ = exports.Monad2 = exports.Monad1 = exports.IMonad = exports.Mon
 var common_1 = require("../util/common");
 var Monad;
 (function (Monad_1) {
-    Monad_1.Ext = (function (Monad) { return (common_1.Function.define(function (Ext) { return ({
+    Monad_1.Ext = (function (Monad) { return (common_1.define(function (Ext) { return ({
         "return": Monad.pure
     }); })); });
+    Monad_1.enhance = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Monad_1.Ext(_)); })); };
 })(Monad || (Monad = {}));
 exports.Monad = Monad;
 exports.IMonad = Monad;
 var Monad1;
 (function (Monad1) {
-    Monad1.Ext = (function (Monad) { return (common_1.Function.define(function (Ext) { return ({
+    Monad1.Ext = (function (Monad) { return (common_1.define(function (Ext) { return ({
         "return": Monad.pure
     }); })); });
+    Monad1.enhance = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Monad1.Ext(_)); })); };
 })(Monad1 || (Monad1 = {}));
 exports.Monad1 = Monad1;
 var Monad2;
 (function (Monad2) {
-    Monad2.Ext = (function (Monad) { return (common_1.Function.define(function (Ext) { return ({
+    Monad2.Ext = (function (Monad) { return (common_1.define(function (Ext) { return ({
         "return": Monad.pure
     }); })); });
+    Monad2.enhance = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Monad2.Ext(_)); })); };
 })(Monad2 || (Monad2 = {}));
 exports.Monad2 = Monad2;
 var Monad2_;
 (function (Monad2_) {
-    Monad2_.Ext = (function (Monad) { return (common_1.Function.define(function (Ext) { return ({
+    Monad2_.Ext = (function (Monad) { return (common_1.define(function (Ext) { return ({
         "return": Monad.pure
     }); })); });
+    Monad2_.enhance = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Monad2_.Ext(_)); })); };
 })(Monad2_ || (Monad2_ = {}));
 exports.Monad2_ = Monad2_;
 exports["default"] = Monad;

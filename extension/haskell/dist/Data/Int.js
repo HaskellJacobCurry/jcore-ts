@@ -11,11 +11,14 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 exports.__esModule = true;
-exports.Ord = exports.Eq = exports.Ring = exports.Semiring = exports.Show = exports.Num = exports.odd = exports.even = exports.dec = exports.inc = exports.sub = exports.mul = exports.add = exports.fromI = exports.Int = exports.URI = void 0;
+exports.Ord = exports.Eq = exports.Ring = exports.Semiring = exports.Show = exports.Num = exports.odd = exports.even = exports.dec = exports.inc = exports.sub = exports.mul = exports.add = exports.create = exports.fromI = exports.Int = exports.URI = void 0;
 var IInt_1 = require("./IInt");
 var Num_1 = require("../GHC/Num");
+var Semiring_1 = require("./Semiring");
+var Ring_1 = require("./Ring");
 var Eq_1 = require("./Eq");
 var Ord_1 = require("./Ord");
+var Show_1 = require("./Show");
 var String_1 = require("./String");
 var Bool_1 = require("./Bool");
 var Ordering_1 = require("./Ordering");
@@ -24,6 +27,8 @@ var URI = common_1.S('Int');
 exports.URI = URI;
 var fromI = (function (int) { return ({ URI: URI, value: int.value }); });
 exports.fromI = fromI;
+var create = (function (value) { return ({ URI: URI, value: value }); });
+exports.create = create;
 var add = IInt_1.IInt.add;
 exports.add = add;
 var mul = IInt_1.IInt.mul;
@@ -38,44 +43,41 @@ var even = (function (int) { return Bool_1.Bool(int.value % 2 == 0); });
 exports.even = even;
 var odd = (function (int) { return Bool_1.Bool(int.value % 2 != 0); });
 exports.odd = odd;
-var Num = (common_1.assign({
+var Num = Num_1.INum.enhance({
     add: add,
     sub: sub,
     mul: mul,
-    zero: function () { return ({ value: 0 }); },
-    one: function () { return ({ value: 1 }); },
-    abs: function (int) { return ({ value: Math.abs(int.value) }); }
-})(function (_) { return common_1.Json.assign(_, Num_1.INum.Ext(_)); }));
+    zero: function () { return create(0); },
+    one: function () { return create(1); },
+    abs: function (int) { return create(Math.abs(int.value)); }
+});
 exports.Num = Num;
-var Show = ({
+var Show = Show_1.IShow.enhance({
     show: function (int) { return String_1.String("" + int.value); }
 });
 exports.Show = Show;
-var Semiring = ({
+var Semiring = Semiring_1.ISemiring.enhance({
     add: function (int0) { return function (int1) { return IInt_1.IInt.add(int0)(int1); }; },
-    zero: function () { return Int(0); },
+    zero: function () { return create(0); },
     mul: function (int0) { return function (int1) { return IInt_1.IInt.mul(int0)(int1); }; },
-    one: function () { return Int(1); }
+    one: function () { return create(1); }
 });
 exports.Semiring = Semiring;
-var Ring = (__assign(__assign({}, Semiring), { sub: function (int0) { return function (int1) { return IInt_1.IInt.sub(int0)(int1); }; }, negate: function (int) { return IInt_1.IInt.negate(int); } }));
+var Ring = Ring_1.IRing.enhance(__assign(__assign({}, Semiring), { sub: function (int0) { return function (int1) { return IInt_1.IInt.sub(int0)(int1); }; }, negate: function (int) { return IInt_1.IInt.negate(int); } }));
 exports.Ring = Ring;
-var Eq = (common_1.assign(({
+var Eq = Eq_1.IEq.enhance({
     eq: function (int0) { return function (int1) { return Bool_1.Bool(int0.value == int1.value); }; }
-}))(function (Eq) { return common_1.Json.assign(Eq, Eq_1.IEq.Ext(Eq)); }));
+});
 exports.Eq = Eq;
-var Ord = (common_1.assign(common_1.define(function (Ord) { return (__assign(__assign({}, Eq), { compare: function (int0) { return function (int1) { return (Ord().lt(int0)(int1).cata({
+var Ord = Ord_1.IOrd.enhance(common_1.define(function (Ord) { return (__assign(__assign({}, Eq), { compare: function (int0) { return function (int1) { return (Ord().lt(int0)(int1).cata({
         True: function () { return Ordering_1.Ordering.LT; },
         False: function () { return (Ord().lt(int1)(int0).cata({
             True: function () { return Ordering_1.Ordering.GT; },
             False: function () { return Ordering_1.Ordering.EQ; }
         })); }
-    })); }; }, lt: function (int0) { return function (int1) { return Bool_1.Bool(int0.value < int1.value); }; } })); }))(function (Ord) { return common_1.Json.assign(Ord, Ord_1.IOrd.Ext(Ord)); }));
+    })); }; }, lt: function (int0) { return function (int1) { return Bool_1.Bool(int0.value < int1.value); }; } })); }));
 exports.Ord = Ord;
-var Int = common_1.Json.assign(function (value) { return ({
-    URI: URI,
-    value: value
-}); }, {
+var Int = common_1.Json.assign(create, {
     URI: URI,
     fromI: fromI,
     add: add,

@@ -35,4 +35,7 @@ interface IApplicative2_<F extends URI2, T0> {
 interface Applicative2_<F extends URI2, T0> extends IApplicative2_<F, T0>, Apply2_<F, T0> {
 }
 export { Applicative2_ };
+declare namespace Applicative1 {
+    let enhance: <F extends "Endo" | "Maybe">(_: Applicative1<F>) => Applicative1<F>;
+}
 export default Applicative;

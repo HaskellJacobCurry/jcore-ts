@@ -14,6 +14,7 @@ exports.__esModule = true;
 exports.Ord = exports.Eq = exports.Show = exports.invert = exports.fromI = exports.GT = exports.EQ = exports.LT = exports.Ordering = void 0;
 var Eq_1 = require("./Eq");
 var Ord_1 = require("./Ord");
+var Show_1 = require("./Show");
 var String_1 = require("./String");
 var Bool_1 = require("./Bool");
 var common_1 = require("../util/common");
@@ -41,15 +42,15 @@ var invert = (function (ordering) { return (ordering.cata({
     GT: function () { return LT; }
 })); });
 exports.invert = invert;
-var Show = ({
+var Show = Show_1.IShow.enhance({
     show: function (ordering) { return String_1.String(ordering.tag); }
 });
 exports.Show = Show;
-var Eq = (common_1.Function.assign({
+var Eq = Eq_1.Eq.enhance({
     eq: function (ordering0) { return function (ordering1) { return Bool_1.Bool(ordering0.tag === ordering1.tag); }; }
-})(function (Eq) { return common_1.Json.assign(Eq, Eq_1.Eq.Ext(Eq)); }));
+});
 exports.Eq = Eq;
-var Ord = (common_1.Function.assign(common_1.Function.define(function (Ord) { return (__assign(__assign({}, Eq), { compare: function (ordering0) { return function (ordering1) { return (ordering0.cata({
+var Ord = Ord_1.Ord.enhance(common_1.define(function (Ord) { return (__assign(__assign({}, Eq), { compare: function (ordering0) { return function (ordering1) { return (ordering0.cata({
         LT: function () { return (ordering1.cata({
             LT: function () { return EQ; },
             EQ: function () { return LT; },
@@ -69,7 +70,7 @@ var Ord = (common_1.Function.assign(common_1.Function.define(function (Ord) { re
         LT: function () { return Bool_1.Bool.True; },
         EQ: function () { return Bool_1.Bool.False; },
         GT: function () { return Bool_1.Bool.False; }
-    })); }; } })); }))(function (Ord) { return common_1.Json.assign(Ord, Ord_1.Ord.Ext(Ord)); }));
+    })); }; } })); }));
 exports.Ord = Ord;
 var Ordering = {
     LT: LT,

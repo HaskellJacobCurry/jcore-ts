@@ -13,5 +13,6 @@ declare namespace Monoid {
     interface Ext<A> extends IExtMonoid<A> {
     }
     let Ext: <A>(_: Monoid<A>) => Ext<A>;
+    let enhance: <A>(_: Monoid<A>) => Monoid<A> & Ext<A>;
 }
 export default Monoid;

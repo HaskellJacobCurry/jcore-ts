@@ -2,7 +2,9 @@ import {HKT, URI1, URI2, Kind1, Kind2} from '../util/HKT'
 import {Applicative, Applicative1, Applicative2, Applicative2_} from './Applicative'
 import {Bind, Bind1, Bind2, Bind2_} from './Bind'
 import {
-	Function
+	Json,
+	define,
+	assign,
 } from '../util/common'
 
 /**
@@ -27,10 +29,14 @@ namespace Monad {
 	export interface Ext<F> extends IExtMonad<F> {}
 	export let Ext: <F>(_: Monad<F>) => Ext<F> = (
 		<F>(Monad: Monad<F>) => (
-			Function.define<Ext<F>>(Ext => ({
+			define<Ext<F>>(Ext => ({
 				return: Monad.pure,
 			}))
 		)
+	);
+
+	export let enhance = <F>(_: Monad<F>) => (
+		assign(_)((_: Monad<F>) => Json.assign(_, Ext(_)))
 	);
 }
 
@@ -56,10 +62,14 @@ namespace Monad1 {
 	export interface Ext<F extends URI1> extends IExtMonad1<F> {}
 	export let Ext: <F extends URI1>(_: Monad1<F>) => Ext<F> = (
 		<F extends URI1>(Monad: Monad1<F>) => (
-			Function.define<Ext<F>>(Ext => ({
+			define<Ext<F>>(Ext => ({
 				return: Monad.pure,
 			}))
 		)
+	);
+
+	export let enhance = <F extends URI1>(_: Monad1<F>) => (
+		assign(_)((_: Monad1<F>) => Json.assign(_, Ext(_)))
 	);
 }
 
@@ -67,10 +77,14 @@ namespace Monad2 {
 	export interface Ext<F extends URI2> extends IExtMonad2<F> {}
 	export let Ext: <F extends URI2>(_: Monad2<F>) => Ext<F> = (
 		<F extends URI2>(Monad: Monad2<F>) => (
-			Function.define<Ext<F>>(Ext => ({
+			define<Ext<F>>(Ext => ({
 				return: Monad.pure,
 			}))
 		)
+	);
+
+	export let enhance = <F extends URI2>(_: Monad2<F>) => (
+		assign(_)((_: Monad2<F>) => Json.assign(_, Ext(_)))
 	);
 }
 
@@ -78,10 +92,14 @@ namespace Monad2_ {
 	export interface Ext<F extends URI2, T0> extends IExtMonad2_<F, T0> {}
 	export let Ext: <F extends URI2, T0>(_: Monad2_<F, T0>) => Ext<F, T0> = (
 		<F extends URI2, T0>(Monad: Monad2_<F, T0>) => (
-			Function.define<Ext<F, T0>>(Ext => ({
+			define<Ext<F, T0>>(Ext => ({
 				return: Monad.pure,
 			}))
 		)
+	);
+
+	export let enhance = <F extends URI2, T0>(_: Monad2_<F, T0>) => (
+		assign(_)((_: Monad2_<F, T0>) => Json.assign(_, Ext(_)))
 	);
 }
 

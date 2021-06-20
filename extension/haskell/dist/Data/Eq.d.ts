@@ -18,5 +18,6 @@ declare namespace Eq {
     interface Ext<A> extends IExtEq<A> {
     }
     let Ext: <A>(Eq: Eq<A>) => Ext<A>;
+    let enhance: <A>(_: Eq<A>) => Eq<A> & Ext<A>;
 }
 export default Eq;

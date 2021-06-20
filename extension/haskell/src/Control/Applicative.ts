@@ -1,5 +1,9 @@
 import {HKT, URI1, URI2, Kind1, Kind2} from '../util/HKT'
 import {Apply, Apply1, Apply2, Apply2_} from './Apply'
+import {
+	Json,
+	assign,
+} from '../util/common'
 
 /**
  * class (Apply f) <= Applicative f where
@@ -35,5 +39,11 @@ interface IApplicative2_<F extends URI2, T0> {
 }
 interface Applicative2_<F extends URI2, T0> extends IApplicative2_<F, T0>, Apply2_<F, T0> {}
 export {Applicative2_}
+
+namespace Applicative1 {
+	export let enhance = <F extends URI1>(_: Applicative1<F>) => (
+		_
+	);;
+}
 
 export default Applicative

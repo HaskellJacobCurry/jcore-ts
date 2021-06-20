@@ -1,7 +1,9 @@
 import {HKT, URI1, URI2, Kind1, Kind2} from '../util/HKT'
 import {Apply, Apply1, Apply2, Apply2_} from './Apply'
 import {
-	Function,
+	Json,
+	assign,
+	define,
 	const_,
 	id_,
 } from '../util/common'
@@ -33,11 +35,15 @@ namespace Bind {
 	export let Ext: <F>(_: Bind<F>) => Ext<F> = (
 		<F>(Bind: Bind<F>) => (
 			((ApplyExt = Apply.Ext(Bind)) => (
-				Function.define<Ext<F>>(Ext => ({
+				define<Ext<F>>(Ext => ({
 					sequence: ApplyExt.sndAp,
 				}))
 			))()
 		)
+	);
+
+	export let enhance = <F>(_: Bind<F>) => (
+		assign(_)((_: Bind<F>) => Json.assign(_, Ext(_)))
 	);
 }
 
@@ -73,11 +79,15 @@ namespace Bind1 {
 	export let Ext: <F extends URI1>(_: Bind1<F>) => Ext<F> = (
 		<F extends URI1>(Bind: Bind1<F>) => (
 			((ApplyExt = Apply1.Ext(Bind)) => (
-				Function.define<Ext<F>>(Ext => ({
+				define<Ext<F>>(Ext => ({
 					sequence: ApplyExt.sndAp,
 				}))
 			))()
 		)
+	);
+
+	export let enhance = <F extends URI1>(_: Bind1<F>) => (
+		assign(_)((_: Bind1<F>) => Json.assign(_, Ext(_)))
 	);
 }
 
@@ -86,11 +96,15 @@ namespace Bind2 {
 	export let Ext: <F extends URI2>(_: Bind2<F>) => Ext<F> = (
 		<F extends URI2>(Bind: Bind2<F>) => (
 			((ApplyExt = Apply2.Ext(Bind)) => (
-				Function.define<Ext<F>>(Ext => ({
+				define<Ext<F>>(Ext => ({
 					sequence: ApplyExt.sndAp,
 				}))
 			))()
 		)
+	);
+
+	export let enhance = <F extends URI2>(_: Bind2<F>) => (
+		assign(_)((_: Bind2<F>) => Json.assign(_, Ext(_)))
 	);
 }
 
@@ -99,11 +113,15 @@ namespace Bind2_ {
 	export let Ext: <F extends URI2, T0>(_: Bind2_<F, T0>) => Ext<F, T0> = (
 		<F extends URI2, T0>(Bind: Bind2_<F, T0>) => (
 			((ApplyExt = Apply2_.Ext(Bind)) => (
-				Function.define<Ext<F, T0>>(Ext => ({
+				define<Ext<F, T0>>(Ext => ({
 					sequence: ApplyExt.sndAp,
 				}))
 			))()
 		)
+	);
+
+	export let enhance = <F extends URI2, T0>(_: Bind2_<F, T0>) => (
+		assign(_)((_: Bind2_<F, T0>) => Json.assign(_, Ext(_)))
 	);
 }
 
