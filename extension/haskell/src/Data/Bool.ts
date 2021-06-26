@@ -4,6 +4,7 @@ import {String} from './String'
 import {
 	Json,
 	reinterpret,
+	create,
 } from '../util/common'
 
 /** data Bool = True | False */
@@ -13,14 +14,15 @@ export {Bool}
 interface False {
 	tag: 'False';
 }
-let False = <Bool>(
+let False: Bool = create<Bool>(
 	Json.assign(
-		<False>{tag: 'False'}, <IBool>{
+		create<False>({tag: 'False'}),
+		create<IBool>({
 			cata: fs => fs['False'](),
 			not: () => True,
 			and: _ => False,
 			or: _ => _,
-		}
+		})
 	)
 );
 export {False}
@@ -28,14 +30,15 @@ export {False}
 interface True {
 	tag: 'True';
 }
-let True = <Bool>(
+let True: Bool = create<Bool>(
 	Json.assign(
-		<True>{tag: 'True'}, <IBool>{
+		create<True>({tag: 'True'}),
+		create<IBool>({
 			cata: fs => fs['True'](),
 			not: () => False,
 			and: _ => _,
 			or: _ => True,
-		}
+		})
 	)
 );
 export {True}
@@ -50,10 +53,10 @@ let fromI: (_: IBool) => Bool = (
 );
 export {fromI}
 
-let create: (value: boolean) => Bool = (
+let create_: (value: boolean) => Bool = (
 	value => value ? True : False
 );
-export {create}
+export {create_ as create}
 
 let and: (_: Bool) => (_: Bool) => Bool = (
 	bool0 => bool1 => IBool.and(bool0)(bool1)
@@ -80,7 +83,7 @@ let Show = IShow.enhance<Bool>({
 });
 export {Show}
 
-let Bool = Json.assign(create, {
+let Bool = Json.assign(create_, {
 	fromI,
 	and,
 	or,

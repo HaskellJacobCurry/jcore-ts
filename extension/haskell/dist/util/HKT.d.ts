@@ -1,11 +1,11 @@
 interface HKT<URI, A> {
-    readonly _URI: URI;
-    readonly _A: A;
+    _URI: URI;
+    _A: A;
 }
 export { HKT };
 export { HKT as HKT1 };
 interface HKT2<URI, A, B> extends HKT<URI, A> {
-    readonly _B: B;
+    _B: B;
 }
 export { HKT2 };
 interface KindsByURI1<A> {

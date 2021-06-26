@@ -4,7 +4,6 @@ import {
 	Compare,
 	Any,
 	Bool,
-	Trampoline,
 	trampoline,
 } from '../ts-toolbelt'
 import {Array} from './Array'
@@ -173,7 +172,7 @@ export class BinarySearchTreeAVL<
 	}
 
 	inorderTraverse(cb: BinarySearchTreeAVL.InorderTraverse.Callback<TKey, TValue>): this {
-		trampoline<[this?, Trampoline.Cont<void>?], void>(
+		trampoline<[this?, trampoline.Cont<void>?], void>(
 			(inorderTraverse, tree = this, cont = () => {}) => (
 				(cont => (
 					tree.left !== null ?
@@ -197,7 +196,7 @@ export class BinarySearchTreeAVL<
 	}
 
 	preorderTraverse(cb: BinarySearchTreeAVL.PreorderTraverse.Callback<TKey, TValue>): this {
-		trampoline<[this?, Trampoline.Cont<void>?], void>(
+		trampoline<[this?, trampoline.Cont<void>?], void>(
 			(preorderTraverse, tree = this, cont = () => {}) => (
 				(cont => {
 					if (!tree.isEmpty()) {
@@ -221,7 +220,7 @@ export class BinarySearchTreeAVL<
 	}
 
 	inorderTraverse_(cb: BinarySearchTreeAVL.InorderTraverse_.Callback<TKey, TValue>): this {
-		trampoline<[this?, Trampoline.Cont<void>?], void>(
+		trampoline<[this?, trampoline.Cont<void>?], void>(
 			(inorderTraverse, tree = this, cont = () => {}) => (
 				((finalCont = cont) => (
 					(cont => (

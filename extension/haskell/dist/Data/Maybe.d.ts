@@ -7,6 +7,11 @@ import { Monad1 } from '../Control/Monad';
 import { ISemigroup } from './Semigroup';
 import { IMonoid } from './Monoid';
 import { Foldable1 } from './Foldable';
+/** data Maybe a = Just a | Nothing */
+declare type Maybe<A> = IMaybe<A> & (Nothing | Just<A>) & {
+    URI: URI;
+};
+export { Maybe };
 declare const URI: "Maybe";
 declare type URI = typeof URI;
 declare module '../util/HKT' {
@@ -15,11 +20,6 @@ declare module '../util/HKT' {
     }
 }
 export { URI };
-/** data Maybe a = Just a | Nothing */
-declare type Maybe<A> = IMaybe<A> & (Nothing | Just<A>) & {
-    URI: URI;
-};
-export { Maybe };
 interface IMaybe<A> {
     cata: <T, U>(fs: {
         Nothing: () => T;
@@ -31,13 +31,15 @@ interface Nothing {
 }
 declare let Nothing: Maybe<never>;
 export { Nothing };
+declare let Nothing_: <A>() => Maybe<A>;
+export { Nothing_ };
 interface Just<A> {
     tag: 'Just';
     value: A;
 }
 declare let Just: <A>(_: A) => Maybe<A>;
 export { Just };
-declare let infer: <TMaybe>(maybe: TMaybe) => Maybe<TMaybe extends Maybe<infer T> ? T : never>;
+declare let infer: <TMaybe>(_: TMaybe) => Maybe<TMaybe extends Maybe<infer T> ? T : never>;
 export { infer };
 /** maybe :: b -> (a -> b) -> Maybe a -> b */
 declare let maybe: <B>(_: B) => <A>(_: (_: A) => B) => (_: Maybe<A>) => B;
@@ -64,7 +66,7 @@ declare let Maybe: {
     URI: "Maybe";
     Nothing: Maybe<never>;
     Just: <A>(_: A) => Maybe<A>;
-    infer: <TMaybe>(maybe: TMaybe) => Maybe<TMaybe extends Maybe<infer T> ? T : never>;
+    infer: <TMaybe>(_: TMaybe) => Maybe<TMaybe extends Maybe<infer T> ? T : never>;
     maybe: <B>(_: B) => <A_1>(_: (_: A_1) => B) => (_: Maybe<A_1>) => B;
     Show: <A_2>(_: IShow<A_2>) => IShow<Maybe<A_2>>;
     Functor: Functor1<"Maybe"> & Functor1.Ext<"Maybe">;

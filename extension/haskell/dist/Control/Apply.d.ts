@@ -76,7 +76,7 @@ declare namespace Apply1 {
     interface Ext<F extends URI1> extends IExtApply1<F> {
     }
     let Ext: <F extends URI1>(_: Apply1<F>) => Ext<F>;
-    let enhance: <F extends "Endo" | "Maybe">(_: Apply1<F>) => Apply1<F> & Ext<F>;
+    let enhance: <F extends "Endo" | "List" | "Maybe">(_: Apply1<F>) => Apply1<F> & Ext<F>;
 }
 declare namespace Apply2 {
     let Def: <F extends URI2>(_: Apply2<F>) => IApply2<F>;

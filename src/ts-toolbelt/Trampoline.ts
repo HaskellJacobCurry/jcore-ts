@@ -1,43 +1,53 @@
 import {Function} from './Function'
-import {Tuple} from './Tuple'
-import {Function as Function_} from './Function'
 
 interface X<
-	TArgs extends Tuple,
+	TArgs extends any[],
 	TRet extends any
 > {
 	(x: X<TArgs, TRet>): Function<TArgs, TRet>;
 }
 
 interface Rec {
-	(f: Function, ...as: Function.Args<typeof f>): Trampoline.State<Function.Ret<typeof f>>;
+	(f: Function, ...as: Function.Args<typeof f>): trampoline.State<Function.Ret<typeof f>>;
 }
 
-export namespace Trampoline {
+namespace trampoline {
 	export interface State<TRet = any> {
 		rec: Rec;
 		thunk: () => TRet | State<TRet>;
 	}
 
-	export interface Function<
-		TArgs extends Tuple = Tuple,
+	export type StateLike<T> = T | State<T>;
+
+	export interface Func<
+		TArgs extends any[] = any[],
 		TRet extends any = any
 	> {
-		(rec: Function_<TArgs, TRet | State<TRet>>, ...as: TArgs): TRet | State<TRet>;
+		(rec: Function<TArgs, TRet | State<TRet>>, ...as: TArgs): TRet | State<TRet>;
 	}
-	export namespace Function {
-		export type Args<TFunc> = TFunc extends Trampoline.Function<infer TArgs, any> ? TArgs : never;
-
-		export type Ret<TFunc> = TFunc extends Trampoline.Function<any, infer TRet> ? TRet : never;
+	export namespace Func {
+		export type Args<TFunc> = TFunc extends Func<infer TArgs, any> ? TArgs : never;
+		export type Ret<TFunc> = TFunc extends Func<any, infer TRet> ? TRet : never;
 	}
 
-	export let fn: Trampoline = f => {
+	export interface Cont<T> {
+		(acc: T): T | State<T>;
+	}
+}
+interface trampoline {
+	<
+		TArgs extends any[],
+		TRet extends any
+	>(_: trampoline.Func<TArgs, TRet>): Function<TArgs, TRet>;
+}
+let trampoline: trampoline = (
+	f => {
 		let rec: Rec = (f, ...as) => ({ rec, thunk: () => f(...as) });
-		type TArgs = Trampoline.Function.Args<typeof f>;
-		type TRet = Trampoline.Function.Ret<typeof f>;
-		let isState = (state: any): state is State => state && state.rec === rec;
+		type TArgs = trampoline.Func.Args<typeof f>;
+		type TRet = trampoline.Func.Ret<typeof f>;
+		let isState = (state: any): state is trampoline.State => state && state.rec === rec;
 		return (...as) => (
-			((state: State<TRet> | TRet) => {
+			((state: trampoline.State<TRet> | TRet) => {
 				while (isState(state)) {
 					state = state.thunk();
 				}
@@ -52,17 +62,7 @@ export namespace Trampoline {
 				)(...as)
 			)
 		);
-	};
-
-	export type Cont<T> = (acc: T) => T | State<T>;
-}
-export interface Trampoline {
-	<
-		TArgs extends Tuple = Tuple,
-		TRet extends any = any
-	>(f: Trampoline.Function<TArgs, TRet>): Function<TArgs, TRet>;
-}
-
-export let trampoline = Trampoline.fn;
-
-export default Trampoline
+	}
+);
+export {trampoline}
+export default trampoline

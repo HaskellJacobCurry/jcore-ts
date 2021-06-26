@@ -47,4 +47,15 @@ export let N = <T extends Number>(_: T) => <T>_;
 export let T = <T extends Tuple>(..._: T) => <T>_;
 
 export let cast = <T = any>(_?: T) => <U extends T>() => <U>_;
+
 export let reinterpret = <T = any>(_?: any) => <T>_;
+
+let apply: <T>(_: T) => <U>(f: (_: T) => U) => U = (
+	_ => f => f(_)
+);
+export {apply}
+
+interface X<A> {
+	(x: X<A>): A;
+}
+export {X}

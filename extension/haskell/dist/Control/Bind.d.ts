@@ -60,7 +60,7 @@ declare namespace Bind1 {
     interface Ext<F extends URI1> extends IExtBind1<F> {
     }
     let Ext: <F extends URI1>(_: Bind1<F>) => Ext<F>;
-    let enhance: <F extends "Endo" | "Maybe">(_: Bind1<F>) => Bind1<F> & Ext<F>;
+    let enhance: <F extends "Endo" | "List" | "Maybe">(_: Bind1<F>) => Bind1<F> & Ext<F>;
 }
 declare namespace Bind2 {
     interface Ext<F extends URI2> extends IExtBind2<F> {

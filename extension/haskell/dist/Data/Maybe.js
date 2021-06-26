@@ -11,7 +11,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 exports.__esModule = true;
-exports.Foldable = exports.Monoid = exports.Semigroup = exports.Monad = exports.Bind = exports.Applicative = exports.Apply = exports.Functor = exports.Show = exports.maybe = exports.infer = exports.Just = exports.Nothing = exports.Maybe = exports.URI = void 0;
+exports.Foldable = exports.Monoid = exports.Semigroup = exports.Monad = exports.Bind = exports.Applicative = exports.Apply = exports.Functor = exports.Show = exports.maybe = exports.infer = exports.Just = exports.Nothing_ = exports.Nothing = exports.URI = exports.Maybe = void 0;
 var Show_1 = require("./Show");
 var Functor_1 = require("./Functor");
 var Apply_1 = require("../Control/Apply");
@@ -25,13 +25,17 @@ var String_1 = require("./String");
 var common_1 = require("../util/common");
 var URI = common_1.S('Maybe');
 exports.URI = URI;
-var Nothing = (common_1.Json.assign({ tag: 'Nothing' }, { URI: URI }, {
+var Nothing = common_1.create(common_1.Json.assign({ URI: URI }, common_1.create({ tag: 'Nothing' }), common_1.create({
     cata: function (fs) { return fs['Nothing'](); }
-}));
+})));
 exports.Nothing = Nothing;
-var Just = (function (value) { return (common_1.Json.assign({ tag: 'Just', value: value }, { URI: URI }, {
-    cata: function (fs) { return fs['Just'](value); }
+var Nothing_ = (function () { return common_1.Json.assign({ URI: URI }, common_1.create({ tag: 'Nothing' }), common_1.create({
+    cata: function (fs) { return fs['Nothing'](); }
 })); });
+exports.Nothing_ = Nothing_;
+var Just = (function (value) { return common_1.create(common_1.Json.assign({ URI: URI }, common_1.create({ tag: 'Just', value: value }), common_1.create({
+    cata: function (fs) { return fs['Just'](value); }
+}))); });
 exports.Just = Just;
 var infer = (function (maybe) { return common_1.reinterpret(maybe); });
 exports.infer = infer;
@@ -44,32 +48,32 @@ exports.maybe = maybe;
 var Show = function (_) { return ((function (ShowA) {
     if (ShowA === void 0) { ShowA = _; }
     return (Show_1.IShow.enhance({
-        show: function (maybeA) { return maybeA.cata({
+        show: function (maybeA) { return (maybeA.cata({
             Nothing: function () { return String_1.String('Nothing'); },
-            Just: function (value) { return String_1.String("Just(" + ShowA.show(value) + ")"); }
-        }); }
+            Just: function (value) { return (common_1.apply(String_1.String.Semigroup.append(String_1.String('Just('))(String_1.String.fromI(ShowA.show(value))))(function (_) { return String_1.String.Semigroup.append(_)(String_1.String(')')); })); }
+        })); }
     }));
 })()); };
 exports.Show = Show;
 var Functor = Functor_1.Functor1.enhance({
     URI: URI,
-    fmap: function (f) { return function (maybeA) { return infer(maybeA.cata({
+    fmap: function (f) { return function (maybeA) { return (common_1.apply(maybeA.cata({
         Nothing: function () { return Nothing; },
         Just: function (value) { return Just(f(value)); }
-    })); }; }
+    }))(infer)); }; }
 });
 exports.Functor = Functor;
-var Apply = Apply_1.Apply1.enhance(__assign(__assign({}, Functor), { ap: function (maybeF) { return function (maybeA) { return infer(maybeF.cata({
+var Apply = Apply_1.Apply1.enhance(__assign(__assign({}, Functor), { ap: function (maybeF) { return function (maybeA) { return (common_1.apply(maybeF.cata({
         Just: function (f) { return Functor.fmap(f)(common_1.reinterpret(maybeA)); },
         Nothing: function () { return Nothing; }
-    })); }; }, liftA2: common_1.reinterpret() }));
+    }))(infer)); }; }, liftA2: common_1.reinterpret() }));
 exports.Apply = Apply;
 var Applicative = Applicative_1.Applicative1.enhance(__assign(__assign({}, Apply), { pure: Just }));
 exports.Applicative = Applicative;
-var Bind = Bind_1.Bind1.enhance(__assign(__assign({}, Apply), { bind: function (maybeA) { return function (f) { return infer(maybeA.cata({
+var Bind = Bind_1.Bind1.enhance(__assign(__assign({}, Apply), { bind: function (maybeA) { return function (f) { return (common_1.apply(maybeA.cata({
         Just: f,
         Nothing: function () { return Nothing; }
-    })); }; } }));
+    }))(infer)); }; } }));
 exports.Bind = Bind;
 var Monad = Monad_1.Monad1.enhance(__assign(__assign({}, Applicative), Bind));
 exports.Monad = Monad;

@@ -3,7 +3,6 @@ import {
 	Int,
 	Bool,
 	trampoline,
-	Trampoline,
 	Function,
 } from '../ts-toolbelt'
 
@@ -119,7 +118,7 @@ export abstract class List<T = any> {
 	}
 	
 	unsnoc(): [List<T>, T] | null {
-		return trampoline<[List<T>?, List<T>?, Trampoline.Cont<[List<T>, T] | null>?], [List<T>, T] | null>(
+		return trampoline<[List<T>?, List<T>?, trampoline.Cont<[List<T>, T] | null>?], [List<T>, T] | null>(
 			(unsnoc, list = this, heads = List.nil(), cont = _ => _) => (
 				list.cata({
 					Nil: () => cont(null),
@@ -203,7 +202,7 @@ export abstract class List<T = any> {
 	}
 
 	insertAt(i: Int, value: T): List<T> | null {
-		return trampoline<[Int, List<T>?, Trampoline.Cont<List<T> | null>?], List<T> | null>(
+		return trampoline<[Int, List<T>?, trampoline.Cont<List<T> | null>?], List<T> | null>(
 			(insertAt, i, list = this, cont = _ => _) => (
 				i == 0 ?
 				cont(List.cons(value, list)) :
@@ -234,7 +233,7 @@ export abstract class List<T = any> {
 	}
 
 	deleteAt(i: Int): List<T> | null {
-		return trampoline<[Int, List<T>?, Trampoline.Cont<List<T> | null>?], List<T> | null>(
+		return trampoline<[Int, List<T>?, trampoline.Cont<List<T> | null>?], List<T> | null>(
 			(deleteAt, i, list = this, cont = _ => _) => (
 				list.cata({
 					Nil: () => cont(null),

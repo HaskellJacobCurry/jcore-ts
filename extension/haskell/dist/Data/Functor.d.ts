@@ -85,7 +85,7 @@ declare namespace Functor1 {
     interface Ext<F extends URI1> extends IExtFunctor1<F> {
     }
     let Ext: <F extends URI1>(_: Functor1<F>) => Ext<F>;
-    let enhance: <F extends "Endo" | "Maybe">(_: Functor1<F>) => Functor1<F> & Ext<F>;
+    let enhance: <F extends "Endo" | "List" | "Maybe">(_: Functor1<F>) => Functor1<F> & Ext<F>;
 }
 declare namespace Functor2 {
     interface Ext<F extends URI2> extends IExtFunctor2<F> {

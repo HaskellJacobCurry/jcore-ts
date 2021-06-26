@@ -12,9 +12,14 @@ import {
 	Json,
 	reinterpret,
 	cast,
-	assign,
+	apply,
+	create,
 	S
 } from '../util/common'
+
+/** data Maybe a = Just a | Nothing */
+type Maybe<A> = IMaybe<A> & (Nothing | Just<A>) & {URI: URI};
+export {Maybe}
 
 const URI = S('Maybe');
 type URI = typeof URI;
@@ -24,10 +29,6 @@ declare module '../util/HKT' {
 	}
 }
 export {URI}
-
-/** data Maybe a = Just a | Nothing */
-type Maybe<A> = IMaybe<A> & (Nothing | Just<A>) & {URI: URI};
-export {Maybe}
 
 interface IMaybe<A> {
 	cata: <T, U>(
@@ -41,31 +42,45 @@ interface IMaybe<A> {
 interface Nothing {
 	tag: 'Nothing';
 }
-let Nothing = <Maybe<never>>(
+let Nothing = create<Maybe<never>>(
 	Json.assign(
-		<Nothing>{tag: 'Nothing'}, {URI}, <IMaybe<never>>{
+		{URI}, 
+		create<Nothing>({tag: 'Nothing'}),
+		create<IMaybe<never>>({
 			cata: fs => fs['Nothing'](),
-		}
+		})
 	)
 );
 export {Nothing}
+let Nothing_: <A>() => Maybe<A> = (
+	<A>() => Json.assign(
+		{URI},
+		create<Nothing>({tag: 'Nothing'}),
+		create<IMaybe<A>>({
+			cata: fs => fs['Nothing'](),
+		})
+	)
+);
+export {Nothing_}
 
 interface Just<A> {
 	tag: 'Just';
 	value: A;
 }
 let Just: <A>(_: A) => Maybe<A> = (
-	<A>(value: A) => <Maybe<A>>(
+	<A>(value: A) => create<Maybe<A>>(
 		Json.assign(
-			<Just<A>>{tag: 'Just', value}, {URI}, <IMaybe<A>>{
+			{URI},
+			create<Just<A>>({tag: 'Just', value}),
+			create<IMaybe<A>>({
 				cata: fs => fs['Just'](value),
-			}
+			})
 		)
 	)
 );
 export {Just}
 
-let infer: <TMaybe>(maybe: TMaybe) => Maybe<TMaybe extends Maybe<infer T> ? T : never> = (
+let infer: <TMaybe>(_: TMaybe) => Maybe<TMaybe extends Maybe<infer T> ? T : never> = (
 	maybe => reinterpret(maybe)
 );
 export {infer}
@@ -84,10 +99,16 @@ export {maybe}
 let Show = <A>(_: IShow<A>) => (
 	((ShowA = _) => (
 		IShow.enhance<Maybe<A>>({
-			show: maybeA => maybeA.cata({
-				Nothing: () => String('Nothing'),
-				Just: value => String(`Just(${ShowA.show(value)})`),
-			}),
+			show: maybeA => (
+				maybeA.cata({
+					Nothing: () => String('Nothing'),
+					Just: value => (
+						apply(
+							String.Semigroup.append(String('Just('))(String.fromI(ShowA.show(value)))
+						)(_ => String.Semigroup.append(_)(String(')')))
+					),
+				})
+			),
 		})
 	))()
 )
@@ -95,22 +116,26 @@ export {Show}
 
 let Functor = Functor1.enhance<URI>({
 	URI,
-	fmap: f => maybeA => infer(
-		maybeA.cata({
-			Nothing: () => Nothing,
-			Just: value => Just(f(value)),
-		})
+	fmap: f => maybeA => (
+		apply(
+			maybeA.cata({
+				Nothing: () => Nothing,
+				Just: value => Just(f(value)),
+			})
+		)(infer)
 	),
 });
 export {Functor}
 
 let Apply = Apply1.enhance<URI>({
 	...Functor,
-	ap: maybeF => maybeA => infer(
-		maybeF.cata({
-			Just: f => Functor.fmap(f)(reinterpret(maybeA)),
-			Nothing: () => Nothing,
-		})
+	ap: maybeF => maybeA => (
+		apply(
+			maybeF.cata({
+				Just: f => Functor.fmap(f)(reinterpret(maybeA)),
+				Nothing: () => Nothing,
+			})
+		)(infer)
 	),
 	liftA2: reinterpret(),
 });
@@ -124,11 +149,13 @@ export {Applicative}
 
 let Bind = Bind1.enhance<URI>({
 	...Apply,
-	bind: maybeA => f => infer(
-		maybeA.cata({
-			Just: f,
-			Nothing: () => Nothing,
-		})
+	bind: maybeA => f => (
+		apply(
+			maybeA.cata({
+				Just: f,
+				Nothing: () => Nothing,
+			})
+		)(infer)
 	)
 });
 export {Bind}

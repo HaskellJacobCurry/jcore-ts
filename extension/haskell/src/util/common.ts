@@ -21,8 +21,37 @@ let flip: <A, B, C>(_: (_: A) => (_: B) => C) => (_: B) => (_: A) => C = (
 );
 export {flip}
 
-let assign = Function.assign;
+let assign: <T>(_: T) => <U>(f: (_: T) => U) => U = (
+	_ => f => f(_)
+);
 export {assign}
 
 let define = Function.define;
 export {define}
+
+let apply = assign;
+export {apply}
+
+let create: <T>(_: T) => T = _ => _;
+export {create}
+
+/** recurse :: ((...a[i]) -> ((...a[i]) -> b) -> b) -> (...a[i]) -> b */
+let recurse: <B>() => <AS extends any[]>(f: (..._: AS) => (s: (..._: AS) => B) => B) => (..._: AS) => B = (
+	<B>() => <AS extends any[]>(f: (..._: AS) => (s: (..._: AS) => B) => B) => (...as: AS) => (
+		apply(
+			(x => x(x))(
+				create<X<(..._: AS) => B>>(x => (...as) => (
+					((s = (..._: AS) => x(x)(..._)) => (
+						f(...as)(s)
+					))()
+				))
+			)
+		)(_ => _(...as))
+	)
+);
+export {recurse}
+
+interface X<A> {
+	(x: X<A>): A;
+}
+export {X}

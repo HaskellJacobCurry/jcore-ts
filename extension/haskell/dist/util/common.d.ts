@@ -16,3 +16,14 @@ declare let assign: <T>(_: T) => <U>(f: (_: T) => U) => U;
 export { assign };
 declare let define: Function.Define;
 export { define };
+declare let apply: <T>(_: T) => <U>(f: (_: T) => U) => U;
+export { apply };
+declare let create: <T>(_: T) => T;
+export { create };
+/** recurse :: ((...a[i]) -> ((...a[i]) -> b) -> b) -> (...a[i]) -> b */
+declare let recurse: <B>() => <AS extends any[]>(f: (..._: AS) => (s: (..._: AS) => B) => B) => (..._: AS) => B;
+export { recurse };
+interface X<A> {
+    (x: X<A>): A;
+}
+export { X };

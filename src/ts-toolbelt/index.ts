@@ -9,7 +9,7 @@ import {Curry, StrictCurry, curry, strictCurry} from './Curry'
 import {String} from './String'
 import {Json} from './Json'
 import {Tuple} from './Tuple'
-import {Trampoline, trampoline} from './Trampoline'
+import {trampoline} from './Trampoline'
 import {PromisedTrampoline} from './PromisedTrampoline'
 import {Promise, Promisable} from './Promise'
 import {PromiseCapability} from './PromiseCapability'
@@ -45,7 +45,6 @@ export {
 	String,
 	Json,
 	Tuple,
-	Trampoline,
 	trampoline,
 	PromisedTrampoline,
 	Promise,

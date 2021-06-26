@@ -107,6 +107,6 @@ declare namespace Foldable1 {
     interface Ext<F extends URI1> extends IExtFoldable1<F> {
     }
     let Ext: <F extends URI1>(_: Foldable1<F>) => Ext<F>;
-    let enhance: <F extends "Endo" | "Maybe">(_: Foldable1<F>) => Foldable1<F> & Ext<F>;
+    let enhance: <F extends "Endo" | "List" | "Maybe">(_: Foldable1<F>) => Foldable1<F> & Ext<F>;
 }
 export default Foldable;

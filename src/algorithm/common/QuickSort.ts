@@ -5,7 +5,6 @@ import {
 	StrictWeakOrdering,
 	Int,
 	Function,
-	Trampoline,
 	trampoline,
 } from '../../ts-toolbelt'
 import {_swap, swap} from './Swap'
@@ -24,7 +23,7 @@ let _quickSort = <T>(as: T[], iBegin: Int, iLast: Int, ordering: StrictWeakOrder
 );
 _quickSort = <T>(as: T[], iBegin: Int, iLast: Int, ordering: StrictWeakOrdering<T>): void => (
 	_swap(as, iLast - 1, Int.random(iBegin, iLast - 1)),
-	trampoline<[T[], Int, Int, StrictWeakOrdering<T>, Function<[], void | Trampoline.State<void>>?], void>(
+	trampoline<[T[], Int, Int, StrictWeakOrdering<T>, Function<[], void | trampoline.State<void>>?], void>(
 		(quickSort, as, iLeft, iRight, ordering, cont = () => {}) => {
 			if (iLeft < iRight) {
 				let iPivot = _partition(as, iLeft, iRight, ordering);
@@ -44,7 +43,7 @@ export namespace QuickSort {
 		<TIterator extends Iterator, T extends BaseIterator.Value<TIterator>
 		>(first: TIterator, last: TIterator, ordering: StrictWeakOrdering<T>): void => {
 			console.log('randomize'),
-			trampoline<[TIterator, TIterator, StrictWeakOrdering<T>, Function<[], void | Trampoline.State<void>>?], void>(
+			trampoline<[TIterator, TIterator, StrictWeakOrdering<T>, Function<[], void | trampoline.State<void>>?], void>(
 				(quickSort, left, right, ordering, cont = () => {}) => {
 					if (left.index() < right.index()) {
 						let pivot = partition(left, right, ordering);
