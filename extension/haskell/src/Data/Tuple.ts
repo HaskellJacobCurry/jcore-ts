@@ -9,6 +9,7 @@ import {Function} from './Function'
 import {
 	Json,
 	reinterpret,
+	apply,
 	S,
 } from '../util/common'
 
@@ -48,7 +49,15 @@ let Show = <A, B>(_0: IShow<A>, _1: IShow<B>) => (
 		IShow.enhance<Tuple<A, B>>({
 			show: tuple => (
 				((fst = ShowFst.show(tuple.fst), snd = ShowSnd.show(tuple.snd)) => (
-					String(`Tuple(${fst},${snd})`)
+					apply(
+						String('(Tuple ')
+					)(_ => apply(
+						String.Semigroup.append(_)(String.fromI(fst))
+					))(_ => apply(
+						String.Semigroup.append(_)(String(' '))
+					))(_ => apply(
+						String.Semigroup.append(_)(String.fromI(snd))
+					))(_ => String.Semigroup.append(_)(String(')')))
 				))()
 			)
 		})

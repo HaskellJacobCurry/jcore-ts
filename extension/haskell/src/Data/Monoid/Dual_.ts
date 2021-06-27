@@ -20,30 +20,36 @@ export {Dual}
 let get: <A>(_: Dual<A>) => A = _ => _.value;
 export {get}
 
+let create_: <A>(value: A) => Dual<A> = (
+	value => ({URI, value})
+);
+export {create_ as create}
+
 /** Semigroup a => Semigroup (Dual a) */
-let Semigroup: <A>(_: ISemigroup<A>) => ISemigroup<Dual<A>> = (
-	SemigroupA => ({
-		append: dual0 => dual1 => Dual(SemigroupA.append(dual1.value)(dual0.value))
-	})
+let Semigroup = <A>(_: ISemigroup<A>) => (
+	((SemigroupA = _) => (
+		ISemigroup.enhance<Dual<A>>({
+			append: dual0 => dual1 => create_(SemigroupA.append(dual1.value)(dual0.value))
+		})
+	))()
 );
 export {Semigroup}
 
-let Monoid: <A>(_: IMonoid<A>) => IMonoid<Dual<A>> & IMonoid.Ext<Dual<A>> = (
-	<A>(MonoidA: IMonoid<A>) => (
-		assign(<IMonoid<Dual<A>>>{
+let Monoid = <A>(_: IMonoid<A>) => (
+	((MonoidA = _) => (
+		IMonoid.enhance<Dual<A>>({
 			...Semigroup(MonoidA),
 			mempty: () => Dual(MonoidA.mempty()),
-		})(_ => Json.assign(_, IMonoid.Ext(_)))
-	)
+		})
+	))()
 );
 export {Monoid}
 
-let Dual = Json.assign(
-	<A>(value: A) => <Dual<A>>{URI, value}, {
-		URI,
-		get,
-		Semigroup,
-		Monoid,
-	}
-);
+let Dual = Json.assign(create_, {
+	URI,
+	get,
+	create: create_,
+	Semigroup,
+	Monoid,
+});
 export default Dual

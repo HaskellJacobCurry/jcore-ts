@@ -104,7 +104,7 @@ let Show = <A>(_: IShow<A>) => (
 					Nothing: () => String('Nothing'),
 					Just: value => (
 						apply(
-							String.Semigroup.append(String('Just('))(String.fromI(ShowA.show(value)))
+							String.Semigroup.append(String('(Just '))(String.fromI(ShowA.show(value)))
 						)(_ => String.Semigroup.append(_)(String(')')))
 					),
 				})

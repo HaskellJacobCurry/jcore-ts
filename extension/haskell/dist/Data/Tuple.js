@@ -43,7 +43,7 @@ var Show = function (_0, _1) { return ((function (ShowFst, ShowSnd) {
         show: function (tuple) { return ((function (fst, snd) {
             if (fst === void 0) { fst = ShowFst.show(tuple.fst); }
             if (snd === void 0) { snd = ShowSnd.show(tuple.snd); }
-            return (String_1.String("Tuple(" + fst + "," + snd + ")"));
+            return (common_1.apply(String_1.String('(Tuple '))(function (_) { return common_1.apply(String_1.String.Semigroup.append(_)(String_1.String.fromI(fst))); })(function (_) { return common_1.apply(String_1.String.Semigroup.append(_)(String_1.String(' '))); })(function (_) { return common_1.apply(String_1.String.Semigroup.append(_)(String_1.String.fromI(snd))); })(function (_) { return String_1.String.Semigroup.append(_)(String_1.String(')')); }));
         })()); }
     }));
 })()); };

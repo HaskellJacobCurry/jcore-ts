@@ -49,7 +49,7 @@ declare namespace Monad1 {
     interface Ext<F extends URI1> extends IExtMonad1<F> {
     }
     let Ext: <F extends URI1>(_: Monad1<F>) => Ext<F>;
-    let enhance: <F extends "Endo" | "List" | "Maybe">(_: Monad1<F>) => Monad1<F> & Ext<F>;
+    let enhance: <F extends "Endo" | "Maybe" | "List">(_: Monad1<F>) => Monad1<F> & Ext<F>;
 }
 declare namespace Monad2 {
     interface Ext<F extends URI2> extends IExtMonad2<F> {

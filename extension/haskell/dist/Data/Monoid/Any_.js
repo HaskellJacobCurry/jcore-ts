@@ -11,7 +11,8 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 exports.__esModule = true;
-exports.Monoid = exports.Semigroup = exports.get = exports.Any = exports.URI = void 0;
+exports.Monoid = exports.Semigroup = exports.create = exports.get = exports.Any = exports.URI = void 0;
+var Semigroup_1 = require("../Semigroup");
 var Monoid_1 = require("../Monoid");
 var IBool_1 = require("../IBool");
 var common_1 = require("../../util/common");
@@ -19,17 +20,20 @@ var URI = common_1.S('Any');
 exports.URI = URI;
 var get = function (_) { return _.value; };
 exports.get = get;
+var create_ = (function (value) { return ({ URI: URI, value: value }); });
+exports.create = create_;
 /** Semigroup Any */
-var Semigroup = ({
-    append: function (any0) { return function (any1) { return Any(IBool_1.IBool.or(any0.value)(any1.value)); }; }
+var Semigroup = Semigroup_1.ISemigroup.enhance({
+    append: function (any0) { return function (any1) { return create_(IBool_1.IBool.or(any0.value)(any1.value)); }; }
 });
 exports.Semigroup = Semigroup;
 /** Monoid Any */
-var Monoid = (common_1.assign(__assign(__assign({}, Semigroup), { mempty: function () { return Any(IBool_1.IBool.False); } }))(function (_) { return common_1.Json.assign(_, Monoid_1.IMonoid.Ext(_)); }));
+var Monoid = Monoid_1.IMonoid.enhance(__assign(__assign({}, Semigroup), { mempty: function () { return create_(IBool_1.IBool.False); } }));
 exports.Monoid = Monoid;
-var Any = common_1.Json.assign(function (value) { return ({ URI: URI, value: value }); }, {
+var Any = common_1.Json.assign(create_, {
     URI: URI,
     get: get,
+    create: create_,
     Semigroup: Semigroup,
     Monoid: Monoid
 });

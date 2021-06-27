@@ -26,27 +26,27 @@ export {Endo}
 let get: <A>(_: Endo<A>) => (_: A) => A = _ => _.fn;
 export {get}
 
-let Semigroup: <A>() => ISemigroup<Endo<A>> = (
-	() => ({
-		append: endo0 => endo1 => Endo(compose(endo0.fn, endo1.fn))
-	})
+let create_: <A>(fn: (_: A) => A) => Endo<A> = (
+	fn => ({URI, fn})
 );
+export {create_ as create}
+
+let Semigroup = <A>() => ISemigroup.enhance<Endo<A>>({
+	append: endo0 => endo1 => Endo(compose(endo0.fn, endo1.fn)),
+});
 export {Semigroup}
 
-let Monoid: <A>() => IMonoid<Endo<A>> & IMonoid.Ext<Endo<A>> = (
-	<A>() => (
-		assign(<IMonoid<Endo<A>>>{
-			...Semigroup<A>(),
-			mempty: () => Endo(id),
-		})(_ => Json.assign(_, IMonoid.Ext(_)))
-	)
-);
+let Monoid = <A>() => IMonoid.enhance<Endo<A>>({
+	...Semigroup<A>(),
+	mempty: () => Endo(id),
+});
 export {Monoid}
 
 let Endo = Json.assign(
 	<A>(fn: (_: A) => A) => <Endo<A>>{URI, fn}, {
 		URI,
 		get,
+		create: create_,
 		Semigroup,
 		Monoid,
 	}

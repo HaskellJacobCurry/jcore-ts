@@ -1,10 +1,15 @@
 "use strict";
 exports.__esModule = true;
-exports.last = exports.head = exports.create = exports.infer = exports.Cons = exports.Nil_ = exports.Nil = exports.URI = exports.List = void 0;
+exports.Foldable = exports.Show = exports.foldr = exports.foldl = exports.foldMap = exports.unsnoc = exports.uncons = exports.tail = exports.last = exports.head = exports.singleton = exports.cons = exports.create = exports.infer = exports.Cons = exports.Nil_ = exports.Nil = exports.URI = exports.List = void 0;
 var util_1 = require("../util");
 var Throwable_1 = require("../util/Throwable");
 var String_1 = require("./String");
 var Bool_1 = require("./Bool");
+var Foldable_1 = require("./Foldable");
+var Show_1 = require("./Show");
+var Monoid_1 = require("./Monoid");
+var Maybe_1 = require("./Maybe");
+var Tuple_1 = require("./Tuple");
 var URI = util_1.S('List');
 exports.URI = URI;
 var Nil = util_1.create(util_1.Json.assign({ URI: URI }, util_1.create({ tag: 'Nil' }), util_1.create({
@@ -26,7 +31,12 @@ var create_ = (function (as) { return (util_1.apply(util_1.trampoline()(function
     True: function () { return acc; }
 })); }; }))(function (_) { return _(Nil, as.length - 1); })); });
 exports.create = create_;
-/** head :: [a] -> a */
+var cons = (function (head) { return function (tail) { return Cons(head, tail); }; });
+exports.cons = cons;
+/** singleton :: a -> List a */
+var singleton = (function (a) { return Cons(a, Nil); });
+exports.singleton = singleton;
+/** head :: List a -> a */
 var head = (function (list) { return (list.cata({
     Nil: function () { return Throwable_1.Throwable(String_1.String('EmptyList')); },
     Cons: function (head) { return head; }
@@ -48,6 +58,68 @@ exports.last = last = function (list) { return (util_1.apply(util_1.trampoline_(
         Cons: function () { return last(tail); }
     })); }
 })); }))(function (_) { return _(list); })); };
+/** tail :: [a] -> [a] */
+var tail = (function (list) { return (list.cata({
+    Nil: function () { return Throwable_1.Throwable(String_1.String('EmptyList')); },
+    Cons: function (_, tail) { return tail; }
+})); });
+exports.tail = tail;
+/** uncons :: List a -> Maybe (Tuple a (List a))  */
+var uncons = (function (list) { return (util_1.apply(list.cata({
+    Nil: function () { return Maybe_1.Maybe.Nothing; },
+    Cons: function (head, tail) { return Maybe_1.Maybe.Just(Tuple_1.Tuple(head, tail)); }
+}))(Maybe_1.Maybe.infer)); });
+exports.uncons = uncons;
+/** unsnoc :: List a -> Maybe (Tuple (List a) a) */
+var unsnoc = (function (list) { return (util_1.apply(util_1.recurse()(function (list) { return function (unsnoc) { return (list.cata({
+    Nil: function () { return Maybe_1.Maybe.Nothing; },
+    Cons: function (head, tail) { return (tail.cata({
+        Nil: function () { return Maybe_1.Maybe.Just(Tuple_1.Tuple(Nil, head)); },
+        Cons: function () { return (util_1.apply(Tuple_1.Tuple.Bifunctor.lmap(cons(head)))(function (_) { return util_1.apply(Maybe_1.Maybe.Functor.fmap(_)); })(function (_) { return _(unsnoc(tail)); })); }
+    })); }
+})); }; }))(function (_) { return _(list); })); });
+exports.unsnoc = unsnoc;
+var foldMap = (function (MonoidG) { return function (f) { return function (listA) { return (util_1.apply({
+    MonoidExtG: Monoid_1.Monoid.Ext(MonoidG)
+})(function (_a) {
+    var MonoidExtG = _a.MonoidExtG;
+    return util_1.apply(util_1.recurse()(function (acc, listA) { return function (foldMap) { return (listA.cata({
+        Nil: function () { return acc; },
+        Cons: function (head, tail) { return util_1.apply(MonoidExtG.mappend(acc)(f(head)))(function (_) { return foldMap(_, tail); }); }
+    })); }; }));
+})(function (_) { return _(MonoidG.mempty(), listA); })); }; }; });
+exports.foldMap = foldMap;
+exports.foldMap = foldMap = function (MonoidG) { return function (f) { return function (listA) { return (util_1.apply({
+    MonoidExtG: Monoid_1.Monoid.Ext(MonoidG)
+})(function (_a) {
+    var MonoidExtG = _a.MonoidExtG;
+    return util_1.apply(util_1.trampoline()(function (acc, listA) { return function (foldMap) { return (listA.cata({
+        Nil: function () { return acc; },
+        Cons: function (head, tail) { return util_1.apply(MonoidExtG.mappend(acc)(f(head)))(function (_) { return foldMap(_, tail); }); }
+    })); }; }));
+})(function (_) { return _(MonoidG.mempty(), listA); })); }; }; };
+var foldl = (function (f) { return function (b) { return function (listA) { return (util_1.apply(util_1.trampoline()(function (acc, listA) { return function (foldl) { return (listA.cata({
+    Nil: function () { return acc; },
+    Cons: function (head, tail) { return foldl(f(acc)(head), tail); }
+})); }; }))(function (_) { return _(b, listA); })); }; }; });
+exports.foldl = foldl;
+var foldr = (function (_0) { return function (_1) { return function (_2) { return Foldable.foldr(_0)(_1)(_2); }; }; });
+exports.foldr = foldr;
+/** show :: (Show a) => Show (List a) => List a -> String */
+var Show = function (_) { return util_1.apply(_)(function (ShowA) { return (Show_1.IShow.enhance({
+    show: function (listA) { return (util_1.apply(util_1.recurse()(function (list) { return function (show) { return (list.cata({
+        Nil: function () { return String_1.String('Nil'); },
+        Cons: function (head, tail) { return (util_1.apply(String_1.String('(Cons '))(function (_) { return util_1.apply(String_1.String.Semigroup.append(_)(String_1.String.fromI(ShowA.show(head)))); })(function (_) { return util_1.apply(String_1.String.Semigroup.append(_)(String_1.String(' '))); })(function (_) { return util_1.apply(String_1.String.Semigroup.append(_)(String_1.String.fromI(show(tail)))); })(function (_) { return String_1.String.Semigroup.append(_)(String_1.String(')')); })); }
+    })); }; }))(function (_) { return _(listA); })); }
+})); }); };
+exports.Show = Show;
+var Foldable = Foldable_1.Foldable1.enhance({
+    URI: URI,
+    foldMap: foldMap,
+    foldr: util_1.reinterpret()
+});
+exports.Foldable = Foldable;
+Foldable.foldl = foldl;
 var List = {
     URI: URI,
     Nil: Nil,
@@ -55,8 +127,18 @@ var List = {
     Cons: Cons,
     infer: infer,
     create: create_,
+    cons: cons,
+    singleton: singleton,
     head: head,
-    last: last
+    last: last,
+    tail: tail,
+    uncons: uncons,
+    unsnoc: unsnoc,
+    foldMap: foldMap,
+    foldl: foldl,
+    foldr: foldr,
+    Show: Show,
+    Foldable: Foldable
 };
 exports.List = List;
 exports["default"] = List;

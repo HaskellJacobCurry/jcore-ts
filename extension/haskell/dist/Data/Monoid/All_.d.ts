@@ -11,6 +11,8 @@ interface All {
 export { All };
 declare let get: (_: All) => IBool;
 export { get };
+declare let create_: (value: IBool) => All;
+export { create_ as create };
 /** Semigroup All */
 declare let Semigroup: ISemigroup<All>;
 export { Semigroup };
@@ -20,6 +22,7 @@ export { Monoid };
 declare let All: ((value: IBool) => All) & {
     URI: "All";
     get: (_: All) => IBool;
+    create: (value: IBool) => All;
     Semigroup: ISemigroup<All>;
     Monoid: IMonoid<All> & IMonoid.Ext<All>;
 };

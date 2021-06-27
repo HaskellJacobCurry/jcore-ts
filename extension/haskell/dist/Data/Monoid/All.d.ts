@@ -6,6 +6,7 @@ export { Show };
 declare let _All: ((value: import("../IBool").IBool) => All) & {
     URI: "All";
     get: (_: All) => import("../IBool").IBool;
+    create: (value: import("../IBool").IBool) => All;
     Semigroup: import("../Semigroup").Semigroup<All>;
     Monoid: import("../Monoid").Monoid<All> & import("../Monoid").Monoid.Ext<All>;
 } & {

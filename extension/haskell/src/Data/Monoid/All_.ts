@@ -21,27 +21,29 @@ export {All}
 let get: (_: All) => IBool = _ => _.value;
 export {get}
 
+let create_: (value: IBool) => All = (
+	value => ({URI, value})
+);
+export {create_ as create}
+
 /** Semigroup All */
-let Semigroup: ISemigroup<All> = ({
-	append: _0 => _1 => All(IBool.and(_0.value)(_1.value)),
+let Semigroup = ISemigroup.enhance<All>({
+	append: _0 => _1 => create_(IBool.and(_0.value)(_1.value)),
 });
 export {Semigroup}
 
 /** Monoid All */
-let Monoid: IMonoid<All> & IMonoid.Ext<All> = (
-	assign(<IMonoid<All>>{
-		...Semigroup,
-		mempty: () => All(IBool.True),
-	})(_ => Json.assign(_, IMonoid.Ext(_)))
-);
+let Monoid = IMonoid.enhance<All>({
+	...Semigroup,
+	mempty: () => create_(IBool.True),
+});
 export {Monoid}
 
-let All = Json.assign(
-	(value: IBool) => <All>{URI, value}, {
-		URI,
-		get,
-		Semigroup,
-		Monoid,
-	}
-);
+let All = Json.assign(create_, {
+	URI,
+	get,
+	create: create_,
+	Semigroup,
+	Monoid,
+});
 export default All

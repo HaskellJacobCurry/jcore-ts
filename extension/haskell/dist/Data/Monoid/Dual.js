@@ -1,43 +1,31 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 exports.__esModule = true;
-exports.Monoid = exports.Semigroup = exports.Show = exports.get = exports.Dual = exports.URI = void 0;
-var Monoid_1 = require("../Monoid");
+exports.Dual = exports.Show = void 0;
+var Dual_1 = require("./Dual_");
+var Show_1 = require("../Show");
 var String_1 = require("../String");
 var common_1 = require("../../util/common");
-var URI = common_1.S('Dual');
-exports.URI = URI;
-var get = function (_) { return _.value; };
-exports.get = get;
 /** Show a => Show (Dual a) */
-var Show = (function (ShowA) { return ({
-    show: function (dualA) { return (common_1.assign(String_1.String('Dual('))(function (_) { return common_1.assign(String_1.String.Semigroup.append(_)(String_1.String.fromI(ShowA.show(dualA.value)))); })(function (_) { return String_1.String.Semigroup.append(_)(String_1.String(')')); })); }
-}); });
+var Show = function (_) { return ((function (ShowA) {
+    if (ShowA === void 0) { ShowA = _; }
+    return (Show_1.IShow.enhance({
+        show: function (dualA) { return (common_1.assign(String_1.String('Dual('))(function (_) { return common_1.assign(String_1.String.Semigroup.append(_)(String_1.String.fromI(ShowA.show(dualA.value)))); })(function (_) { return String_1.String.Semigroup.append(_)(String_1.String(')')); })); }
+    }));
+})()); };
 exports.Show = Show;
-/** Semigroup a => Semigroup (Dual a) */
-var Semigroup = (function (SemigroupA) { return ({
-    append: function (dual0) { return function (dual1) { return Dual(SemigroupA.append(dual1.value)(dual0.value)); }; }
-}); });
-exports.Semigroup = Semigroup;
-/** Monoid a => Monoid (Dual a) */
-var Monoid = (function (MonoidA) { return (common_1.assign(__assign(__assign({}, Semigroup(MonoidA)), { mempty: function () { return Dual(MonoidA.mempty()); } }))(function (_) { return common_1.Json.assign(_, Monoid_1.IMonoid.Ext(_)); })); });
-exports.Monoid = Monoid;
-var Dual = common_1.Json.assign(function (value) { return ({ URI: URI, value: value }); }, {
-    URI: URI,
-    get: get,
-    Show: Show,
-    Semigroup: Semigroup,
-    Monoid: Monoid
+var _Dual = common_1.Json.assign(Dual_1.Dual, {
+    Show: Show
 });
-exports.Dual = Dual;
-exports["default"] = Dual;
+exports.Dual = _Dual;
+__exportStar(require("./Dual_"), exports);
+exports["default"] = _Dual;

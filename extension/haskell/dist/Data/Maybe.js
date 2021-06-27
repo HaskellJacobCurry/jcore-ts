@@ -50,7 +50,7 @@ var Show = function (_) { return ((function (ShowA) {
     return (Show_1.IShow.enhance({
         show: function (maybeA) { return (maybeA.cata({
             Nothing: function () { return String_1.String('Nothing'); },
-            Just: function (value) { return (common_1.apply(String_1.String.Semigroup.append(String_1.String('Just('))(String_1.String.fromI(ShowA.show(value))))(function (_) { return String_1.String.Semigroup.append(_)(String_1.String(')')); })); }
+            Just: function (value) { return (common_1.apply(String_1.String.Semigroup.append(String_1.String('(Just '))(String_1.String.fromI(ShowA.show(value))))(function (_) { return String_1.String.Semigroup.append(_)(String_1.String(')')); })); }
         })); }
     }));
 })()); };

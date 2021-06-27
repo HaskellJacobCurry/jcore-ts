@@ -1,31 +1,17 @@
+import { Sum } from './Sum_';
 import { IShow } from '../Show';
-import { ISemigroup } from '../Semigroup';
-import { IMonoid } from '../Monoid';
-import { INum } from '../../GHC/Num';
-declare const URI: "Sum";
-declare type URI = typeof URI;
-export { URI };
-interface Sum<A> {
-    URI: URI;
-    value: A;
-}
-export { Sum };
-declare let get: <A>(_: Sum<A>) => A;
-export { get };
 /** Show a => Show (Sum a) */
 declare let Show: <A>(_: IShow<A>) => IShow<Sum<A>>;
 export { Show };
-/** Num a => Semigroup (Sum a) */
-declare let Semigroup: <A>(_: INum<A>) => ISemigroup<Sum<A>>;
-export { Semigroup };
-/** Num a => Monoid (Sum a) */
-declare let Monoid: <A>(_: INum<A>) => IMonoid<Sum<A>> & IMonoid.Ext<Sum<A>>;
-export { Monoid };
-declare let Sum: (<A>(value: A) => Sum<A>) & {
+declare let _Sum: (<A>(value: A) => Sum<A>) & {
     URI: "Sum";
     get: <A_1>(_: Sum<A_1>) => A_1;
-    Show: <A_2>(_: IShow<A_2>) => IShow<Sum<A_2>>;
-    Semigroup: <A_3>(_: INum<A_3>) => ISemigroup<Sum<A_3>>;
-    Monoid: <A_4>(_: INum<A_4>) => IMonoid<Sum<A_4>> & IMonoid.Ext<Sum<A_4>>;
+    create: <A_2>(value: A_2) => Sum<A_2>;
+    Semigroup: <A_3>(_: import("../../GHC/Num").Num<A_3>) => import("../Semigroup").Semigroup<Sum<A_3>>;
+    Monoid: <A_4>(_: import("../../GHC/Num").Num<A_4>) => import("../Monoid").Monoid<Sum<A_4>> & import("../Monoid").Monoid.Ext<Sum<A_4>>;
+} & {
+    Show: <A_5>(_: IShow<A_5>) => IShow<Sum<A_5>>;
 };
-export default Sum;
+export * from './Sum_';
+export { _Sum as Sum };
+export default _Sum;

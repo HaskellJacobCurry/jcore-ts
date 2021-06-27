@@ -7,11 +7,17 @@ import {
 	trampoline_,
 	trampoline,
 	recurse,
+	recurse_,
 	S
 } from '../util'
 import {Throwable} from '../util/Throwable'
 import {String} from './String'
 import {Bool} from './Bool'
+import {Foldable1} from './Foldable'
+import {IShow} from './Show'
+import {Monoid} from './Monoid'
+import {Maybe} from './Maybe'
+import {Tuple} from './Tuple'
 
 /** data List a = Nil | Cons a (List a) */
 type List<A> = IList<A> & (Nil | Cons<A>) & {URI: URI};
@@ -96,7 +102,18 @@ let create_: <A>(_: A[]) => List<A> = (
 );
 export {create_ as create}
 
-/** head :: [a] -> a */
+let cons: <A>(head: A) => (tail: List<A>) => List<A> = (
+	head => tail => Cons(head, tail)
+);
+export {cons}
+
+/** singleton :: a -> List a */
+let singleton: <A>(_: A) => List<A> = (
+	a => Cons(a, Nil)
+);
+export {singleton}
+
+/** head :: List a -> a */
 let head: <A>(_: List<A>) => A = (
 	list => (
 		list.cata({
@@ -140,6 +157,138 @@ last = <A>(list: List<A>) => (
 );
 export {last}
 
+/** tail :: [a] -> [a] */
+let tail: <A>(_: List<A>) => List<A> = (
+	list => (
+		list.cata({
+			Nil: () => Throwable(String('EmptyList')),
+			Cons: (_, tail) => tail,
+		})
+	)
+);
+export {tail}
+
+/** uncons :: List a -> Maybe (Tuple a (List a))  */
+let uncons: <A>(_: List<A>) => Maybe<Tuple<A, List<A>>> = (
+	list => (
+		apply(
+			list.cata({
+				Nil: () => Maybe.Nothing,
+				Cons: (head, tail) => Maybe.Just(Tuple(head, tail)),
+			})
+		)(Maybe.infer)
+	)
+);
+export {uncons}
+
+/** unsnoc :: List a -> Maybe (Tuple (List a) a) */
+let unsnoc: <A>(_: List<A>) => Maybe<Tuple<List<A>, A>> = (
+	<A>(list: List<A>) => (
+		apply(
+			recurse<Maybe<Tuple<List<A>, A>>>()((list: List<A>) => unsnoc => (
+				list.cata({
+					Nil: () => Maybe.Nothing,
+					Cons: (head, tail) => (
+						tail.cata({
+							Nil: () => Maybe.Just(Tuple(Nil, head)),
+							Cons: () => (
+								apply(
+									Tuple.Bifunctor.lmap(cons(head))
+								)(_ => apply(
+									Maybe.Functor.fmap(_)
+								))(_ => _(unsnoc(tail)))
+							),
+						})
+					),
+				})
+			))
+		)(_ => _(list))
+	)
+);
+export {unsnoc}
+
+let foldMap: <G>(_: Monoid<G>) => <A>(_: (_: A) => G) => (_: List<A>) => G = (
+	<G>(MonoidG: Monoid<G>) => <A>(f: (_: A) => G) => (listA: List<A>) => (
+		apply({
+			MonoidExtG: Monoid.Ext(MonoidG),
+		})(({MonoidExtG}) => apply(
+			recurse<G>()((acc: G, listA: List<A>) => foldMap => (
+				listA.cata({
+					Nil: () => acc,
+					Cons: (head, tail) => apply(MonoidExtG.mappend(acc)(f(head)))(_ => foldMap(_, tail)),
+				})
+			))
+		))(_ => _(MonoidG.mempty(), listA))
+	)
+);
+foldMap = <G>(MonoidG: Monoid<G>) => <A>(f: (_: A) => G) => (listA: List<A>) => (
+	apply({
+		MonoidExtG: Monoid.Ext(MonoidG),
+	})(({MonoidExtG}) => apply(
+		trampoline<G>()((acc: G, listA: List<A>) => foldMap => (
+			listA.cata({
+				Nil: () => acc,
+				Cons: (head, tail) => apply(MonoidExtG.mappend(acc)(f(head)))(_ => foldMap(_, tail)),
+			})
+		))
+	))(_ => _(MonoidG.mempty(), listA))
+);
+export {foldMap}
+
+let foldl: <A, B>(_: (_: B) => (_: A) => B) => (_: B) => (_: List<A>) => B = (
+	<A, B>(f: (_: B) => (_: A) => B) => (b: B) => (listA: List<A>) => (
+		apply(
+			trampoline<B>()((acc: B, listA: List<A>) => foldl => (
+				listA.cata({
+					Nil: () => acc,
+					Cons: (head, tail) => foldl(f(acc)(head), tail),
+				})
+			))
+		)(_ => _(b, listA))
+	)
+);
+export {foldl}
+
+let foldr: <A, B>(_: (_: A) => (_: B) => B) => (_: B) => (_: List<A>) => B = (
+	_0 => _1 => _2 => Foldable.foldr(_0)(_1)(_2)
+);
+export {foldr}
+
+/** show :: (Show a) => Show (List a) => List a -> String */
+let Show = <A>(_: IShow<A>) => apply(_)(ShowA => (
+	IShow.enhance<List<A>>({
+		show: listA => (
+			apply(
+				recurse<String>()((list: List<A>) => show => (
+					list.cata({
+						Nil: () => String('Nil'),
+						Cons: (head, tail) => (
+							apply(
+								String('(Cons ')
+							)(_ => apply(
+								String.Semigroup.append(_)(String.fromI(ShowA.show(head)))
+							))(_ => apply(
+								String.Semigroup.append(_)(String(' '))
+							))(_ => apply(
+								String.Semigroup.append(_)(String.fromI(show(tail)))
+							))(_ => String.Semigroup.append(_)(String(')')))
+						)
+					})
+				))
+			)(_ => _(listA))
+		)
+	})
+));
+export {Show}
+
+let Foldable = Foldable1.enhance<URI>({
+	URI,
+	foldMap,
+	foldr: reinterpret(),
+});
+Foldable.foldl = foldl;
+export {Foldable}
+
 let List = {
 	URI,
 	Nil,
@@ -147,7 +296,17 @@ let List = {
 	Cons,
 	infer,
 	create: create_,
+	cons,
+	singleton,
 	head,
 	last,
+	tail,
+	uncons,
+	unsnoc,
+	foldMap,
+	foldl,
+	foldr,
+	Show,
+	Foldable,
 };
 export default List

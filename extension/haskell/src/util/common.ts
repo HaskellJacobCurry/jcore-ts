@@ -2,7 +2,6 @@ export * from '../../dependency/jcore/dist/ts-toolbelt'
 export * from '../../dependency/jcore/dist/ts-toolbelt/common'
 export * from '../../dependency/jcore/dist/common/compose'
 export * from '../../dependency/jcore/dist/common/pipe'
-import {Function} from '../../dependency/jcore/dist/ts-toolbelt'
 
 let id: <A>(_: A) => A = a => a;
 export {id}
@@ -26,7 +25,15 @@ let assign: <T>(_: T) => <U>(f: (_: T) => U) => U = (
 );
 export {assign}
 
-let define = Function.define;
+let define: <T>(f: (_: () => T) => T) => T = (
+	<T>(f: (_: () => T) => T) => (
+		((a?: T) => (
+			(x => x(x))(
+				create<X<T>>(x => f(() => a || (a = x(x))))
+			)
+		))()
+	)
+);
 export {define}
 
 let apply = assign;
@@ -50,6 +57,22 @@ let recurse: <B>() => <AS extends any[]>(f: (..._: AS) => (s: (..._: AS) => B) =
 	)
 );
 export {recurse}
+
+/** recurse_ :: (((...a[i]) -> b, ...a[i]) -> b) -> (...a[i]) -> b */
+let recurse_: <AS extends any[], B>(f: (s: (..._: AS) => B, ..._: AS) => B) => (..._: AS) => B = (
+	<AS extends any[], B>(f: (s: (..._: AS) => B, ..._: AS) => B) => (...as: AS) => (
+		apply(
+			(x => x(x))(
+				create<X<(..._: AS) => B>>(x => (...as) => (
+					((s = (..._: AS) => x(x)(..._)) => (
+						f(s, ...as)
+					))()
+				))
+			)
+		)(_ => _(...as))
+	)
+);
+export {recurse_}
 
 interface X<A> {
 	(x: X<A>): A;
