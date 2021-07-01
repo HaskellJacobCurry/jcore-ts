@@ -35,7 +35,7 @@ namespace Monad {
 		)
 	);
 
-	export let enhance = <F>(_: Monad<F>) => (
+	export let instantiate = <F>(_: Monad<F>) => (
 		assign(_)((_: Monad<F>) => Json.assign(_, Ext(_)))
 	);
 }
@@ -68,7 +68,7 @@ namespace Monad1 {
 		)
 	);
 
-	export let enhance = <F extends URI1>(_: Monad1<F>) => (
+	export let instantiate = <F extends URI1>(_: Monad1<F>) => (
 		assign(_)((_: Monad1<F>) => Json.assign(_, Ext(_)))
 	);
 }
@@ -83,7 +83,7 @@ namespace Monad2 {
 		)
 	);
 
-	export let enhance = <F extends URI2>(_: Monad2<F>) => (
+	export let instantiate = <F extends URI2>(_: Monad2<F>) => (
 		assign(_)((_: Monad2<F>) => Json.assign(_, Ext(_)))
 	);
 }
@@ -98,7 +98,7 @@ namespace Monad2_ {
 		)
 	);
 
-	export let enhance = <F extends URI2, T0>(_: Monad2_<F, T0>) => (
+	export let instantiate = <F extends URI2, T0>(_: Monad2_<F, T0>) => (
 		assign(_)((_: Monad2_<F, T0>) => Json.assign(_, Ext(_)))
 	);
 }

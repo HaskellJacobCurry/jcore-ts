@@ -24,14 +24,14 @@ exports.create = create_;
 /** Semigroup a => Semigroup (Dual a) */
 var Semigroup = function (_) { return ((function (SemigroupA) {
     if (SemigroupA === void 0) { SemigroupA = _; }
-    return (Semigroup_1.ISemigroup.enhance({
+    return (Semigroup_1.ISemigroup.instantiate({
         append: function (dual0) { return function (dual1) { return create_(SemigroupA.append(dual1.value)(dual0.value)); }; }
     }));
 })()); };
 exports.Semigroup = Semigroup;
 var Monoid = function (_) { return ((function (MonoidA) {
     if (MonoidA === void 0) { MonoidA = _; }
-    return (Monoid_1.IMonoid.enhance(__assign(__assign({}, Semigroup(MonoidA)), { mempty: function () { return Dual(MonoidA.mempty()); } })));
+    return (Monoid_1.IMonoid.instantiate(__assign(__assign({}, Semigroup(MonoidA)), { mempty: function () { return Dual(MonoidA.mempty()); } })));
 })()); };
 exports.Monoid = Monoid;
 var Dual = common_1.Json.assign(create_, {

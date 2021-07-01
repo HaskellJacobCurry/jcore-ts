@@ -1,10 +1,10 @@
 "use strict";
 exports.__esModule = true;
-exports.evaluate = exports.foldl = exports.until = exports.filter = exports.fmap = exports.map = exports.create = exports.LazySequence = void 0;
-var util_1 = require("../util");
+exports.toPopulatable = exports.toPopulatable1 = exports.evaluate = exports.foldl = exports.until = exports.filter = exports.fmap = exports.map = exports.create = exports.LazySequence = void 0;
 var Bool_1 = require("../Data/Bool");
 var Int_1 = require("../Data/Int");
 var Unit_1 = require("../Data/Unit");
+var util_1 = require("../util");
 var create_ = (function (transform) { return function (seed) { return (util_1.apply(util_1.recurse()(function (value) { return function (makeSequence) { return ({
     value: value,
     done: Bool_1.Bool.False,
@@ -60,6 +60,10 @@ var foldl = (function (f) { return function (b) { return function (lazyA) { retu
 exports.foldl = foldl;
 var evaluate = (function (f) { return function (_) { return (foldl(function (_) { return f; })(Unit_1.Unit())(_)); }; });
 exports.evaluate = evaluate;
+var toPopulatable1 = (function (PopulatableF) { return function (lazyA) { return (foldl(function (acc) { return function (a) { return PopulatableF.populate(a)(acc); }; })(PopulatableF.seed())(lazyA)); }; });
+exports.toPopulatable1 = toPopulatable1;
+var toPopulatable = toPopulatable1;
+exports.toPopulatable = toPopulatable;
 var LazySequence = util_1.Json.assign(create_, {
     create: create_,
     map: map,
@@ -68,6 +72,8 @@ var LazySequence = util_1.Json.assign(create_, {
     until: until,
     take: take,
     foldl: foldl,
-    evaluate: evaluate
+    evaluate: evaluate,
+    toPopulatable: toPopulatable,
+    toPopulatable1: toPopulatable1
 });
 exports.LazySequence = LazySequence;

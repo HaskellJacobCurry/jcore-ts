@@ -12,7 +12,7 @@ var Apply;
         fstAp: function (_0) { return function (_1) { return Apply.liftA2(common_1.const_)(_0)(_1); }; },
         sndAp: function (_0) { return function (_1) { return (common_1.assign(Apply.fmap(common_1.const_(common_1.id_()))(_0))(function (_) { return Apply.ap(_)(_1); })); }; }
     }); })); });
-    Apply_1.enhance = function (_) { return (common_1.assign(common_1.Json.assign(Apply_1.Def(_), _))(function (_) { return common_1.Json.assign(_, Apply_1.Ext(_)); })); };
+    Apply_1.instantiate = function (_) { return (common_1.assign(common_1.Json.assign(Apply_1.Def(_), _))(function (_) { return common_1.Json.assign(_, Apply_1.Ext(_)); })); };
 })(Apply || (Apply = {}));
 exports.Apply = Apply;
 exports.IApply = Apply;
@@ -26,7 +26,7 @@ var Apply1;
         fstAp: function (_0) { return function (_1) { return (Apply.liftA2(common_1.const_)(_0)(_1)); }; },
         sndAp: function (_0) { return function (_1) { return (common_1.assign(Apply.fmap(common_1.const_(common_1.id_()))(_0))(function (_) { return Apply.ap(_)(_1); })); }; }
     }); })); });
-    Apply1.enhance = function (_) { return (common_1.assign(common_1.Json.assign(Apply1.Def(_), _))(function (_) { return common_1.Json.assign(_, Apply1.Ext(_)); })); };
+    Apply1.instantiate = function (_) { return (common_1.assign(common_1.Json.assign(Apply1.Def(_), _))(function (_) { return common_1.Json.assign(_, Apply1.Ext(_)); })); };
 })(Apply1 || (Apply1 = {}));
 exports.Apply1 = Apply1;
 var Apply2;
@@ -39,7 +39,7 @@ var Apply2;
         fstAp: function (_0) { return function (_1) { return (Apply.liftA2(common_1.const_)(_0)(_1)); }; },
         sndAp: function (_0) { return function (_1) { return (common_1.assign(Apply.fmap(common_1.const_(common_1.id_()))(_0))(function (_) { return Apply.ap(_)(_1); })); }; }
     }); })); });
-    Apply2.enhance = function (_) { return (common_1.assign(common_1.Json.assign(Apply2.Def(_), _))(function (_) { return common_1.Json.assign(_, Apply2.Ext(_)); })); };
+    Apply2.instantiate = function (_) { return (common_1.assign(common_1.Json.assign(Apply2.Def(_), _))(function (_) { return common_1.Json.assign(_, Apply2.Ext(_)); })); };
 })(Apply2 || (Apply2 = {}));
 exports.Apply2 = Apply2;
 var Apply2_;
@@ -52,7 +52,7 @@ var Apply2_;
         fstAp: function (_0) { return function (_1) { return (Apply.liftA2(common_1.const_)(_0)(_1)); }; },
         sndAp: function (_0) { return function (_1) { return (common_1.assign(Apply.fmap(common_1.const_(common_1.id_()))(_0))(function (_) { return Apply.ap(_)(_1); })); }; }
     }); })); });
-    Apply2_.enhance = function (_) { return (common_1.assign(common_1.Json.assign(Apply2_.Def(_), _))(function (_) { return common_1.Json.assign(_, Apply2_.Ext(_)); })); };
+    Apply2_.instantiate = function (_) { return (common_1.assign(common_1.Json.assign(Apply2_.Def(_), _))(function (_) { return common_1.Json.assign(_, Apply2_.Ext(_)); })); };
 })(Apply2_ || (Apply2_ = {}));
 exports.Apply2_ = Apply2_;
 exports["default"] = Apply;

@@ -25,7 +25,7 @@ namespace Eq {
 		notEq: eq0 => eq1 => IBool.not(Eq.eq(eq0)(eq1))
 	});
 
-	export let enhance = <A>(_: Eq<A>) => (
+	export let instantiate = <A>(_: Eq<A>) => (
 		assign(_)((_: Eq<A>) => Json.assign(_, Ext(_)))
 	);
 }

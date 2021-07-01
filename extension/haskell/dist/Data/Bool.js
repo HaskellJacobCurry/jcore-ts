@@ -32,7 +32,7 @@ var or = (function (bool0) { return function (bool1) { return IBool_1.IBool.or(b
 exports.or = or;
 var not = (function (bool) { return IBool_1.IBool.not(bool); });
 exports.not = not;
-var Show = Show_1.IShow.enhance({
+var Show = Show_1.IShow.instantiate({
     show: function (bool) { return (bool.cata({
         True: function () { return String_1.String('True'); },
         False: function () { return String_1.String('False'); }

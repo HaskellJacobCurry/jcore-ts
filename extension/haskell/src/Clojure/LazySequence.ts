@@ -1,3 +1,8 @@
+import {Kind1, URI1} from '../util/HKT'
+import {Populatable1} from '../Data/Populatable'
+import {Bool} from '../Data/Bool'
+import {Int} from '../Data/Int'
+import {Unit} from '../Data/Unit'
 import {
     create,
     trampoline,
@@ -5,9 +10,6 @@ import {
     apply,
     Json,
 } from '../util'
-import {Bool} from '../Data/Bool'
-import {Int} from '../Data/Int'
-import {Unit} from '../Data/Unit'
 
 interface LazySequence<T> {
     value: T;
@@ -127,6 +129,16 @@ let evaluate: <A>(f: (_: A) => Unit) => (_: LazySequence<A>) => Unit = (
 );
 export {evaluate}
 
+let toPopulatable1: <F extends URI1>(_: Populatable1<F>) => <A>(_: LazySequence<A>) => Kind1<F, A> = (
+    <F extends URI1>(PopulatableF: Populatable1<F>) => <A>(lazyA: LazySequence<A>) => (
+        foldl<A, Kind1<F, A>>(acc => a => PopulatableF.populate(a)(acc))(PopulatableF.seed())(lazyA)
+    )
+);
+export {toPopulatable1}
+
+let toPopulatable = toPopulatable1;
+export {toPopulatable}
+
 let LazySequence = Json.assign(create_, {
     create: create_,
     map,
@@ -136,4 +148,6 @@ let LazySequence = Json.assign(create_, {
     take,
     foldl,
     evaluate,
+    toPopulatable,
+    toPopulatable1,
 });

@@ -27,7 +27,7 @@ export {create_ as create}
 /** Num a => Semigroup (Sum a) */
 let Semigroup = <A>(_: INum<A>) => (
 	((NumA = _) => (
-		ISemigroup.enhance<Sum<A>>({
+		ISemigroup.instantiate<Sum<A>>({
 			append: sum0 => sum1 => Sum(NumA.add(sum0.value)(sum1.value)),
 		})
 	))()
@@ -37,7 +37,7 @@ export {Semigroup}
 /** Num a => Monoid (Sum a) */
 let Monoid = <A>(_: INum<A>) => (
 	((NumA = _) => (
-		IMonoid.enhance<Sum<A>>({
+		IMonoid.instantiate<Sum<A>>({
 			...Semigroup(NumA),
 			mempty: () => Sum(NumA.zero()),
 		})

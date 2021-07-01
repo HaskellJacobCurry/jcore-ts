@@ -23,12 +23,12 @@ exports.get = get;
 var create_ = (function (value) { return ({ URI: URI, value: value }); });
 exports.create = create_;
 /** Semigroup Any */
-var Semigroup = Semigroup_1.ISemigroup.enhance({
+var Semigroup = Semigroup_1.ISemigroup.instantiate({
     append: function (any0) { return function (any1) { return create_(IBool_1.IBool.or(any0.value)(any1.value)); }; }
 });
 exports.Semigroup = Semigroup;
 /** Monoid Any */
-var Monoid = Monoid_1.IMonoid.enhance(__assign(__assign({}, Semigroup), { mempty: function () { return create_(IBool_1.IBool.False); } }));
+var Monoid = Monoid_1.IMonoid.instantiate(__assign(__assign({}, Semigroup), { mempty: function () { return create_(IBool_1.IBool.False); } }));
 exports.Monoid = Monoid;
 var Any = common_1.Json.assign(create_, {
     URI: URI,

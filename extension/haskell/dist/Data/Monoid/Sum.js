@@ -18,7 +18,7 @@ var common_1 = require("../../util/common");
 /** Show a => Show (Sum a) */
 var Show = function (_) { return ((function (ShowA) {
     if (ShowA === void 0) { ShowA = _; }
-    return (Show_1.IShow.enhance({
+    return (Show_1.IShow.instantiate({
         show: function (sumA) { return (common_1.assign(String_1.String('Sum('))(function (_) { return common_1.assign(String_1.String.Semigroup.append(_)(String_1.String.fromI(ShowA.show(sumA.value)))); })(function (_) { return String_1.String.Semigroup.append(_)(String_1.String(')')); })); }
     }));
 })()); };

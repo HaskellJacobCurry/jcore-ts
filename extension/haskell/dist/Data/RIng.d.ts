@@ -13,6 +13,6 @@ interface Ring<A> extends IRing<A>, Semiring<A> {
 export { Ring };
 export { Ring as IRing };
 declare namespace Ring {
-    let enhance: <A>(_: Ring<A>) => Ring<A>;
+    let instantiate: <A>(_: Ring<A>) => Ring<A>;
 }
 export default Ring;

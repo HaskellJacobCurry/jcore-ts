@@ -41,7 +41,7 @@ interface Applicative2_<F extends URI2, T0> extends IApplicative2_<F, T0>, Apply
 export {Applicative2_}
 
 namespace Applicative1 {
-	export let enhance = <F extends URI1>(_: Applicative1<F>) => (
+	export let instantiate = <F extends URI1>(_: Applicative1<F>) => (
 		_
 	);;
 }

@@ -21,11 +21,11 @@ var get = function (_) { return _.fn; };
 exports.get = get;
 var create_ = (function (fn) { return ({ URI: URI, fn: fn }); });
 exports.create = create_;
-var Semigroup = function () { return Semigroup_1.ISemigroup.enhance({
+var Semigroup = function () { return Semigroup_1.ISemigroup.instantiate({
     append: function (endo0) { return function (endo1) { return Endo(common_1.compose(endo0.fn, endo1.fn)); }; }
 }); };
 exports.Semigroup = Semigroup;
-var Monoid = function () { return Monoid_1.IMonoid.enhance(__assign(__assign({}, Semigroup()), { mempty: function () { return Endo(common_1.id); } })); };
+var Monoid = function () { return Monoid_1.IMonoid.instantiate(__assign(__assign({}, Semigroup()), { mempty: function () { return Endo(common_1.id); } })); };
 exports.Monoid = Monoid;
 var Endo = common_1.Json.assign(function (fn) { return ({ URI: URI, fn: fn }); }, {
     URI: URI,

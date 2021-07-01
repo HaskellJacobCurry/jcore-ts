@@ -7,7 +7,7 @@ var Monad;
     Monad_1.Ext = (function (Monad) { return (common_1.define(function (Ext) { return ({
         "return": Monad.pure
     }); })); });
-    Monad_1.enhance = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Monad_1.Ext(_)); })); };
+    Monad_1.instantiate = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Monad_1.Ext(_)); })); };
 })(Monad || (Monad = {}));
 exports.Monad = Monad;
 exports.IMonad = Monad;
@@ -16,7 +16,7 @@ var Monad1;
     Monad1.Ext = (function (Monad) { return (common_1.define(function (Ext) { return ({
         "return": Monad.pure
     }); })); });
-    Monad1.enhance = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Monad1.Ext(_)); })); };
+    Monad1.instantiate = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Monad1.Ext(_)); })); };
 })(Monad1 || (Monad1 = {}));
 exports.Monad1 = Monad1;
 var Monad2;
@@ -24,7 +24,7 @@ var Monad2;
     Monad2.Ext = (function (Monad) { return (common_1.define(function (Ext) { return ({
         "return": Monad.pure
     }); })); });
-    Monad2.enhance = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Monad2.Ext(_)); })); };
+    Monad2.instantiate = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Monad2.Ext(_)); })); };
 })(Monad2 || (Monad2 = {}));
 exports.Monad2 = Monad2;
 var Monad2_;
@@ -32,7 +32,7 @@ var Monad2_;
     Monad2_.Ext = (function (Monad) { return (common_1.define(function (Ext) { return ({
         "return": Monad.pure
     }); })); });
-    Monad2_.enhance = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Monad2_.Ext(_)); })); };
+    Monad2_.instantiate = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Monad2_.Ext(_)); })); };
 })(Monad2_ || (Monad2_ = {}));
 exports.Monad2_ = Monad2_;
 exports["default"] = Monad;

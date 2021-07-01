@@ -60,7 +60,7 @@ namespace Functor {
 		)
 	);
 
-	export let enhance = <F>(_: Functor<F>) => (
+	export let instantiate = <F>(_: Functor<F>) => (
 		assign(_)((_: Functor<F>) => Json.assign(_, Ext(_)))
 	);
 }
@@ -130,7 +130,7 @@ namespace Functor1 {
 		)
 	);
 
-	export let enhance = <F extends URI1>(_: Functor1<F>) => (
+	export let instantiate = <F extends URI1>(_: Functor1<F>) => (
 		assign(_)((_: Functor1<F>) => Json.assign(_, Ext(_)))
 	);
 }
@@ -148,7 +148,7 @@ namespace Functor2 {
 		)
 	);
 
-	export let enhance = <F extends URI2>(_: Functor2<F>) => (
+	export let instantiate = <F extends URI2>(_: Functor2<F>) => (
 		assign(_)((_: Functor2<F>) => Json.assign(_, Ext(_)))
 	);
 }
@@ -166,7 +166,7 @@ namespace Functor2_ {
 		)
 	);
 
-	export let enhance = <F extends URI2, T0>(_: Functor2_<F, T0>) => (
+	export let instantiate = <F extends URI2, T0>(_: Functor2_<F, T0>) => (
 		assign(_)((_: Functor2_<F, T0>) => Json.assign(_, Ext(_)))
 	);
 }

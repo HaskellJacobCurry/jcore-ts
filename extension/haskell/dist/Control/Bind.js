@@ -11,7 +11,7 @@ var Bind;
             sequence: ApplyExt.sndAp
         }); }));
     })()); });
-    Bind_1.enhance = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Bind_1.Ext(_)); })); };
+    Bind_1.instantiate = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Bind_1.Ext(_)); })); };
 })(Bind || (Bind = {}));
 exports.Bind = Bind;
 exports.IBind = Bind;
@@ -23,7 +23,7 @@ var Bind1;
             sequence: ApplyExt.sndAp
         }); }));
     })()); });
-    Bind1.enhance = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Bind1.Ext(_)); })); };
+    Bind1.instantiate = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Bind1.Ext(_)); })); };
 })(Bind1 || (Bind1 = {}));
 exports.Bind1 = Bind1;
 var Bind2;
@@ -34,7 +34,7 @@ var Bind2;
             sequence: ApplyExt.sndAp
         }); }));
     })()); });
-    Bind2.enhance = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Bind2.Ext(_)); })); };
+    Bind2.instantiate = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Bind2.Ext(_)); })); };
 })(Bind2 || (Bind2 = {}));
 exports.Bind2 = Bind2;
 var Bind2_;
@@ -45,7 +45,7 @@ var Bind2_;
             sequence: ApplyExt.sndAp
         }); }));
     })()); });
-    Bind2_.enhance = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Bind2_.Ext(_)); })); };
+    Bind2_.instantiate = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Bind2_.Ext(_)); })); };
 })(Bind2_ || (Bind2_ = {}));
 exports.Bind2_ = Bind2_;
 exports["default"] = Bind;

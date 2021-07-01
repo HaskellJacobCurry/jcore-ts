@@ -42,15 +42,15 @@ var invert = (function (ordering) { return (ordering.cata({
     GT: function () { return LT; }
 })); });
 exports.invert = invert;
-var Show = Show_1.IShow.enhance({
+var Show = Show_1.IShow.instantiate({
     show: function (ordering) { return String_1.String(ordering.tag); }
 });
 exports.Show = Show;
-var Eq = Eq_1.Eq.enhance({
+var Eq = Eq_1.Eq.instantiate({
     eq: function (ordering0) { return function (ordering1) { return Bool_1.Bool(ordering0.tag === ordering1.tag); }; }
 });
 exports.Eq = Eq;
-var Ord = Ord_1.Ord.enhance(common_1.define(function (Ord) { return (__assign(__assign({}, Eq), { compare: function (ordering0) { return function (ordering1) { return (ordering0.cata({
+var Ord = Ord_1.Ord.instantiate(common_1.define(function (Ord) { return (__assign(__assign({}, Eq), { compare: function (ordering0) { return function (ordering1) { return (ordering0.cata({
         LT: function () { return (ordering1.cata({
             LT: function () { return EQ; },
             EQ: function () { return LT; },

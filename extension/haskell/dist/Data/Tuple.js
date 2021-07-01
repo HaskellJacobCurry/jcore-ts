@@ -39,7 +39,7 @@ exports.create = create;
 var Show = function (_0, _1) { return ((function (ShowFst, ShowSnd) {
     if (ShowFst === void 0) { ShowFst = _0; }
     if (ShowSnd === void 0) { ShowSnd = _1; }
-    return (Show_1.IShow.enhance({
+    return (Show_1.IShow.instantiate({
         show: function (tuple) { return ((function (fst, snd) {
             if (fst === void 0) { fst = ShowFst.show(tuple.fst); }
             if (snd === void 0) { snd = ShowSnd.show(tuple.snd); }
@@ -53,7 +53,7 @@ exports.Show = Show;
 var Semigroup = function (_0, _1) { return ((function (SemigroupFst, SemigroupSnd) {
     if (SemigroupFst === void 0) { SemigroupFst = _0; }
     if (SemigroupSnd === void 0) { SemigroupSnd = _1; }
-    return (Semigroup_1.ISemigroup.enhance({
+    return (Semigroup_1.ISemigroup.instantiate({
         append: function (tuple0) { return function (tuple1) { return ((function (fst, snd) {
             if (fst === void 0) { fst = SemigroupFst.append(tuple0.fst)(tuple1.fst); }
             if (snd === void 0) { snd = SemigroupSnd.append(tuple0.snd)(tuple1.snd); }
@@ -66,11 +66,11 @@ exports.Semigroup = Semigroup;
 var Monoid = function (_0, _1) { return ((function (MonoidFst, MonoidSnd) {
     if (MonoidFst === void 0) { MonoidFst = _0; }
     if (MonoidSnd === void 0) { MonoidSnd = _1; }
-    return (Monoid_1.IMonoid.enhance(__assign(__assign({}, Semigroup(MonoidFst, MonoidSnd)), { mempty: function () { return Tuple(MonoidFst.mempty(), MonoidSnd.mempty()); } })));
+    return (Monoid_1.IMonoid.instantiate(__assign(__assign({}, Semigroup(MonoidFst, MonoidSnd)), { mempty: function () { return Tuple(MonoidFst.mempty(), MonoidSnd.mempty()); } })));
 })()); };
 exports.Monoid = Monoid;
 /** map :: Functor (Tuple a) => (b -> c) -> Tuple a b -> Tuple a c */
-var Functor = Functor_1.Functor2.enhance({
+var Functor = Functor_1.Functor2.instantiate({
     URI: exports.URI,
     fmap: function (f) { return function (tupleA) { return create(tupleA.fst, f(tupleA.snd)); }; }
 });
@@ -78,11 +78,11 @@ exports.Functor = Functor;
 /** ap :: Semigroup a => Apply (Tuple a) => Tuple a (b -> c) -> Tuple a b -> Tuple a c */
 var Apply = function (_) { return ((function (SemigroupT0) {
     if (SemigroupT0 === void 0) { SemigroupT0 = _; }
-    return (Apply_1.Apply2_.enhance(__assign(__assign({}, Functor), { ap: function (tupleF) { return function (tupleA) { return (Tuple(SemigroupT0.append(tupleF.fst)(tupleA.fst), tupleF.snd(tupleA.snd))); }; }, liftA2: common_1.reinterpret() })));
+    return (Apply_1.Apply2_.instantiate(__assign(__assign({}, Functor), { ap: function (tupleF) { return function (tupleA) { return (Tuple(SemigroupT0.append(tupleF.fst)(tupleA.fst), tupleF.snd(tupleA.snd))); }; }, liftA2: common_1.reinterpret() })));
 })()); };
 exports.Apply = Apply;
 /** bimap :: Bifunctor Tuple => (a -> c) -> (b -> d) -> Tuple a b -> Tuple c d */
-var Bifunctor = Bifunctor_1.Bifunctor2.enhance({
+var Bifunctor = Bifunctor_1.Bifunctor2.instantiate({
     URI: exports.URI,
     bimap: function (f) { return function (g) { return function (_a) {
         var fst = _a.fst, snd = _a.snd;

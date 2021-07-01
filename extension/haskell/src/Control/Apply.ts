@@ -68,7 +68,7 @@ namespace Apply {
 		)
 	);
 
-	export let enhance = <F>(_: Apply<F>) => (
+	export let instantiate = <F>(_: Apply<F>) => (
 		assign(Json.assign(Def(_), _))((_: Apply<F>) => Json.assign(_, Ext(_)))
 	);
 }
@@ -136,7 +136,7 @@ namespace Apply1 {
 		)
 	);
 
-	export let enhance = <F extends URI1>(_: Apply1<F>) => (
+	export let instantiate = <F extends URI1>(_: Apply1<F>) => (
 		assign(Json.assign(Def(_), _))((_: Apply1<F>) => Json.assign(_, Ext(_)))
 	);
 }
@@ -171,7 +171,7 @@ namespace Apply2 {
 		)
 	);
 
-	export let enhance = <F extends URI2>(_: Apply2<F>) => (
+	export let instantiate = <F extends URI2>(_: Apply2<F>) => (
 		assign(Json.assign(Def(_), _))((_: Apply2<F>) => Json.assign(_, Ext(_)))
 	);
 }
@@ -206,7 +206,7 @@ namespace Apply2_ {
 		)
 	);
 
-	export let enhance = <F extends URI2, T0>(_: Apply2_<F, T0>) => (
+	export let instantiate = <F extends URI2, T0>(_: Apply2_<F, T0>) => (
 		assign(Json.assign(Def(_), _))((_: Apply2_<F, T0>) => Json.assign(_, Ext(_)))
 	);
 }

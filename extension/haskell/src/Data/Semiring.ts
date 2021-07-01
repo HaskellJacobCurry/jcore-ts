@@ -15,7 +15,7 @@ interface Semiring<A> extends ISemiring<A> {}
 export {Semiring}
 export {Semiring as ISemiring};
 namespace Semiring {
-	export let enhance = <A>(_: Semiring<A>) => (
+	export let instantiate = <A>(_: Semiring<A>) => (
 		_
 	);
 }

@@ -73,7 +73,7 @@ let not: (_: Bool) => Bool = (
 );
 export {not}
 
-let Show = IShow.enhance<Bool>({
+let Show = IShow.instantiate<Bool>({
 	show: bool => (
 		bool.cata({
 			True: () => String('True'),

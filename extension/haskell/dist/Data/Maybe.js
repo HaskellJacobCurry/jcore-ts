@@ -47,7 +47,7 @@ var maybe = (function (b) { return function (f) { return function (maybeA) { ret
 exports.maybe = maybe;
 var Show = function (_) { return ((function (ShowA) {
     if (ShowA === void 0) { ShowA = _; }
-    return (Show_1.IShow.enhance({
+    return (Show_1.IShow.instantiate({
         show: function (maybeA) { return (maybeA.cata({
             Nothing: function () { return String_1.String('Nothing'); },
             Just: function (value) { return (common_1.apply(String_1.String.Semigroup.append(String_1.String('(Just '))(String_1.String.fromI(ShowA.show(value))))(function (_) { return String_1.String.Semigroup.append(_)(String_1.String(')')); })); }
@@ -55,7 +55,7 @@ var Show = function (_) { return ((function (ShowA) {
     }));
 })()); };
 exports.Show = Show;
-var Functor = Functor_1.Functor1.enhance({
+var Functor = Functor_1.Functor1.instantiate({
     URI: URI,
     fmap: function (f) { return function (maybeA) { return (common_1.apply(maybeA.cata({
         Nothing: function () { return Nothing; },
@@ -63,23 +63,23 @@ var Functor = Functor_1.Functor1.enhance({
     }))(infer)); }; }
 });
 exports.Functor = Functor;
-var Apply = Apply_1.Apply1.enhance(__assign(__assign({}, Functor), { ap: function (maybeF) { return function (maybeA) { return (common_1.apply(maybeF.cata({
+var Apply = Apply_1.Apply1.instantiate(__assign(__assign({}, Functor), { ap: function (maybeF) { return function (maybeA) { return (common_1.apply(maybeF.cata({
         Just: function (f) { return Functor.fmap(f)(common_1.reinterpret(maybeA)); },
         Nothing: function () { return Nothing; }
     }))(infer)); }; }, liftA2: common_1.reinterpret() }));
 exports.Apply = Apply;
-var Applicative = Applicative_1.Applicative1.enhance(__assign(__assign({}, Apply), { pure: Just }));
+var Applicative = Applicative_1.Applicative1.instantiate(__assign(__assign({}, Apply), { pure: Just }));
 exports.Applicative = Applicative;
-var Bind = Bind_1.Bind1.enhance(__assign(__assign({}, Apply), { bind: function (maybeA) { return function (f) { return (common_1.apply(maybeA.cata({
+var Bind = Bind_1.Bind1.instantiate(__assign(__assign({}, Apply), { bind: function (maybeA) { return function (f) { return (common_1.apply(maybeA.cata({
         Just: f,
         Nothing: function () { return Nothing; }
     }))(infer)); }; } }));
 exports.Bind = Bind;
-var Monad = Monad_1.Monad1.enhance(__assign(__assign({}, Applicative), Bind));
+var Monad = Monad_1.Monad1.instantiate(__assign(__assign({}, Applicative), Bind));
 exports.Monad = Monad;
 var Semigroup = function (_) { return ((function (SemigroupA) {
     if (SemigroupA === void 0) { SemigroupA = _; }
-    return (Semigroup_1.ISemigroup.enhance({
+    return (Semigroup_1.ISemigroup.instantiate({
         append: function (maybe0) { return function (maybe1) { return (maybe0.cata({
             Nothing: function () { return maybe1; },
             Just: function (value0) { return (maybe1.cata({
@@ -92,10 +92,10 @@ var Semigroup = function (_) { return ((function (SemigroupA) {
 exports.Semigroup = Semigroup;
 var Monoid = function (_) { return ((function (SemigroupA) {
     if (SemigroupA === void 0) { SemigroupA = _; }
-    return (Monoid_1.IMonoid.enhance(__assign(__assign({}, Semigroup(SemigroupA)), { mempty: function () { return common_1.reinterpret(Nothing); } })));
+    return (Monoid_1.IMonoid.instantiate(__assign(__assign({}, Semigroup(SemigroupA)), { mempty: function () { return common_1.reinterpret(Nothing); } })));
 })()); };
 exports.Monoid = Monoid;
-var Foldable = Foldable_1.Foldable1.enhance({
+var Foldable = Foldable_1.Foldable1.instantiate({
     URI: URI,
     foldMap: function (Monoid) { return maybe(Monoid.mempty()); },
     foldr: common_1.reinterpret()

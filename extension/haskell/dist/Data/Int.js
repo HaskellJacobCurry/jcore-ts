@@ -43,7 +43,7 @@ var even = (function (int) { return Bool_1.Bool(int.value % 2 == 0); });
 exports.even = even;
 var odd = (function (int) { return Bool_1.Bool(int.value % 2 != 0); });
 exports.odd = odd;
-var Num = Num_1.INum.enhance({
+var Num = Num_1.INum.instantiate({
     add: add,
     sub: sub,
     mul: mul,
@@ -52,24 +52,24 @@ var Num = Num_1.INum.enhance({
     abs: function (int) { return create(Math.abs(int.value)); }
 });
 exports.Num = Num;
-var Show = Show_1.IShow.enhance({
+var Show = Show_1.IShow.instantiate({
     show: function (int) { return String_1.String("" + int.value); }
 });
 exports.Show = Show;
-var Semiring = Semiring_1.ISemiring.enhance({
+var Semiring = Semiring_1.ISemiring.instantiate({
     add: function (int0) { return function (int1) { return IInt_1.IInt.add(int0)(int1); }; },
     zero: function () { return create(0); },
     mul: function (int0) { return function (int1) { return IInt_1.IInt.mul(int0)(int1); }; },
     one: function () { return create(1); }
 });
 exports.Semiring = Semiring;
-var Ring = Ring_1.IRing.enhance(__assign(__assign({}, Semiring), { sub: function (int0) { return function (int1) { return IInt_1.IInt.sub(int0)(int1); }; }, negate: function (int) { return IInt_1.IInt.negate(int); } }));
+var Ring = Ring_1.IRing.instantiate(__assign(__assign({}, Semiring), { sub: function (int0) { return function (int1) { return IInt_1.IInt.sub(int0)(int1); }; }, negate: function (int) { return IInt_1.IInt.negate(int); } }));
 exports.Ring = Ring;
-var Eq = Eq_1.IEq.enhance({
+var Eq = Eq_1.IEq.instantiate({
     eq: function (int0) { return function (int1) { return Bool_1.Bool(int0.value == int1.value); }; }
 });
 exports.Eq = Eq;
-var Ord = Ord_1.IOrd.enhance(common_1.define(function (Ord) { return (__assign(__assign({}, Eq), { compare: function (int0) { return function (int1) { return (Ord().lt(int0)(int1).cata({
+var Ord = Ord_1.IOrd.instantiate(common_1.define(function (Ord) { return (__assign(__assign({}, Eq), { compare: function (int0) { return function (int1) { return (Ord().lt(int0)(int1).cata({
         True: function () { return Ordering_1.Ordering.LT; },
         False: function () { return (Ord().lt(int1)(int0).cata({
             True: function () { return Ordering_1.Ordering.GT; },

@@ -27,7 +27,7 @@ declare namespace Bind {
     interface Ext<F> extends IExtBind<F> {
     }
     let Ext: <F>(_: Bind<F>) => Ext<F>;
-    let enhance: <F>(_: Bind<F>) => Bind<F> & Ext<F>;
+    let instantiate: <F>(_: Bind<F>) => Bind<F> & Ext<F>;
 }
 interface IBind1<F extends URI1> {
     bind: <A>(_: Kind1<F, A>) => <B>(_: (_: A) => Kind1<F, B>) => Kind1<F, B>;
@@ -60,18 +60,18 @@ declare namespace Bind1 {
     interface Ext<F extends URI1> extends IExtBind1<F> {
     }
     let Ext: <F extends URI1>(_: Bind1<F>) => Ext<F>;
-    let enhance: <F extends "Endo" | "Maybe" | "List">(_: Bind1<F>) => Bind1<F> & Ext<F>;
+    let instantiate: <F extends "Endo" | "Maybe" | "List">(_: Bind1<F>) => Bind1<F> & Ext<F>;
 }
 declare namespace Bind2 {
     interface Ext<F extends URI2> extends IExtBind2<F> {
     }
     let Ext: <F extends URI2>(_: Bind2<F>) => Ext<F>;
-    let enhance: <F extends "Function" | "Tuple">(_: Bind2<F>) => Bind2<F> & Ext<F>;
+    let instantiate: <F extends "Function" | "Tuple">(_: Bind2<F>) => Bind2<F> & Ext<F>;
 }
 declare namespace Bind2_ {
     interface Ext<F extends URI2, T0> extends IExtBind2_<F, T0> {
     }
     let Ext: <F extends URI2, T0>(_: Bind2_<F, T0>) => Ext<F, T0>;
-    let enhance: <F extends "Function" | "Tuple", T0>(_: Bind2_<F, T0>) => Bind2_<F, T0> & Ext<F, T0>;
+    let instantiate: <F extends "Function" | "Tuple", T0>(_: Bind2_<F, T0>) => Bind2_<F, T0> & Ext<F, T0>;
 }
 export default Bind;

@@ -30,7 +30,7 @@ let create_ = (value: string): String => ({
 });
 export {create_ as create}
 
-let Show = IShow.enhance<String>({
+let Show = IShow.instantiate<String>({
 	show: string => `"${string.toString()}"`,
 });
 export {Show}
@@ -38,7 +38,7 @@ export {Show}
 let show = Show.show;
 export {show}
 
-let Semigroup = ISemigroup.enhance<String>({
+let Semigroup = ISemigroup.instantiate<String>({
 	append: _0 => _1 => create_(`${_0.value}${_1.value}`)
 });
 export {Semigroup}
@@ -46,7 +46,7 @@ export {Semigroup}
 let append = Semigroup.append;
 export {append}
 
-let Monoid = IMonoid.enhance<String>({
+let Monoid = IMonoid.instantiate<String>({
 	...Semigroup,
 	mempty: () => create_(''),
 });

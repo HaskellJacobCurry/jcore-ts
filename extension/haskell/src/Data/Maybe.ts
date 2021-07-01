@@ -98,7 +98,7 @@ export {maybe}
 
 let Show = <A>(_: IShow<A>) => (
 	((ShowA = _) => (
-		IShow.enhance<Maybe<A>>({
+		IShow.instantiate<Maybe<A>>({
 			show: maybeA => (
 				maybeA.cata({
 					Nothing: () => String('Nothing'),
@@ -114,7 +114,7 @@ let Show = <A>(_: IShow<A>) => (
 )
 export {Show}
 
-let Functor = Functor1.enhance<URI>({
+let Functor = Functor1.instantiate<URI>({
 	URI,
 	fmap: f => maybeA => (
 		apply(
@@ -127,7 +127,7 @@ let Functor = Functor1.enhance<URI>({
 });
 export {Functor}
 
-let Apply = Apply1.enhance<URI>({
+let Apply = Apply1.instantiate<URI>({
 	...Functor,
 	ap: maybeF => maybeA => (
 		apply(
@@ -141,13 +141,13 @@ let Apply = Apply1.enhance<URI>({
 });
 export {Apply}
 
-let Applicative = Applicative1.enhance<URI>({
+let Applicative = Applicative1.instantiate<URI>({
 	...Apply,
 	pure: Just,
 });
 export {Applicative}
 
-let Bind = Bind1.enhance<URI>({
+let Bind = Bind1.instantiate<URI>({
 	...Apply,
 	bind: maybeA => f => (
 		apply(
@@ -160,7 +160,7 @@ let Bind = Bind1.enhance<URI>({
 });
 export {Bind}
 
-let Monad = Monad1.enhance<URI>({
+let Monad = Monad1.instantiate<URI>({
 	...Applicative,
 	...Bind,
 });
@@ -168,7 +168,7 @@ export {Monad}
 
 let Semigroup = <A>(_: ISemigroup<A>) => (
 	((SemigroupA = _) => (
-		ISemigroup.enhance<Maybe<A>>({
+		ISemigroup.instantiate<Maybe<A>>({
 			append: maybe0 => maybe1 => (
 				maybe0.cata({
 					Nothing: () => maybe1,
@@ -187,7 +187,7 @@ export {Semigroup}
 
 let Monoid = <A>(_: ISemigroup<A>) => (
 	((SemigroupA = _) => (
-		IMonoid.enhance<Maybe<A>>({
+		IMonoid.instantiate<Maybe<A>>({
 			...Semigroup(SemigroupA),
 			mempty: () => reinterpret(Nothing),
 		})
@@ -195,7 +195,7 @@ let Monoid = <A>(_: ISemigroup<A>) => (
 );
 export {Monoid}
 
-let Foldable = Foldable1.enhance<URI>({
+let Foldable = Foldable1.instantiate<URI>({
 	URI,
 	foldMap: Monoid => maybe(Monoid.mempty()),
 	foldr: reinterpret(),

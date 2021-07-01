@@ -28,7 +28,7 @@ export {create_ as create}
 /** Semigroup a => Semigroup (Dual a) */
 let Semigroup = <A>(_: ISemigroup<A>) => (
 	((SemigroupA = _) => (
-		ISemigroup.enhance<Dual<A>>({
+		ISemigroup.instantiate<Dual<A>>({
 			append: dual0 => dual1 => create_(SemigroupA.append(dual1.value)(dual0.value))
 		})
 	))()
@@ -37,7 +37,7 @@ export {Semigroup}
 
 let Monoid = <A>(_: IMonoid<A>) => (
 	((MonoidA = _) => (
-		IMonoid.enhance<Dual<A>>({
+		IMonoid.instantiate<Dual<A>>({
 			...Semigroup(MonoidA),
 			mempty: () => Dual(MonoidA.mempty()),
 		})

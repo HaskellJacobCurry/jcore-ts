@@ -42,7 +42,7 @@ namespace Bind {
 		)
 	);
 
-	export let enhance = <F>(_: Bind<F>) => (
+	export let instantiate = <F>(_: Bind<F>) => (
 		assign(_)((_: Bind<F>) => Json.assign(_, Ext(_)))
 	);
 }
@@ -86,7 +86,7 @@ namespace Bind1 {
 		)
 	);
 
-	export let enhance = <F extends URI1>(_: Bind1<F>) => (
+	export let instantiate = <F extends URI1>(_: Bind1<F>) => (
 		assign(_)((_: Bind1<F>) => Json.assign(_, Ext(_)))
 	);
 }
@@ -103,7 +103,7 @@ namespace Bind2 {
 		)
 	);
 
-	export let enhance = <F extends URI2>(_: Bind2<F>) => (
+	export let instantiate = <F extends URI2>(_: Bind2<F>) => (
 		assign(_)((_: Bind2<F>) => Json.assign(_, Ext(_)))
 	);
 }
@@ -120,7 +120,7 @@ namespace Bind2_ {
 		)
 	);
 
-	export let enhance = <F extends URI2, T0>(_: Bind2_<F, T0>) => (
+	export let instantiate = <F extends URI2, T0>(_: Bind2_<F, T0>) => (
 		assign(_)((_: Bind2_<F, T0>) => Json.assign(_, Ext(_)))
 	);
 }

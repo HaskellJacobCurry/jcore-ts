@@ -31,12 +31,12 @@ let create_: <A>(fn: (_: A) => A) => Endo<A> = (
 );
 export {create_ as create}
 
-let Semigroup = <A>() => ISemigroup.enhance<Endo<A>>({
+let Semigroup = <A>() => ISemigroup.instantiate<Endo<A>>({
 	append: endo0 => endo1 => Endo(compose(endo0.fn, endo1.fn)),
 });
 export {Semigroup}
 
-let Monoid = <A>() => IMonoid.enhance<Endo<A>>({
+let Monoid = <A>() => IMonoid.instantiate<Endo<A>>({
 	...Semigroup<A>(),
 	mempty: () => Endo(id),
 });

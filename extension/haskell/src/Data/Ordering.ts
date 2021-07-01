@@ -64,17 +64,17 @@ let invert: (_: Ordering) => Ordering = (
 );
 export {invert}
 
-let Show = IShow.enhance<Ordering>({
+let Show = IShow.instantiate<Ordering>({
 	show: ordering => String(ordering.tag),
 });
 export {Show}
 
-let Eq = IEq.enhance<Ordering>({
+let Eq = IEq.instantiate<Ordering>({
 	eq: ordering0 => ordering1 => Bool(ordering0.tag === ordering1.tag),
 });
 export {Eq}
 
-let Ord = IOrd.enhance<Ordering>(
+let Ord = IOrd.instantiate<Ordering>(
 	define<IOrd<Ordering>>(Ord => ({
 		...Eq,
 		compare: ordering0 => ordering1 => (

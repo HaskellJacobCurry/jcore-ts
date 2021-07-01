@@ -26,19 +26,19 @@ var create_ = function (value) { return ({
     toString: function () { return value; }
 }); };
 exports.create = create_;
-var Show = Show_1.IShow.enhance({
+var Show = Show_1.IShow.instantiate({
     show: function (string) { return "\"" + string.toString() + "\""; }
 });
 exports.Show = Show;
 var show = Show.show;
 exports.show = show;
-var Semigroup = Semigroup_1.ISemigroup.enhance({
+var Semigroup = Semigroup_1.ISemigroup.instantiate({
     append: function (_0) { return function (_1) { return create_("" + _0.value + _1.value); }; }
 });
 exports.Semigroup = Semigroup;
 var append = Semigroup.append;
 exports.append = append;
-var Monoid = Monoid_1.IMonoid.enhance(__assign(__assign({}, Semigroup), { mempty: function () { return create_(''); } }));
+var Monoid = Monoid_1.IMonoid.instantiate(__assign(__assign({}, Semigroup), { mempty: function () { return create_(''); } }));
 exports.Monoid = Monoid;
 var mempty = Monoid.mempty;
 exports.mempty = mempty;

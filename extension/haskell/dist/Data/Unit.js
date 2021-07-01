@@ -6,7 +6,7 @@ var String_1 = require("./String");
 var common_1 = require("../util/common");
 var fromI = (function (unit) { return common_1.cast(unit)(); });
 exports.fromI = fromI;
-var Show = Show_1.IShow.enhance({
+var Show = Show_1.IShow.instantiate({
     show: function (_) { return String_1.String('Unit'); }
 });
 exports.Show = Show;

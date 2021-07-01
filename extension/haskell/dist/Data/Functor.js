@@ -11,7 +11,7 @@ var Functor;
         ffmap: function (_0) { return function (_1) { return Functor.fmap(_1)(_0); }; },
         "void": function (_) { return Ext().lfmap(IUnit_1.IUnit())(_); }
     }); })); });
-    Functor_1.enhance = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Functor_1.Ext(_)); })); };
+    Functor_1.instantiate = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Functor_1.Ext(_)); })); };
 })(Functor || (Functor = {}));
 exports.Functor = Functor;
 exports.IFunctor = Functor;
@@ -32,7 +32,7 @@ var Functor1;
         ffmap: function (_0) { return function (_1) { return Functor.fmap(_1)(_0); }; },
         "void": function (_) { return Ext().lfmap(IUnit_1.IUnit())(_); }
     }); })); });
-    Functor1.enhance = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Functor1.Ext(_)); })); };
+    Functor1.instantiate = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Functor1.Ext(_)); })); };
 })(Functor1 || (Functor1 = {}));
 exports.Functor1 = Functor1;
 var Functor2;
@@ -43,7 +43,7 @@ var Functor2;
         ffmap: function (_0) { return function (_1) { return Functor.fmap(_1)(_0); }; },
         "void": function (_) { return Ext().lfmap(IUnit_1.IUnit())(_); }
     }); })); });
-    Functor2.enhance = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Functor2.Ext(_)); })); };
+    Functor2.instantiate = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Functor2.Ext(_)); })); };
 })(Functor2 || (Functor2 = {}));
 exports.Functor2 = Functor2;
 var Functor2_;
@@ -54,7 +54,7 @@ var Functor2_;
         ffmap: function (_0) { return function (_1) { return Functor.fmap(_1)(_0); }; },
         "void": function (_) { return Ext().lfmap(IUnit_1.IUnit())(_); }
     }); })); });
-    Functor2_.enhance = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Functor2_.Ext(_)); })); };
+    Functor2_.instantiate = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Functor2_.Ext(_)); })); };
 })(Functor2_ || (Functor2_ = {}));
 exports.Functor2_ = Functor2_;
 exports["default"] = Functor;

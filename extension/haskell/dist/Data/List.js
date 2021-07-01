@@ -1,11 +1,12 @@
 "use strict";
 exports.__esModule = true;
-exports.Foldable = exports.Show = exports.foldr = exports.foldl = exports.foldMap = exports.show = exports.unsnoc = exports.uncons = exports.tail = exports.last = exports.head = exports.singleton = exports.cons = exports.create = exports.infer = exports.Cons = exports.Nil_ = exports.Nil = exports.URI = exports.List = void 0;
+exports.Populatable = exports.Foldable = exports.Show = exports.populate = exports.seed = exports.foldr = exports.foldl = exports.foldMap = exports.show = exports.reverse = exports.map = exports.reverseMap = exports.unsnoc = exports.uncons = exports.tail = exports.last = exports.head = exports.singleton = exports.snoc = exports.cons = exports.create = exports.infer = exports.Cons = exports.Nil_ = exports.Nil = exports.URI = exports.List = void 0;
 var util_1 = require("../util");
 var Throwable_1 = require("../util/Throwable");
 var String_1 = require("./String");
 var Bool_1 = require("./Bool");
 var Foldable_1 = require("./Foldable");
+var Populatable_1 = require("./Populatable");
 var Show_1 = require("./Show");
 var Monoid_1 = require("./Monoid");
 var Maybe_1 = require("./Maybe");
@@ -33,6 +34,8 @@ var create_ = (function (as) { return (util_1.apply(util_1.trampoline()(function
 exports.create = create_;
 var cons = (function (head) { return function (tail) { return Cons(head, tail); }; });
 exports.cons = cons;
+var snoc = (function (init) { return function (last) { return (foldr(cons)(singleton(last))(init)); }; });
+exports.snoc = snoc;
 /** singleton :: a -> List a */
 var singleton = (function (a) { return Cons(a, Nil); });
 exports.singleton = singleton;
@@ -89,6 +92,12 @@ exports.unsnoc = unsnoc = function (list) { return (util_1.apply(util_1.trampoli
         })); }
     })); }
 })); }; }))(function (_) { return _(list, Bool_1.Bool.False, Maybe_1.Maybe.Just(Tuple_1.Tuple(Nil, util_1.placeholder())), function (_) { return _; }); })); };
+var reverseMap = (function (f) { return function (listA) { return (foldl(function (acc) { return function (a) { return cons(f(a))(acc); }; })(Nil)(listA)); }; });
+exports.reverseMap = reverseMap;
+var map = (function (f) { return function (listA) { return (util_1.apply((reverseMap(f)(listA)))(reverse)); }; });
+exports.map = map;
+var reverse = (function (_) { return reverseMap(util_1.id)(_); });
+exports.reverse = reverse;
 var show = (function (ShowA) { return function (listA) { return (util_1.apply(util_1.recurse()(function (list) { return function (show) { return (list.cata({
     Nil: function () { return String_1.String('Nil'); },
     Cons: function (head, tail) { return (util_1.apply((String_1.String('(Cons ')))(function (_) { return util_1.apply(String_1.String.append(_)(String_1.String.fromI(ShowA.show(head)))); })(function (_) { return util_1.apply(String_1.String.append(_)(String_1.String(' '))); })(function (_) { return util_1.apply(String_1.String.append(_)(show(tail))); })(function (_) { return String_1.String.append(_)(String_1.String(')')); })); }
@@ -125,20 +134,37 @@ var foldl = (function (f) { return function (b) { return function (listA) { retu
     Cons: function (head, tail) { return foldl(f(acc)(head), tail); }
 })); }; }))(function (_) { return _(b, listA); })); }; }; });
 exports.foldl = foldl;
-var foldr = (function (_0) { return function (_1) { return function (_2) { return Foldable.foldr(_0)(_1)(_2); }; }; });
+var foldr = (function (f) { return function (b) { return function (listA) { return (util_1.apply((reverse(listA)))(foldl(function (b) { return function (a) { return f(a)(b); }; })(b))); }; }; });
 exports.foldr = foldr;
+var seed = (function () { return Nil; });
+exports.seed = seed;
+var populate = (function () {
+    var as = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        as[_i] = arguments[_i];
+    }
+    return function (listA) { return (foldr(cons)(create_(as))(listA)); };
+});
+exports.populate = populate;
 /** show :: (Show a) => Show (List a) => List a -> String */
-var Show = function (_) { return util_1.apply(_)(function (ShowA) { return (Show_1.IShow.enhance({
+var Show = function (_) { return util_1.apply(_)(function (ShowA) { return (Show_1.IShow.instantiate({
     show: show(ShowA)
 })); }); };
 exports.Show = Show;
-var Foldable = Foldable_1.Foldable1.enhance({
+var Foldable = Foldable_1.Foldable1.instantiate({
     URI: URI,
     foldMap: foldMap,
     foldr: util_1.placeholder()
 });
 exports.Foldable = Foldable;
 Foldable.foldl = foldl;
+Foldable.foldr = foldr;
+var Populatable = Populatable_1.Populatable1.instantiate({
+    URI: URI,
+    seed: seed,
+    populate: populate
+});
+exports.Populatable = Populatable;
 var List = {
     URI: URI,
     Nil: Nil,
@@ -147,18 +173,25 @@ var List = {
     infer: infer,
     create: create_,
     cons: cons,
+    snoc: snoc,
     singleton: singleton,
     head: head,
     last: last,
     tail: tail,
     uncons: uncons,
     unsnoc: unsnoc,
+    reverseMap: reverseMap,
+    map: map,
+    reverse: reverse,
     show: show,
     foldMap: foldMap,
     foldl: foldl,
     foldr: foldr,
+    seed: seed,
+    populate: populate,
     Show: Show,
-    Foldable: Foldable
+    Foldable: Foldable,
+    Populatable: Populatable
 };
 exports.List = List;
 exports["default"] = List;

@@ -11,7 +11,7 @@ interface Show<A> extends IShow<A> {}
 export {Show}
 export {Show as IShow};
 namespace Show {
-	export let enhance = <A>(_: Show<A>) => (
+	export let instantiate = <A>(_: Show<A>) => (
 		_
 	);
 }

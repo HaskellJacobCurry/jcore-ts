@@ -9,7 +9,7 @@ import {
 /** Show a => Show (Dual a) */
 let Show = <A>(_: IShow<A>) => (
 	((ShowA = _) => (
-		IShow.enhance<Dual<A>>({
+		IShow.instantiate<Dual<A>>({
 			show: dualA => (
 				assign(
 					String('Dual(')

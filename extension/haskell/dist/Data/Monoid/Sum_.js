@@ -24,7 +24,7 @@ exports.create = create_;
 /** Num a => Semigroup (Sum a) */
 var Semigroup = function (_) { return ((function (NumA) {
     if (NumA === void 0) { NumA = _; }
-    return (Semigroup_1.ISemigroup.enhance({
+    return (Semigroup_1.ISemigroup.instantiate({
         append: function (sum0) { return function (sum1) { return Sum(NumA.add(sum0.value)(sum1.value)); }; }
     }));
 })()); };
@@ -32,7 +32,7 @@ exports.Semigroup = Semigroup;
 /** Num a => Monoid (Sum a) */
 var Monoid = function (_) { return ((function (NumA) {
     if (NumA === void 0) { NumA = _; }
-    return (Monoid_1.IMonoid.enhance(__assign(__assign({}, Semigroup(NumA)), { mempty: function () { return Sum(NumA.zero()); } })));
+    return (Monoid_1.IMonoid.instantiate(__assign(__assign({}, Semigroup(NumA)), { mempty: function () { return Sum(NumA.zero()); } })));
 })()); };
 exports.Monoid = Monoid;
 var Sum = common_1.Json.assign(function (value) { return ({ URI: URI, value: value }); }, {

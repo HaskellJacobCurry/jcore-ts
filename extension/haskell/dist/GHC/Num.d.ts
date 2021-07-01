@@ -31,6 +31,6 @@ declare namespace Num {
     interface Ext<A> extends IExtNum<A> {
     }
     let Ext: <A>(_: Num<A>) => Ext<A>;
-    let enhance: <A>(_: Num<A>) => Num<A> & Ext<A>;
+    let instantiate: <A>(_: Num<A>) => Num<A> & Ext<A>;
 }
 export default Num;

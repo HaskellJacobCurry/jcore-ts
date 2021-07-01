@@ -55,7 +55,7 @@ namespace Traversable {
 		)
 	);
 
-	export let enhance = <F>(_: Traversable<F>) => (
+	export let instantiate = <F>(_: Traversable<F>) => (
 		assign(Json.assign(Def(_), _))((_: Traversable<F>) => Json.assign(_, Ext(_)))
 	);
 }
@@ -99,7 +99,7 @@ namespace ITraversable1 {
 		)
 	);
 
-	export let enhance = <F extends URI1>(_: Traversable1<F>) => (
+	export let instantiate = <F extends URI1>(_: Traversable1<F>) => (
 		assign(Json.assign(Def(_), _))((_: Traversable1<F>) => Json.assign(_, Ext(_)))
 	);
 }

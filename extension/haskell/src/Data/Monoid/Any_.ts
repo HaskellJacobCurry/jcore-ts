@@ -27,13 +27,13 @@ let create_: (value: IBool) => Any = (
 export {create_ as create}
 
 /** Semigroup Any */
-let Semigroup = ISemigroup.enhance<Any>({
+let Semigroup = ISemigroup.instantiate<Any>({
 	append: any0 => any1 => create_(IBool.or(any0.value)(any1.value)),
 });
 export {Semigroup}
 
 /** Monoid Any */
-let Monoid = IMonoid.enhance<Any>({
+let Monoid = IMonoid.instantiate<Any>({
 	...Semigroup,
 	mempty: () => create_(IBool.False),
 });

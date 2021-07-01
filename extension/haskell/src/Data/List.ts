@@ -10,12 +10,15 @@ import {
 	recurse,
 	recurse_,
 	const_,
+	compose,
+	id,
 	S
 } from '../util'
 import {Throwable} from '../util/Throwable'
 import {String} from './String'
 import {Bool} from './Bool'
 import {Foldable1} from './Foldable'
+import {Populatable1} from './Populatable'
 import {IShow} from './Show'
 import {Monoid} from './Monoid'
 import {Maybe} from './Maybe'
@@ -109,6 +112,13 @@ let cons: <A>(head: A) => (tail: List<A>) => List<A> = (
 	head => tail => Cons(head, tail)
 );
 export {cons}
+
+let snoc: <A>(init: List<A>) => (last: A) => List<A> = (
+	<A>(init: List<A>) => (last: A) => (
+		foldr<A, List<A>>(cons)(singleton(last))(init)
+	)
+);
+export {snoc}
 
 /** singleton :: a -> List a */
 let singleton: <A>(_: A) => List<A> = (
@@ -240,6 +250,26 @@ unsnoc = <A>(list: List<A>) => (
 );
 export {unsnoc}
 
+let reverseMap: <A, B>(f: (_: A) => B) => (_: List<A>) => List<B> = (
+	<A, B>(f: (_: A) => B) => (listA: List<A>) => (
+		foldl<A, List<B>>(acc => a => cons(f(a))(acc))(Nil)(listA)
+	)
+);
+export {reverseMap}
+
+let map: <A, B>(f: (_: A) => B) => (_: List<A>) => List<B> = (
+	<A, B>(f: (_: A) => B) => (listA: List<A>) => (
+		apply((reverseMap(f)(listA)
+		))(reverse)
+	)
+);
+export {map}
+
+let reverse: <A>(_: List<A>) => List<A> = (
+	<A>(_: List<A>) => reverseMap<A, A>(id)(_)
+);
+export {reverse}
+
 let show: <A>(_: IShow<A>) => (_: List<A>) => IString = (
 	<A>(ShowA: IShow<A>) => (listA: List<A>) => (
 		apply(
@@ -327,25 +357,48 @@ let foldl: <A, B>(_: (_: B) => (_: A) => B) => (_: B) => (_: List<A>) => B = (
 export {foldl}
 
 let foldr: <A, B>(_: (_: A) => (_: B) => B) => (_: B) => (_: List<A>) => B = (
-	_0 => _1 => _2 => Foldable.foldr(_0)(_1)(_2)
+	<A, B>(f: (_: A) => (_: B) => B) => (b: B) => (listA: List<A>) => (
+		apply((reverse(listA)
+		))(foldl<A, B>(b => a => f(a)(b))(b))
+	)
 );
 export {foldr}
 
+let seed: <A>() => List<A> = (
+	() => Nil
+);
+export {seed}
+
+let populate: <A>(..._s: A[]) => (_: List<A>) => List<A> = (
+	<A>(...as: A[]) => (listA: List<A>) => (
+		foldr<A, List<A>>(cons)(create_(as))(listA)
+	)
+);
+export {populate}
+
 /** show :: (Show a) => Show (List a) => List a -> String */
 let Show = <A>(_: IShow<A>) => apply(_)(ShowA => (
-	IShow.enhance<List<A>>({
+	IShow.instantiate<List<A>>({
 		show: show(ShowA),
 	})
 ));
 export {Show}
 
-let Foldable = Foldable1.enhance<URI>({
+let Foldable = Foldable1.instantiate<URI>({
 	URI,
 	foldMap,
 	foldr: placeholder(),
 });
 Foldable.foldl = foldl;
+Foldable.foldr = foldr;
 export {Foldable}
+
+let Populatable = Populatable1.instantiate<URI>({
+	URI,
+	seed,
+	populate,
+});
+export {Populatable}
 
 let List = {
 	URI,
@@ -355,17 +408,24 @@ let List = {
 	infer,
 	create: create_,
 	cons,
+	snoc,
 	singleton,
 	head,
 	last,
 	tail,
 	uncons,
 	unsnoc,
+	reverseMap,
+	map,
+	reverse,
 	show,
 	foldMap,
 	foldl,
 	foldr,
+	seed,
+	populate,
 	Show,
 	Foldable,
+	Populatable,
 };
 export default List

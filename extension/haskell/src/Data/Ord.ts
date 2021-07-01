@@ -70,7 +70,7 @@ namespace Ord {
 		)
 	);
 
-	export let enhance = <A>(_: Ord<A>) => (
+	export let instantiate = <A>(_: Ord<A>) => (
 		assign(_)((_: Ord<A>) => Json.assign(_, Ext(_)))
 	);
 }

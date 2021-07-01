@@ -3,7 +3,7 @@ exports.__esModule = true;
 exports.IShow = exports.Show = void 0;
 var Show;
 (function (Show) {
-    Show.enhance = function (_) { return (_); };
+    Show.instantiate = function (_) { return (_); };
 })(Show || (Show = {}));
 exports.Show = Show;
 exports.IShow = Show;

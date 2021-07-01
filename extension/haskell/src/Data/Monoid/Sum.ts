@@ -9,7 +9,7 @@ import {
 /** Show a => Show (Sum a) */
 let Show = <A>(_: IShow<A>) => (
 	((ShowA = _) => (
-		IShow.enhance<Sum<A>>({
+		IShow.instantiate<Sum<A>>({
 			show: sumA => (
 				assign(
 					String('Sum(')

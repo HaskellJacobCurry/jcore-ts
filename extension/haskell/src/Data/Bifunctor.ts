@@ -39,7 +39,7 @@ namespace Bifunctor {
 		)
 	);
 
-	export let enhance = <F>(_: Bifunctor<F>) => (
+	export let instantiate = <F>(_: Bifunctor<F>) => (
 		assign(_)((_: Bifunctor<F>) => Json.assign(_, Ext(_)))
 	);
 }
@@ -71,7 +71,7 @@ namespace Bifunctor2 {
 		)
 	);
 
-	export let enhance = <F extends URI2>(_: Bifunctor2<F>) => (
+	export let instantiate = <F extends URI2>(_: Bifunctor2<F>) => (
 		assign(_)((_: Bifunctor2<F>) => Json.assign(_, Ext(_)))
 	);
 }

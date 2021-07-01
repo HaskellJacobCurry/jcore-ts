@@ -33,7 +33,7 @@ declare namespace Ord {
     interface Ext<A> extends IExtOrd<A> {
     }
     let Ext: <A>(_: Ord<A>) => Ext<A>;
-    let enhance: <A>(_: Ord<A>) => Ord<A> & Ext<A>;
+    let instantiate: <A>(_: Ord<A>) => Ord<A> & Ext<A>;
 }
 export { Ord };
 export { Ord as IOrd };

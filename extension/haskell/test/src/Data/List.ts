@@ -2,12 +2,13 @@ import {List} from '../../../dist/Data/List'
 import {Int} from '../../../dist/Data/Int'
 import {Maybe} from '../../../dist/Data/Maybe'
 import {Tuple} from '../../../dist/Data/Tuple'
+import {LazySequence} from '../../../dist/Clojure/LazySequence'
 import {
 	apply,
 	create,
 } from '../../../dist/util/common'
 
-let list = List.create(
+let list0 = List.create(
 	apply(
 		create<Int[]>([])
 	)(acc => {
@@ -17,6 +18,12 @@ let list = List.create(
 		return acc;
 	})
 );
+let list = (
+	apply((LazySequence(Int.inc)(Int(0))
+	))(_ => apply(LazySequence.take(Int(9))(_)
+	))(LazySequence.toPopulatable(List.Populatable))
+);
+list = List.snoc(list)(Int(101));
 
 ({
 	0: () => (

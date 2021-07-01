@@ -14,7 +14,7 @@ let fromI: (_: IUnit) => Unit = (
 );
 export {fromI}
 
-let Show = IShow.enhance<Unit>({
+let Show = IShow.instantiate<Unit>({
 	show: _ => String('Unit'),
 });
 export {Show}

@@ -29,7 +29,7 @@ namespace Monoid {
 		)
 	);
 
-	export let enhance = <A>(_: Monoid<A>) => (
+	export let instantiate = <A>(_: Monoid<A>) => (
 		assign(_)((_: Monoid<A>) => Json.assign(_, Ext(_)))
 	);
 }

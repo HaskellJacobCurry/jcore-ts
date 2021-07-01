@@ -63,7 +63,7 @@ let odd: (_: Int) => Bool = (
 );
 export {odd}
 
-let Num = INum.enhance<Int>({
+let Num = INum.instantiate<Int>({
 	add,
 	sub,
 	mul,
@@ -73,12 +73,12 @@ let Num = INum.enhance<Int>({
 });
 export {Num}
 
-let Show = IShow.enhance<Int>({
+let Show = IShow.instantiate<Int>({
 	show: int => String(`${int.value}`),
 });
 export {Show}
 
-let Semiring = ISemiring.enhance<Int>({
+let Semiring = ISemiring.instantiate<Int>({
 	add: int0 => int1 => IInt.add(int0)(int1),
 	zero: () => create(0),
 	mul: int0 => int1 => IInt.mul(int0)(int1),
@@ -86,19 +86,19 @@ let Semiring = ISemiring.enhance<Int>({
 });
 export {Semiring}
 
-let Ring = IRing.enhance<Int>({
+let Ring = IRing.instantiate<Int>({
 	...Semiring,
 	sub: int0 => int1 => IInt.sub(int0)(int1),
 	negate: int => IInt.negate(int),
 });
 export {Ring}
 
-let Eq = IEq.enhance<Int>({
+let Eq = IEq.instantiate<Int>({
 	eq: int0 => int1 => Bool(int0.value == int1.value),
 });
 export {Eq}
 
-let Ord = IOrd.enhance<Int>(
+let Ord = IOrd.instantiate<Int>(
 	define<IOrd<Int>>(Ord => ({
 		...Eq,
 		compare: int0 => int1 => (

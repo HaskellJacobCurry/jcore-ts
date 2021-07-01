@@ -1,3 +1,5 @@
+import { Kind1, URI1 } from '../util/HKT';
+import { Populatable1 } from '../Data/Populatable';
 import { Bool } from '../Data/Bool';
 import { Int } from '../Data/Int';
 import { Unit } from '../Data/Unit';
@@ -21,6 +23,10 @@ declare let foldl: <A, B>(f: (_: B) => (_: A) => B) => (_: B) => (_: LazySequenc
 export { foldl };
 declare let evaluate: <A>(f: (_: A) => Unit) => (_: LazySequence<A>) => Unit;
 export { evaluate };
+declare let toPopulatable1: <F extends URI1>(_: Populatable1<F>) => <A>(_: LazySequence<A>) => Kind1<F, A>;
+export { toPopulatable1 };
+declare let toPopulatable: <F extends "Endo" | "Maybe" | "List">(_: Populatable1<F>) => <A>(_: LazySequence<A>) => Kind1<F, A>;
+export { toPopulatable };
 declare let LazySequence: (<T>(transform: (_: T) => T) => (seed: T) => LazySequence<T>) & {
     create: <T>(transform: (_: T) => T) => (seed: T) => LazySequence<T>;
     map: <A, B>(f: (_: A) => B) => (_: LazySequence<A>) => LazySequence<B>;
@@ -30,4 +36,6 @@ declare let LazySequence: (<T>(transform: (_: T) => T) => (seed: T) => LazySeque
     take: (_: Int) => <A_3>(_: LazySequence<A_3>) => LazySequence<A_3>;
     foldl: <A_4, B_1>(f: (_: B_1) => (_: A_4) => B_1) => (_: B_1) => (_: LazySequence<A_4>) => B_1;
     evaluate: <A_5>(f: (_: A_5) => Unit) => (_: LazySequence<A_5>) => Unit;
+    toPopulatable: <F extends "Endo" | "Maybe" | "List">(_: Populatable1<F>) => <A_6>(_: LazySequence<A_6>) => Kind1<F, A_6>;
+    toPopulatable1: <F extends "Endo" | "Maybe" | "List">(_: Populatable1<F>) => <A_6>(_: LazySequence<A_6>) => Kind1<F, A_6>;
 };

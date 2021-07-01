@@ -65,7 +65,7 @@ declare namespace Foldable {
     interface Ext<F> extends IExtFoldable<F> {
     }
     let Ext: <F>(_: Foldable<F>) => Ext<F>;
-    let enhance: <F>(_: Foldable<F>) => Foldable<F> & Ext<F>;
+    let instantiate: <F>(_: Foldable<F>) => Foldable<F> & Ext<F>;
 }
 interface IFoldable1<F extends URI1> {
     foldMap: <G>(_: Monoid<G>) => <A>(_: (_: A) => G) => (_: Kind1<F, A>) => G;
@@ -107,6 +107,6 @@ declare namespace Foldable1 {
     interface Ext<F extends URI1> extends IExtFoldable1<F> {
     }
     let Ext: <F extends URI1>(_: Foldable1<F>) => Ext<F>;
-    let enhance: <F extends "Endo" | "Maybe" | "List">(_: Foldable1<F>) => Foldable1<F> & Ext<F>;
+    let instantiate: <F extends "Endo" | "Maybe" | "List">(_: Foldable1<F>) => Foldable1<F> & Ext<F>;
 }
 export default Foldable;

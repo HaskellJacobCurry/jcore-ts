@@ -167,7 +167,7 @@ namespace Foldable {
 		)
 	);
 
-	export let enhance = <F>(_: Foldable<F>) => (
+	export let instantiate = <F>(_: Foldable<F>) => (
 		assign(Json.assign(Def(_), _))((_: Foldable<F>) => Json.assign(_, Ext(_)))
 	);
 }
@@ -303,7 +303,7 @@ namespace Foldable1 {
 		)
 	);
 
-	export let enhance = <F extends URI1>(_: Foldable1<F>) => (
+	export let instantiate = <F extends URI1>(_: Foldable1<F>) => (
 		assign(Json.assign(Def(_), _))((_: Foldable1<F>) => Json.assign(_, Ext(_)))
 	);
 }

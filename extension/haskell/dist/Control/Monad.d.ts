@@ -25,7 +25,7 @@ declare namespace Monad {
     interface Ext<F> extends IExtMonad<F> {
     }
     let Ext: <F>(_: Monad<F>) => Ext<F>;
-    let enhance: <F>(_: Monad<F>) => Monad<F> & Ext<F>;
+    let instantiate: <F>(_: Monad<F>) => Monad<F> & Ext<F>;
 }
 interface IExtMonad1<F extends URI1> {
     return: <A>(_: A) => Kind1<F, A>;
@@ -49,18 +49,18 @@ declare namespace Monad1 {
     interface Ext<F extends URI1> extends IExtMonad1<F> {
     }
     let Ext: <F extends URI1>(_: Monad1<F>) => Ext<F>;
-    let enhance: <F extends "Endo" | "Maybe" | "List">(_: Monad1<F>) => Monad1<F> & Ext<F>;
+    let instantiate: <F extends "Endo" | "Maybe" | "List">(_: Monad1<F>) => Monad1<F> & Ext<F>;
 }
 declare namespace Monad2 {
     interface Ext<F extends URI2> extends IExtMonad2<F> {
     }
     let Ext: <F extends URI2>(_: Monad2<F>) => Ext<F>;
-    let enhance: <F extends "Function" | "Tuple">(_: Monad2<F>) => Monad2<F> & Ext<F>;
+    let instantiate: <F extends "Function" | "Tuple">(_: Monad2<F>) => Monad2<F> & Ext<F>;
 }
 declare namespace Monad2_ {
     interface Ext<F extends URI2, T0> extends IExtMonad2_<F, T0> {
     }
     let Ext: <F extends URI2, T0>(_: Monad2_<F, T0>) => Ext<F, T0>;
-    let enhance: <F extends "Function" | "Tuple", T0>(_: Monad2_<F, T0>) => Monad2_<F, T0> & Ext<F, T0>;
+    let instantiate: <F extends "Function" | "Tuple", T0>(_: Monad2_<F, T0>) => Monad2_<F, T0> & Ext<F, T0>;
 }
 export default Monad;

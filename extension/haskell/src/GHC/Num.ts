@@ -39,7 +39,7 @@ namespace Num {
 		})
 	);
 
-	export let enhance = <A>(_: Num<A>) => (
+	export let instantiate = <A>(_: Num<A>) => (
 		assign(_)((_: Num<A>) => Json.assign(_, Ext(_)))
 	);
 }
