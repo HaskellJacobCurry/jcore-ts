@@ -3,6 +3,7 @@ import { IShow } from './Show';
 import { Monoid } from './Monoid';
 import { Maybe } from './Maybe';
 import { Tuple } from './Tuple';
+import IString from './IString';
 /** data List a = Nil | Cons a (List a) */
 declare type List<A> = IList<A> & (Nil | Cons<A>) & {
     URI: URI;
@@ -60,6 +61,8 @@ export { uncons };
 /** unsnoc :: List a -> Maybe (Tuple (List a) a) */
 declare let unsnoc: <A>(_: List<A>) => Maybe<Tuple<List<A>, A>>;
 export { unsnoc };
+declare let show: <A>(_: IShow<A>) => (_: List<A>) => IString;
+export { show };
 declare let foldMap: <G>(_: Monoid<G>) => <A>(_: (_: A) => G) => (_: List<A>) => G;
 export { foldMap };
 declare let foldl: <A, B>(_: (_: B) => (_: A) => B) => (_: B) => (_: List<A>) => B;
@@ -85,10 +88,11 @@ declare let List: {
     tail: <A_7>(_: List<A_7>) => List<A_7>;
     uncons: <A_8>(_: List<A_8>) => Maybe<Tuple<A_8, List<A_8>>>;
     unsnoc: <A_9>(_: List<A_9>) => Maybe<Tuple<List<A_9>, A_9>>;
-    foldMap: <G>(_: Monoid<G>) => <A_10>(_: (_: A_10) => G) => (_: List<A_10>) => G;
-    foldl: <A_11, B>(_: (_: B) => (_: A_11) => B) => (_: B) => (_: List<A_11>) => B;
-    foldr: <A_12, B_1>(_: (_: A_12) => (_: B_1) => B_1) => (_: B_1) => (_: List<A_12>) => B_1;
-    Show: <A_13>(_: IShow<A_13>) => IShow<List<A_13>>;
+    show: <A_10>(_: IShow<A_10>) => (_: List<A_10>) => IString;
+    foldMap: <G>(_: Monoid<G>) => <A_11>(_: (_: A_11) => G) => (_: List<A_11>) => G;
+    foldl: <A_12, B>(_: (_: B) => (_: A_12) => B) => (_: B) => (_: List<A_12>) => B;
+    foldr: <A_13, B_1>(_: (_: A_13) => (_: B_1) => B_1) => (_: B_1) => (_: List<A_13>) => B_1;
+    Show: <A_14>(_: IShow<A_14>) => IShow<List<A_14>>;
     Foldable: Foldable1<"List"> & Foldable1.Ext<"List">;
 };
 export default List;

@@ -17,11 +17,14 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return r;
 };
 exports.__esModule = true;
-exports.recurse_ = exports.recurse = exports.create = exports.apply = exports.define = exports.assign = exports.flip = exports.const_ = exports["const"] = exports.id_ = exports.id = void 0;
+exports.recurse_ = exports.recurse = exports.create = exports.apply = exports.define = exports.assign = exports.flip = exports.const_ = exports["const"] = exports.id_ = exports.id = exports.placeholder = void 0;
+var ts_toolbelt_1 = require("../../dependency/jcore/dist/ts-toolbelt");
 __exportStar(require("../../dependency/jcore/dist/ts-toolbelt"), exports);
 __exportStar(require("../../dependency/jcore/dist/ts-toolbelt/common"), exports);
 __exportStar(require("../../dependency/jcore/dist/common/compose"), exports);
 __exportStar(require("../../dependency/jcore/dist/common/pipe"), exports);
+var placeholder = ts_toolbelt_1.reinterpret;
+exports.placeholder = placeholder;
 var id = function (a) { return a; };
 exports.id = id;
 var id_ = function () { return function (a) { return a; }; };

@@ -2,6 +2,8 @@ export * from '../../dependency/jcore/dist/ts-toolbelt';
 export * from '../../dependency/jcore/dist/ts-toolbelt/common';
 export * from '../../dependency/jcore/dist/common/compose';
 export * from '../../dependency/jcore/dist/common/pipe';
+declare let placeholder: <A>() => A;
+export { placeholder };
 declare let id: <A>(_: A) => A;
 export { id };
 declare let id_: <A>() => (_: A) => A;

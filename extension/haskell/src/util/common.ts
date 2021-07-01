@@ -1,7 +1,12 @@
+import {reinterpret} from '../../dependency/jcore/dist/ts-toolbelt'
+
 export * from '../../dependency/jcore/dist/ts-toolbelt'
 export * from '../../dependency/jcore/dist/ts-toolbelt/common'
 export * from '../../dependency/jcore/dist/common/compose'
 export * from '../../dependency/jcore/dist/common/pipe'
+
+let placeholder: <A>() => A = reinterpret;
+export {placeholder}
 
 let id: <A>(_: A) => A = a => a;
 export {id}

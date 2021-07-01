@@ -1,6 +1,7 @@
 import {
 	Json,
 	reinterpret,
+	placeholder,
 	cast,
 	apply,
 	create,
@@ -8,6 +9,7 @@ import {
 	trampoline,
 	recurse,
 	recurse_,
+	const_,
 	S
 } from '../util'
 import {Throwable} from '../util/Throwable'
@@ -18,6 +20,7 @@ import {IShow} from './Show'
 import {Monoid} from './Monoid'
 import {Maybe} from './Maybe'
 import {Tuple} from './Tuple'
+import IString from './IString'
 
 /** data List a = Nil | Cons a (List a) */
 type List<A> = IList<A> & (Nil | Cons<A>) & {URI: URI};
@@ -192,10 +195,8 @@ let unsnoc: <A>(_: List<A>) => Maybe<Tuple<List<A>, A>> = (
 						tail.cata({
 							Nil: () => Maybe.Just(Tuple(Nil, head)),
 							Cons: () => (
-								apply(
-									Tuple.Bifunctor.lmap(cons(head))
-								)(_ => apply(
-									Maybe.Functor.fmap(_)
+								apply((Tuple.Bifunctor.lmap(cons(head))
+								))(_ => apply(Maybe.Functor.fmap(_)
 								))(_ => _(unsnoc(tail)))
 							),
 						})
@@ -205,7 +206,83 @@ let unsnoc: <A>(_: List<A>) => Maybe<Tuple<List<A>, A>> = (
 		)(_ => _(list))
 	)
 );
+unsnoc = <A>(list: List<A>) => (
+	apply(
+		trampoline<Maybe<Tuple<List<A>, A>>>()((list: List<A>, done: Bool, acc: Maybe<Tuple<List<A>, A>>, cont: trampoline.Cont<Maybe<Tuple<List<A>, A>>>) => unsnoc => (
+			done.cata({
+				True: () => cont(acc),
+				False: () => (
+					list.cata({
+						Nil: () => cont(Maybe.Nothing),
+						Cons: (head, tail) => (
+							tail.cata({
+								Nil: () => (
+									apply((Tuple.Bifunctor.rmap<A, A>(const_(head))
+									))(_ => apply(Maybe.Functor.fmap(_)
+									))(_ => apply(_(acc)
+									))(cont)
+								),
+								Cons: () => (
+									unsnoc(tail, done, acc, acc => (
+										apply((Tuple.Bifunctor.lmap(cons(head))
+										))(_ => apply(Maybe.Functor.fmap(_)
+										))(_ => apply(_(acc)
+										))(acc => unsnoc(list, Bool.True, acc, cont))
+									))
+								),
+							})
+						),
+					})
+				)
+			})
+		))
+	)(_ => _(list, Bool.False, Maybe.Just(Tuple(Nil, placeholder())), _ => _))
+);
 export {unsnoc}
+
+let show: <A>(_: IShow<A>) => (_: List<A>) => IString = (
+	<A>(ShowA: IShow<A>) => (listA: List<A>) => (
+		apply(
+			recurse<String>()((list: List<A>) => show => (
+				list.cata({
+					Nil: () => String('Nil'),
+					Cons: (head, tail) => (
+						apply((String('(Cons ')
+						))(_ => apply(String.append(_)(String.fromI(ShowA.show(head)))
+						))(_ => apply(String.append(_)(String(' '))
+						))(_ => apply(String.append(_)(show(tail))
+						))(_ => String.append(_)(String(')')))
+					)
+				})
+			))
+		)(_ => _(listA))
+	)
+);
+show = <A>(ShowA: IShow<A>) => (listA: List<A>) => (
+	apply(
+		trampoline<String>()((list: List<A>, done: Bool, acc: String, cont: trampoline.Cont<String>) => show => (
+			done.cata({
+				True: () => cont(acc),
+				False: () => (
+					list.cata({
+						Nil: () => cont(String('Nil')),
+						Cons: (head, tail) => (
+							show(tail, done, acc, acc => (
+								apply((String('(Cons ')
+								))(_ => apply(String.append(_)(String.fromI(ShowA.show(head)))
+								))(_ => apply(String.append(_)(String(' '))
+								))(_ => apply(String.append(_)(acc)
+								))(_ => apply(String.append(_)(String(')'))
+								))(acc => show(list, Bool.True, acc, cont))
+							))
+						)
+					})
+				)
+			})
+		))
+	)(_ => _(listA, Bool.False, String.mempty(), _ => _))
+);
+export {show}
 
 let foldMap: <G>(_: Monoid<G>) => <A>(_: (_: A) => G) => (_: List<A>) => G = (
 	<G>(MonoidG: Monoid<G>) => <A>(f: (_: A) => G) => (listA: List<A>) => (
@@ -257,26 +334,7 @@ export {foldr}
 /** show :: (Show a) => Show (List a) => List a -> String */
 let Show = <A>(_: IShow<A>) => apply(_)(ShowA => (
 	IShow.enhance<List<A>>({
-		show: listA => (
-			apply(
-				recurse<String>()((list: List<A>) => show => (
-					list.cata({
-						Nil: () => String('Nil'),
-						Cons: (head, tail) => (
-							apply(
-								String('(Cons ')
-							)(_ => apply(
-								String.Semigroup.append(_)(String.fromI(ShowA.show(head)))
-							))(_ => apply(
-								String.Semigroup.append(_)(String(' '))
-							))(_ => apply(
-								String.Semigroup.append(_)(String.fromI(show(tail)))
-							))(_ => String.Semigroup.append(_)(String(')')))
-						)
-					})
-				))
-			)(_ => _(listA))
-		)
+		show: show(ShowA),
 	})
 ));
 export {Show}
@@ -284,7 +342,7 @@ export {Show}
 let Foldable = Foldable1.enhance<URI>({
 	URI,
 	foldMap,
-	foldr: reinterpret(),
+	foldr: placeholder(),
 });
 Foldable.foldl = foldl;
 export {Foldable}
@@ -303,6 +361,7 @@ let List = {
 	tail,
 	uncons,
 	unsnoc,
+	show,
 	foldMap,
 	foldl,
 	foldr,

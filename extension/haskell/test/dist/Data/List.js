@@ -6,7 +6,7 @@ var Maybe_1 = require("../../../dist/Data/Maybe");
 var Tuple_1 = require("../../../dist/Data/Tuple");
 var common_1 = require("../../../dist/util/common");
 var list = List_1.List.create(common_1.apply(common_1.create([]))(function (acc) {
-    for (var i = 0; i < 4; i++) {
+    for (var i = 0; i < 1e1; i++) {
         acc[acc.length] = Int_1.Int(i + 1);
     }
     return acc;

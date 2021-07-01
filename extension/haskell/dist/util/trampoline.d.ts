@@ -1,4 +1,4 @@
-declare type Rec = <AS extends any[], B>(f: (..._: AS) => StateLike<B>, ..._: AS) => StateLike<B>;
+declare type Rec = <AS extends any[], B>(f: (..._: AS) => StateLike<B>, ..._: AS) => State<B>;
 interface State<T> {
     rec: Rec;
     thunk: () => StateLike<T>;

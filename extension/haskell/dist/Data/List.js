@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.Foldable = exports.Show = exports.foldr = exports.foldl = exports.foldMap = exports.unsnoc = exports.uncons = exports.tail = exports.last = exports.head = exports.singleton = exports.cons = exports.create = exports.infer = exports.Cons = exports.Nil_ = exports.Nil = exports.URI = exports.List = void 0;
+exports.Foldable = exports.Show = exports.foldr = exports.foldl = exports.foldMap = exports.show = exports.unsnoc = exports.uncons = exports.tail = exports.last = exports.head = exports.singleton = exports.cons = exports.create = exports.infer = exports.Cons = exports.Nil_ = exports.Nil = exports.URI = exports.List = void 0;
 var util_1 = require("../util");
 var Throwable_1 = require("../util/Throwable");
 var String_1 = require("./String");
@@ -75,10 +75,32 @@ var unsnoc = (function (list) { return (util_1.apply(util_1.recurse()(function (
     Nil: function () { return Maybe_1.Maybe.Nothing; },
     Cons: function (head, tail) { return (tail.cata({
         Nil: function () { return Maybe_1.Maybe.Just(Tuple_1.Tuple(Nil, head)); },
-        Cons: function () { return (util_1.apply(Tuple_1.Tuple.Bifunctor.lmap(cons(head)))(function (_) { return util_1.apply(Maybe_1.Maybe.Functor.fmap(_)); })(function (_) { return _(unsnoc(tail)); })); }
+        Cons: function () { return (util_1.apply((Tuple_1.Tuple.Bifunctor.lmap(cons(head))))(function (_) { return util_1.apply(Maybe_1.Maybe.Functor.fmap(_)); })(function (_) { return _(unsnoc(tail)); })); }
     })); }
 })); }; }))(function (_) { return _(list); })); });
 exports.unsnoc = unsnoc;
+exports.unsnoc = unsnoc = function (list) { return (util_1.apply(util_1.trampoline()(function (list, done, acc, cont) { return function (unsnoc) { return (done.cata({
+    True: function () { return cont(acc); },
+    False: function () { return (list.cata({
+        Nil: function () { return cont(Maybe_1.Maybe.Nothing); },
+        Cons: function (head, tail) { return (tail.cata({
+            Nil: function () { return (util_1.apply((Tuple_1.Tuple.Bifunctor.rmap(util_1.const_(head))))(function (_) { return util_1.apply(Maybe_1.Maybe.Functor.fmap(_)); })(function (_) { return util_1.apply(_(acc)); })(cont)); },
+            Cons: function () { return (unsnoc(tail, done, acc, function (acc) { return (util_1.apply((Tuple_1.Tuple.Bifunctor.lmap(cons(head))))(function (_) { return util_1.apply(Maybe_1.Maybe.Functor.fmap(_)); })(function (_) { return util_1.apply(_(acc)); })(function (acc) { return unsnoc(list, Bool_1.Bool.True, acc, cont); })); })); }
+        })); }
+    })); }
+})); }; }))(function (_) { return _(list, Bool_1.Bool.False, Maybe_1.Maybe.Just(Tuple_1.Tuple(Nil, util_1.placeholder())), function (_) { return _; }); })); };
+var show = (function (ShowA) { return function (listA) { return (util_1.apply(util_1.recurse()(function (list) { return function (show) { return (list.cata({
+    Nil: function () { return String_1.String('Nil'); },
+    Cons: function (head, tail) { return (util_1.apply((String_1.String('(Cons ')))(function (_) { return util_1.apply(String_1.String.append(_)(String_1.String.fromI(ShowA.show(head)))); })(function (_) { return util_1.apply(String_1.String.append(_)(String_1.String(' '))); })(function (_) { return util_1.apply(String_1.String.append(_)(show(tail))); })(function (_) { return String_1.String.append(_)(String_1.String(')')); })); }
+})); }; }))(function (_) { return _(listA); })); }; });
+exports.show = show;
+exports.show = show = function (ShowA) { return function (listA) { return (util_1.apply(util_1.trampoline()(function (list, done, acc, cont) { return function (show) { return (done.cata({
+    True: function () { return cont(acc); },
+    False: function () { return (list.cata({
+        Nil: function () { return cont(String_1.String('Nil')); },
+        Cons: function (head, tail) { return (show(tail, done, acc, function (acc) { return (util_1.apply((String_1.String('(Cons ')))(function (_) { return util_1.apply(String_1.String.append(_)(String_1.String.fromI(ShowA.show(head)))); })(function (_) { return util_1.apply(String_1.String.append(_)(String_1.String(' '))); })(function (_) { return util_1.apply(String_1.String.append(_)(acc)); })(function (_) { return util_1.apply(String_1.String.append(_)(String_1.String(')'))); })(function (acc) { return show(list, Bool_1.Bool.True, acc, cont); })); })); }
+    })); }
+})); }; }))(function (_) { return _(listA, Bool_1.Bool.False, String_1.String.mempty(), function (_) { return _; }); })); }; };
 var foldMap = (function (MonoidG) { return function (f) { return function (listA) { return (util_1.apply({
     MonoidExtG: Monoid_1.Monoid.Ext(MonoidG)
 })(function (_a) {
@@ -107,16 +129,13 @@ var foldr = (function (_0) { return function (_1) { return function (_2) { retur
 exports.foldr = foldr;
 /** show :: (Show a) => Show (List a) => List a -> String */
 var Show = function (_) { return util_1.apply(_)(function (ShowA) { return (Show_1.IShow.enhance({
-    show: function (listA) { return (util_1.apply(util_1.recurse()(function (list) { return function (show) { return (list.cata({
-        Nil: function () { return String_1.String('Nil'); },
-        Cons: function (head, tail) { return (util_1.apply(String_1.String('(Cons '))(function (_) { return util_1.apply(String_1.String.Semigroup.append(_)(String_1.String.fromI(ShowA.show(head)))); })(function (_) { return util_1.apply(String_1.String.Semigroup.append(_)(String_1.String(' '))); })(function (_) { return util_1.apply(String_1.String.Semigroup.append(_)(String_1.String.fromI(show(tail)))); })(function (_) { return String_1.String.Semigroup.append(_)(String_1.String(')')); })); }
-    })); }; }))(function (_) { return _(listA); })); }
+    show: show(ShowA)
 })); }); };
 exports.Show = Show;
 var Foldable = Foldable_1.Foldable1.enhance({
     URI: URI,
     foldMap: foldMap,
-    foldr: util_1.reinterpret()
+    foldr: util_1.placeholder()
 });
 exports.Foldable = Foldable;
 Foldable.foldl = foldl;
@@ -134,6 +153,7 @@ var List = {
     tail: tail,
     uncons: uncons,
     unsnoc: unsnoc,
+    show: show,
     foldMap: foldMap,
     foldl: foldl,
     foldr: foldr,

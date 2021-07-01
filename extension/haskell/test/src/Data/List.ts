@@ -11,7 +11,7 @@ let list = List.create(
 	apply(
 		create<Int[]>([])
 	)(acc => {
-		for (let i = 0; i < 4; i++) {
+		for (let i = 0; i < 1e1; i++) {
 			acc[acc.length] = Int(i + 1);
 		}
 		return acc;
