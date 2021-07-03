@@ -14,6 +14,7 @@ import {
 	id,
 	S
 } from '../util'
+import {Case} from '../util/Case'
 import {Throwable} from '../util/Throwable'
 import {String} from './String'
 import {Bool} from './Bool'
@@ -23,6 +24,8 @@ import {IShow} from './Show'
 import {Monoid} from './Monoid'
 import {Maybe} from './Maybe'
 import {Tuple} from './Tuple'
+import {Int} from './Int'
+import {Ordering} from './Ordering'
 import IString from './IString'
 
 /** data List a = Nil | Cons a (List a) */
@@ -250,6 +253,91 @@ unsnoc = <A>(list: List<A>) => (
 );
 export {unsnoc}
 
+let shift: <A>(_: List<A>) => Maybe<List<A>> = (
+	<A>(list: List<A>) => (
+		list.cata({
+			Nil: () => Maybe.Nothing_<List<A>>(),
+			Cons: (_, tail) => Maybe.Just(tail)
+		})
+	)
+);
+export {shift}
+
+let shiftN: (n: Int) => <A>(_: List<A>) => Maybe<List<A>> = (
+	(n: Int) => <A>(listA: List<A>) => (
+		apply(
+			trampoline<Maybe<List<A>>>()((acc: List<A>, n: Int) => shiftN => (
+				Int.gt(n)(Int(0)).cata({
+					False: () => Maybe.Just(acc),
+					True: () => (
+						shift(acc).cata({
+							Nothing: () => Maybe.Nothing_<List<A>>(),
+							Just: acc => shiftN(acc, Int.dec(n)),
+						})
+					),
+				})
+			))
+		)(_ => _(listA, n))
+	)
+);
+export {shiftN}
+
+let pop: <A>(_: List<A>) => Maybe<List<A>> = (
+	<A>(listA: List<A>) => (
+		unsnoc(listA).cata({
+			Nothing: () => Maybe.Nothing_<List<A>>(),
+			Just: _ => Maybe.Just(Tuple.fst(_)),
+		})
+	)
+);
+export {pop}
+
+let index: (i: Int) => <A>(_: List<A>) => Maybe<A> = (
+	(i: Int) => <A>(listA: List<A>) => (
+		apply(
+			trampoline<Maybe<A>>()((listA: List<A>, i: Int) => index => (
+				listA.cata({
+					Nil: () => Maybe.Nothing_<A>(),
+					Cons: (head, tail) => (
+						Int.gt(i)(Int(0)).cata({
+							False: () => Maybe.Just(head),
+							True: () => index(tail, Int.dec(i)),
+						})
+					),
+				})
+			))
+		)(_ => _(listA, i))
+	)
+);
+export {index}
+
+let find_: <A>(f: (_: A) => Bool) => (_: List<A>) => Maybe<Tuple<A, Int>> = (
+	<A>(f: (_: A) => Bool) => (listA: List<A>) => (
+		apply(
+			trampoline<Maybe<Tuple<A, Int>>>()((listA: List<A>, i: Int) => find_ => (
+				listA.cata({
+					Nil: () => Maybe.Nothing_<Tuple<A, Int>>(),
+					Cons: (head, tail) => (
+						f(head).cata({
+							True: () => Maybe.Just(Tuple(head, i)),
+							False: () => find_(tail, Int.inc(i)),
+						})
+					),
+				})
+			))
+		)(_ => _(listA, Int(0)))
+	)
+);
+export {find_}
+
+let find: <A>(f: (_: A) => Bool) => (_: List<A>) => Maybe<A> = (
+	<A>(f: (_: A) => Bool) => (listA: List<A>) => (
+		apply((find_(f)(listA)
+		))(Maybe.Functor.fmap<Tuple<A, Int>, A>(Tuple.fst))
+	)
+);
+export {find}
+
 let reverseMap: <A, B>(f: (_: A) => B) => (_: List<A>) => List<B> = (
 	<A, B>(f: (_: A) => B) => (listA: List<A>) => (
 		foldl<A, List<B>>(acc => a => cons(f(a))(acc))(Nil)(listA)
@@ -371,10 +459,78 @@ export {seed}
 
 let populate: <A>(..._s: A[]) => (_: List<A>) => List<A> = (
 	<A>(...as: A[]) => (listA: List<A>) => (
-		foldr<A, List<A>>(cons)(create_(as))(listA)
+		foldr<A, List<A>>(cons)(listA)(create_(as))
 	)
 );
 export {populate}
+
+/** merge :: (a -> a -> Ordering) -> List a -> List a -> List a */
+let merge: <A>(f: (_: A) => (_: A) => Ordering) => (_: List<A>) => (_: List<A>) => List<A> = (
+	<A>(f: (_: A) => (_: A) => Ordering) => (list0: List<A>) => (list1: List<A>) => (
+		apply(
+			recurse<List<A>>()((list0: List<A>, list1: List<A>) => merge => (
+				apply(
+					list0.cata({
+						Nil: () => Case(0, list1),
+						Cons: (head0, tail0) => (
+							list1.cata({
+								Nil: () => Case(0, list0),
+								Cons: (head1, tail1) => Case(1, head0, tail0, head1, tail1),
+							})
+						)
+					})
+				)(Case.infer).cata({
+					0: list => list,
+					1: (head0, tail0, head1, tail1) => (
+						Ordering.Eq.eq(f(head0)(head1))(Ordering.LT).cata({
+							True: () => cons(head0)(merge(tail0, list1)),
+							False: () => cons(head1)(merge(list0, tail1))
+						})
+					)
+				})
+			))
+		)(_ => _(list0, list1))
+	)
+);
+merge = <A>(f: (_: A) => (_: A) => Ordering) => (list0: List<A>) => (list1: List<A>) => (
+	apply(
+		trampoline<List<A>>()((list0: List<A>, list1: List<A>, done: Bool, acc: List<A>, cont: trampoline.Cont<List<A>>) => merge => (
+			done.cata({
+				True: () => cont(acc),
+				False: () => (
+					apply(
+						list0.cata({
+							Nil: () => Case(0, list1),
+							Cons: (head0, tail0) => (
+								list1.cata({
+									Nil: () => Case(0, list0),
+									Cons: (head1, tail1) => Case(1, head0, tail0, head1, tail1),
+								})
+							)
+						})
+					)(Case.infer).cata({
+						0: list => merge(list0, list1, Bool.True, list, cont),
+						1: (head0, tail0, head1, tail1) => (
+							Ordering.Eq.eq(f(head0)(head1))(Ordering.LT).cata({
+								True: () => (
+									merge(tail0, list1, done, acc, acc => (
+										merge(list0, list1, Bool.True, cons(head0)(acc), cont)
+									))
+								),
+								False: () => (
+									merge(list0, tail1, done, acc, acc => (
+										merge(list0, list1, Bool.True, cons(head1)(acc), cont)
+									))
+								),
+							})
+						)
+					})
+				),
+			})
+		))
+	)(_ => _(list0, list1, Bool.False, Nil, _ => _))
+);
+export {merge}
 
 /** show :: (Show a) => Show (List a) => List a -> String */
 let Show = <A>(_: IShow<A>) => apply(_)(ShowA => (
@@ -415,6 +571,11 @@ let List = {
 	tail,
 	uncons,
 	unsnoc,
+	shift,
+	shiftN,
+	pop,
+	index,
+	find_,
 	reverseMap,
 	map,
 	reverse,
@@ -424,6 +585,7 @@ let List = {
 	foldr,
 	seed,
 	populate,
+	merge,
 	Show,
 	Foldable,
 	Populatable,

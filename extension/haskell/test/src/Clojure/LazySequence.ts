@@ -39,7 +39,7 @@ import {
         apply({
             lazy: (
                 apply(
-                    LazySequence<Int>(Int.Ring.add(Int(1)))(Int(1))
+                    LazySequence(Int.inc)(Int(1))
                 )(_ => apply(
                     LazySequence.filter<Int>(Int.odd)(_)
                 ))(_ => apply(
@@ -57,5 +57,13 @@ import {
                 ))
             )(_ => _(lazy))
         ))
+    ),
+    2: () => (
+        apply(
+            apply((LazySequence(Int.inc)(Int(1))
+            ))(LazySequence.take(Int(1e5)))
+        )(lazy => apply(LazySequence.foldl(Int.add)(Int(0))(lazy)
+        ))(_ => apply(Int.Show.show(_)
+        ))(console.log)
     )
-})[1]();
+})[2]();

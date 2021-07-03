@@ -19,12 +19,13 @@ var util_1 = require("../../../dist/util");
         })); }; }))(function (_) { return _(lazy); }));
     })); },
     1: function () { return (util_1.apply({
-        lazy: (util_1.apply(LazySequence_1.LazySequence(Int_1.Int.Ring.add(Int_1.Int(1)))(Int_1.Int(1)))(function (_) { return util_1.apply(LazySequence_1.LazySequence.filter(Int_1.Int.odd)(_)); })(function (_) { return util_1.apply(LazySequence_1.LazySequence.fmap(Int_1.Int.Ring.mul(Int_1.Int(3)))(_)); })(function (_) { return (
+        lazy: (util_1.apply(LazySequence_1.LazySequence(Int_1.Int.inc)(Int_1.Int(1)))(function (_) { return util_1.apply(LazySequence_1.LazySequence.filter(Int_1.Int.odd)(_)); })(function (_) { return util_1.apply(LazySequence_1.LazySequence.fmap(Int_1.Int.Ring.mul(Int_1.Int(3)))(_)); })(function (_) { return (
         //LazySequence.take(Int(0))(_)
         LazySequence_1.LazySequence.until(function (_) { return Bool_1.Bool.fromI(Int_1.Int.Ord.lt(Int_1.Int(66))(_)); })(_)); }))
     })(function (_a) {
         var lazy = _a.lazy;
         return (util_1.apply(LazySequence_1.LazySequence.evaluate(function (_) { return (console.log(Int_1.Int.Show.show(_).toString()),
             Unit_1.Unit()); }))(function (_) { return _(lazy); }));
-    })); }
-})[1]();
+    })); },
+    2: function () { return (util_1.apply(util_1.apply((LazySequence_1.LazySequence(Int_1.Int.inc)(Int_1.Int(1))))(LazySequence_1.LazySequence.take(Int_1.Int(1e5))))(function (lazy) { return util_1.apply(LazySequence_1.LazySequence.foldl(Int_1.Int.add)(Int_1.Int(0))(lazy)); })(function (_) { return util_1.apply(Int_1.Int.Show.show(_)); })(console.log)); }
+})[2]();

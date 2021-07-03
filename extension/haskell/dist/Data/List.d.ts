@@ -1,9 +1,12 @@
+import { Bool } from './Bool';
 import { Foldable1 } from './Foldable';
 import { Populatable1 } from './Populatable';
 import { IShow } from './Show';
 import { Monoid } from './Monoid';
 import { Maybe } from './Maybe';
 import { Tuple } from './Tuple';
+import { Int } from './Int';
+import { Ordering } from './Ordering';
 import IString from './IString';
 /** data List a = Nil | Cons a (List a) */
 declare type List<A> = IList<A> & (Nil | Cons<A>) & {
@@ -64,6 +67,18 @@ export { uncons };
 /** unsnoc :: List a -> Maybe (Tuple (List a) a) */
 declare let unsnoc: <A>(_: List<A>) => Maybe<Tuple<List<A>, A>>;
 export { unsnoc };
+declare let shift: <A>(_: List<A>) => Maybe<List<A>>;
+export { shift };
+declare let shiftN: (n: Int) => <A>(_: List<A>) => Maybe<List<A>>;
+export { shiftN };
+declare let pop: <A>(_: List<A>) => Maybe<List<A>>;
+export { pop };
+declare let index: (i: Int) => <A>(_: List<A>) => Maybe<A>;
+export { index };
+declare let find_: <A>(f: (_: A) => Bool) => (_: List<A>) => Maybe<Tuple<A, Int>>;
+export { find_ };
+declare let find: <A>(f: (_: A) => Bool) => (_: List<A>) => Maybe<A>;
+export { find };
 declare let reverseMap: <A, B>(f: (_: A) => B) => (_: List<A>) => List<B>;
 export { reverseMap };
 declare let map: <A, B>(f: (_: A) => B) => (_: List<A>) => List<B>;
@@ -82,6 +97,9 @@ declare let seed: <A>() => List<A>;
 export { seed };
 declare let populate: <A>(..._s: A[]) => (_: List<A>) => List<A>;
 export { populate };
+/** merge :: (a -> a -> Ordering) -> List a -> List a -> List a */
+declare let merge: <A>(f: (_: A) => (_: A) => Ordering) => (_: List<A>) => (_: List<A>) => List<A>;
+export { merge };
 /** show :: (Show a) => Show (List a) => List a -> String */
 declare let Show: <A>(_: IShow<A>) => IShow<List<A>>;
 export { Show };
@@ -104,16 +122,22 @@ declare let List: {
     tail: <A_8>(_: List<A_8>) => List<A_8>;
     uncons: <A_9>(_: List<A_9>) => Maybe<Tuple<A_9, List<A_9>>>;
     unsnoc: <A_10>(_: List<A_10>) => Maybe<Tuple<List<A_10>, A_10>>;
-    reverseMap: <A_11, B>(f: (_: A_11) => B) => (_: List<A_11>) => List<B>;
-    map: <A_12, B_1>(f: (_: A_12) => B_1) => (_: List<A_12>) => List<B_1>;
-    reverse: <A_13>(_: List<A_13>) => List<A_13>;
-    show: <A_14>(_: IShow<A_14>) => (_: List<A_14>) => IString;
-    foldMap: <G>(_: Monoid<G>) => <A_15>(_: (_: A_15) => G) => (_: List<A_15>) => G;
-    foldl: <A_16, B_2>(_: (_: B_2) => (_: A_16) => B_2) => (_: B_2) => (_: List<A_16>) => B_2;
-    foldr: <A_17, B_3>(_: (_: A_17) => (_: B_3) => B_3) => (_: B_3) => (_: List<A_17>) => B_3;
-    seed: <A_18>() => List<A_18>;
-    populate: <A_19>(..._s: A_19[]) => (_: List<A_19>) => List<A_19>;
-    Show: <A_20>(_: IShow<A_20>) => IShow<List<A_20>>;
+    shift: <A_11>(_: List<A_11>) => Maybe<List<A_11>>;
+    shiftN: (n: Int) => <A_12>(_: List<A_12>) => Maybe<List<A_12>>;
+    pop: <A_13>(_: List<A_13>) => Maybe<List<A_13>>;
+    index: (i: Int) => <A_14>(_: List<A_14>) => Maybe<A_14>;
+    find_: <A_15>(f: (_: A_15) => Bool) => (_: List<A_15>) => Maybe<Tuple<A_15, Int>>;
+    reverseMap: <A_16, B>(f: (_: A_16) => B) => (_: List<A_16>) => List<B>;
+    map: <A_17, B_1>(f: (_: A_17) => B_1) => (_: List<A_17>) => List<B_1>;
+    reverse: <A_18>(_: List<A_18>) => List<A_18>;
+    show: <A_19>(_: IShow<A_19>) => (_: List<A_19>) => IString;
+    foldMap: <G>(_: Monoid<G>) => <A_20>(_: (_: A_20) => G) => (_: List<A_20>) => G;
+    foldl: <A_21, B_2>(_: (_: B_2) => (_: A_21) => B_2) => (_: B_2) => (_: List<A_21>) => B_2;
+    foldr: <A_22, B_3>(_: (_: A_22) => (_: B_3) => B_3) => (_: B_3) => (_: List<A_22>) => B_3;
+    seed: <A_23>() => List<A_23>;
+    populate: <A_24>(..._s: A_24[]) => (_: List<A_24>) => List<A_24>;
+    merge: <A_25>(f: (_: A_25) => (_: A_25) => Ordering) => (_: List<A_25>) => (_: List<A_25>) => List<A_25>;
+    Show: <A_26>(_: IShow<A_26>) => IShow<List<A_26>>;
     Foldable: Foldable1<"List"> & Foldable1.Ext<"List">;
     Populatable: Populatable1<"List">;
 };

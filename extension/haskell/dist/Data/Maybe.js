@@ -11,7 +11,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 exports.__esModule = true;
-exports.Foldable = exports.Monoid = exports.Semigroup = exports.Monad = exports.Bind = exports.Applicative = exports.Apply = exports.Functor = exports.Show = exports.maybe = exports.infer = exports.Just = exports.Nothing_ = exports.Nothing = exports.URI = exports.Maybe = void 0;
+exports.Foldable = exports.Monoid = exports.Semigroup = exports.Monad = exports.Bind = exports.Applicative = exports.Apply = exports.Functor = exports.Show = exports.show = exports.maybe = exports.infer = exports.Just = exports.Nothing_ = exports.Nothing = exports.URI = exports.Maybe = void 0;
 var Show_1 = require("./Show");
 var Functor_1 = require("./Functor");
 var Apply_1 = require("../Control/Apply");
@@ -45,15 +45,14 @@ var maybe = (function (b) { return function (f) { return function (maybeA) { ret
     Just: function (a) { return f(a); }
 })); }; }; });
 exports.maybe = maybe;
-var Show = function (_) { return ((function (ShowA) {
-    if (ShowA === void 0) { ShowA = _; }
-    return (Show_1.IShow.instantiate({
-        show: function (maybeA) { return (maybeA.cata({
-            Nothing: function () { return String_1.String('Nothing'); },
-            Just: function (value) { return (common_1.apply(String_1.String.Semigroup.append(String_1.String('(Just '))(String_1.String.fromI(ShowA.show(value))))(function (_) { return String_1.String.Semigroup.append(_)(String_1.String(')')); })); }
-        })); }
-    }));
-})()); };
+var show = (function (ShowA) { return function (maybeA) { return (maybeA.cata({
+    Nothing: function () { return String_1.String('Nothing'); },
+    Just: function (value) { return (common_1.apply(String_1.String.Semigroup.append(String_1.String('(Just '))(String_1.String.fromI(ShowA.show(value))))(function (_) { return String_1.String.Semigroup.append(_)(String_1.String(')')); })); }
+})); }; });
+exports.show = show;
+var Show = function (_) { return common_1.apply(_)(function (ShowA) { return (Show_1.IShow.instantiate({
+    show: show(ShowA)
+})); }); };
 exports.Show = Show;
 var Functor = Functor_1.Functor1.instantiate({
     URI: URI,
@@ -104,9 +103,11 @@ exports.Foldable = Foldable;
 var Maybe = {
     URI: URI,
     Nothing: Nothing,
+    Nothing_: Nothing_,
     Just: Just,
     infer: infer,
     maybe: maybe,
+    show: show,
     Show: Show,
     Functor: Functor,
     Apply: Apply,

@@ -11,7 +11,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 exports.__esModule = true;
-exports.Bifunctor = exports.Apply = exports.Functor = exports.Monoid = exports.Semigroup = exports.Show = exports.create = exports.swap = exports.snd = exports.fst = exports.URI = exports.Tuple = void 0;
+exports.Bifunctor = exports.Apply = exports.Functor = exports.Monoid = exports.Semigroup = exports.Show = exports.create = exports.swap = exports.snd = exports.fst = exports.fromI = exports.URI = exports.Tuple = void 0;
 var Show_1 = require("./Show");
 var Semigroup_1 = require("./Semigroup");
 var Monoid_1 = require("./Monoid");
@@ -21,6 +21,11 @@ var Bifunctor_1 = require("./Bifunctor");
 var String_1 = require("./String");
 var common_1 = require("../util/common");
 exports.URI = common_1.S('Tuple');
+var fromI = (function (_a) {
+    var fst = _a.fst, snd = _a.snd;
+    return create(fst, snd);
+});
+exports.fromI = fromI;
 /** fst :: Tuple a b -> a */
 var fst = function (tuple) { return tuple.fst; };
 exports.fst = fst;
@@ -91,6 +96,7 @@ var Bifunctor = Bifunctor_1.Bifunctor2.instantiate({
 });
 exports.Bifunctor = Bifunctor;
 var Tuple = common_1.Json.assign(create, {
+    fromI: fromI,
     fst: fst,
     snd: snd,
     swap: swap,

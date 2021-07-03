@@ -1,7 +1,8 @@
 "use strict";
 exports.__esModule = true;
-exports.Populatable = exports.Foldable = exports.Show = exports.populate = exports.seed = exports.foldr = exports.foldl = exports.foldMap = exports.show = exports.reverse = exports.map = exports.reverseMap = exports.unsnoc = exports.uncons = exports.tail = exports.last = exports.head = exports.singleton = exports.snoc = exports.cons = exports.create = exports.infer = exports.Cons = exports.Nil_ = exports.Nil = exports.URI = exports.List = void 0;
+exports.Populatable = exports.Foldable = exports.Show = exports.merge = exports.populate = exports.seed = exports.foldr = exports.foldl = exports.foldMap = exports.show = exports.reverse = exports.map = exports.reverseMap = exports.find = exports.find_ = exports.index = exports.pop = exports.shiftN = exports.shift = exports.unsnoc = exports.uncons = exports.tail = exports.last = exports.head = exports.singleton = exports.snoc = exports.cons = exports.create = exports.infer = exports.Cons = exports.Nil_ = exports.Nil = exports.URI = exports.List = void 0;
 var util_1 = require("../util");
+var Case_1 = require("../util/Case");
 var Throwable_1 = require("../util/Throwable");
 var String_1 = require("./String");
 var Bool_1 = require("./Bool");
@@ -11,6 +12,8 @@ var Show_1 = require("./Show");
 var Monoid_1 = require("./Monoid");
 var Maybe_1 = require("./Maybe");
 var Tuple_1 = require("./Tuple");
+var Int_1 = require("./Int");
+var Ordering_1 = require("./Ordering");
 var URI = util_1.S('List');
 exports.URI = URI;
 var Nil = util_1.create(util_1.Json.assign({ URI: URI }, util_1.create({ tag: 'Nil' }), util_1.create({
@@ -92,6 +95,42 @@ exports.unsnoc = unsnoc = function (list) { return (util_1.apply(util_1.trampoli
         })); }
     })); }
 })); }; }))(function (_) { return _(list, Bool_1.Bool.False, Maybe_1.Maybe.Just(Tuple_1.Tuple(Nil, util_1.placeholder())), function (_) { return _; }); })); };
+var shift = (function (list) { return (list.cata({
+    Nil: function () { return Maybe_1.Maybe.Nothing_(); },
+    Cons: function (_, tail) { return Maybe_1.Maybe.Just(tail); }
+})); });
+exports.shift = shift;
+var shiftN = (function (n) { return function (listA) { return (util_1.apply(util_1.trampoline()(function (acc, n) { return function (shiftN) { return (Int_1.Int.gt(n)(Int_1.Int(0)).cata({
+    False: function () { return Maybe_1.Maybe.Just(acc); },
+    True: function () { return (shift(acc).cata({
+        Nothing: function () { return Maybe_1.Maybe.Nothing_(); },
+        Just: function (acc) { return shiftN(acc, Int_1.Int.dec(n)); }
+    })); }
+})); }; }))(function (_) { return _(listA, n); })); }; });
+exports.shiftN = shiftN;
+var pop = (function (listA) { return (unsnoc(listA).cata({
+    Nothing: function () { return Maybe_1.Maybe.Nothing_(); },
+    Just: function (_) { return Maybe_1.Maybe.Just(Tuple_1.Tuple.fst(_)); }
+})); });
+exports.pop = pop;
+var index = (function (i) { return function (listA) { return (util_1.apply(util_1.trampoline()(function (listA, i) { return function (index) { return (listA.cata({
+    Nil: function () { return Maybe_1.Maybe.Nothing_(); },
+    Cons: function (head, tail) { return (Int_1.Int.gt(i)(Int_1.Int(0)).cata({
+        False: function () { return Maybe_1.Maybe.Just(head); },
+        True: function () { return index(tail, Int_1.Int.dec(i)); }
+    })); }
+})); }; }))(function (_) { return _(listA, i); })); }; });
+exports.index = index;
+var find_ = (function (f) { return function (listA) { return (util_1.apply(util_1.trampoline()(function (listA, i) { return function (find_) { return (listA.cata({
+    Nil: function () { return Maybe_1.Maybe.Nothing_(); },
+    Cons: function (head, tail) { return (f(head).cata({
+        True: function () { return Maybe_1.Maybe.Just(Tuple_1.Tuple(head, i)); },
+        False: function () { return find_(tail, Int_1.Int.inc(i)); }
+    })); }
+})); }; }))(function (_) { return _(listA, Int_1.Int(0)); })); }; });
+exports.find_ = find_;
+var find = (function (f) { return function (listA) { return (util_1.apply((find_(f)(listA)))(Maybe_1.Maybe.Functor.fmap(Tuple_1.Tuple.fst))); }; });
+exports.find = find;
 var reverseMap = (function (f) { return function (listA) { return (foldl(function (acc) { return function (a) { return cons(f(a))(acc); }; })(Nil)(listA)); }; });
 exports.reverseMap = reverseMap;
 var map = (function (f) { return function (listA) { return (util_1.apply((reverseMap(f)(listA)))(reverse)); }; });
@@ -143,9 +182,40 @@ var populate = (function () {
     for (var _i = 0; _i < arguments.length; _i++) {
         as[_i] = arguments[_i];
     }
-    return function (listA) { return (foldr(cons)(create_(as))(listA)); };
+    return function (listA) { return (foldr(cons)(listA)(create_(as))); };
 });
 exports.populate = populate;
+/** merge :: (a -> a -> Ordering) -> List a -> List a -> List a */
+var merge = (function (f) { return function (list0) { return function (list1) { return (util_1.apply(util_1.recurse()(function (list0, list1) { return function (merge) { return (util_1.apply(list0.cata({
+    Nil: function () { return Case_1.Case(0, list1); },
+    Cons: function (head0, tail0) { return (list1.cata({
+        Nil: function () { return Case_1.Case(0, list0); },
+        Cons: function (head1, tail1) { return Case_1.Case(1, head0, tail0, head1, tail1); }
+    })); }
+}))(Case_1.Case.infer).cata({
+    0: function (list) { return list; },
+    1: function (head0, tail0, head1, tail1) { return (Ordering_1.Ordering.Eq.eq(f(head0)(head1))(Ordering_1.Ordering.LT).cata({
+        True: function () { return cons(head0)(merge(tail0, list1)); },
+        False: function () { return cons(head1)(merge(list0, tail1)); }
+    })); }
+})); }; }))(function (_) { return _(list0, list1); })); }; }; });
+exports.merge = merge;
+exports.merge = merge = function (f) { return function (list0) { return function (list1) { return (util_1.apply(util_1.trampoline()(function (list0, list1, done, acc, cont) { return function (merge) { return (done.cata({
+    True: function () { return cont(acc); },
+    False: function () { return (util_1.apply(list0.cata({
+        Nil: function () { return Case_1.Case(0, list1); },
+        Cons: function (head0, tail0) { return (list1.cata({
+            Nil: function () { return Case_1.Case(0, list0); },
+            Cons: function (head1, tail1) { return Case_1.Case(1, head0, tail0, head1, tail1); }
+        })); }
+    }))(Case_1.Case.infer).cata({
+        0: function (list) { return merge(list0, list1, Bool_1.Bool.True, list, cont); },
+        1: function (head0, tail0, head1, tail1) { return (Ordering_1.Ordering.Eq.eq(f(head0)(head1))(Ordering_1.Ordering.LT).cata({
+            True: function () { return (merge(tail0, list1, done, acc, function (acc) { return (merge(list0, list1, Bool_1.Bool.True, cons(head0)(acc), cont)); })); },
+            False: function () { return (merge(list0, tail1, done, acc, function (acc) { return (merge(list0, list1, Bool_1.Bool.True, cons(head1)(acc), cont)); })); }
+        })); }
+    })); }
+})); }; }))(function (_) { return _(list0, list1, Bool_1.Bool.False, Nil, function (_) { return _; }); })); }; }; };
 /** show :: (Show a) => Show (List a) => List a -> String */
 var Show = function (_) { return util_1.apply(_)(function (ShowA) { return (Show_1.IShow.instantiate({
     show: show(ShowA)
@@ -180,6 +250,11 @@ var List = {
     tail: tail,
     uncons: uncons,
     unsnoc: unsnoc,
+    shift: shift,
+    shiftN: shiftN,
+    pop: pop,
+    index: index,
+    find_: find_,
     reverseMap: reverseMap,
     map: map,
     reverse: reverse,
@@ -189,6 +264,7 @@ var List = {
     foldr: foldr,
     seed: seed,
     populate: populate,
+    merge: merge,
     Show: Show,
     Foldable: Foldable,
     Populatable: Populatable

@@ -96,22 +96,25 @@ let maybe: <B>(_: B) => <A>(_: (_: A) => B) => (_: Maybe<A>) => B = (
 );
 export {maybe}
 
-let Show = <A>(_: IShow<A>) => (
-	((ShowA = _) => (
-		IShow.instantiate<Maybe<A>>({
-			show: maybeA => (
-				maybeA.cata({
-					Nothing: () => String('Nothing'),
-					Just: value => (
-						apply(
-							String.Semigroup.append(String('(Just '))(String.fromI(ShowA.show(value)))
-						)(_ => String.Semigroup.append(_)(String(')')))
-					),
-				})
+let show: <A>(_: IShow<A>) => (_: Maybe<A>) => String = (
+	ShowA => maybeA => (
+		maybeA.cata({
+			Nothing: () => String('Nothing'),
+			Just: value => (
+				apply(
+					String.Semigroup.append(String('(Just '))(String.fromI(ShowA.show(value)))
+				)(_ => String.Semigroup.append(_)(String(')')))
 			),
 		})
-	))()
-)
+	)
+);
+export {show}
+
+let Show = <A>(_: IShow<A>) => apply(_)(ShowA => (
+	IShow.instantiate<Maybe<A>>({
+		show: show(ShowA),
+	})
+))
 export {Show}
 
 let Functor = Functor1.instantiate<URI>({
@@ -205,9 +208,11 @@ export {Foldable}
 let Maybe = {
 	URI,
 	Nothing,
+	Nothing_,
 	Just,
 	infer,
 	maybe,
+	show,
 	Show,
 	Functor,
 	Apply,

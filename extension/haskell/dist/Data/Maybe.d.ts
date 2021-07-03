@@ -7,6 +7,7 @@ import { Monad1 } from '../Control/Monad';
 import { ISemigroup } from './Semigroup';
 import { IMonoid } from './Monoid';
 import { Foldable1 } from './Foldable';
+import { String } from './String';
 /** data Maybe a = Just a | Nothing */
 declare type Maybe<A> = IMaybe<A> & (Nothing | Just<A>) & {
     URI: URI;
@@ -44,6 +45,8 @@ export { infer };
 /** maybe :: b -> (a -> b) -> Maybe a -> b */
 declare let maybe: <B>(_: B) => <A>(_: (_: A) => B) => (_: Maybe<A>) => B;
 export { maybe };
+declare let show: <A>(_: IShow<A>) => (_: Maybe<A>) => String;
+export { show };
 declare let Show: <A>(_: IShow<A>) => IShow<Maybe<A>>;
 export { Show };
 declare let Functor: Functor1<"Maybe"> & Functor1.Ext<"Maybe">;
@@ -65,17 +68,19 @@ export { Foldable };
 declare let Maybe: {
     URI: "Maybe";
     Nothing: Maybe<never>;
-    Just: <A>(_: A) => Maybe<A>;
+    Nothing_: <A>() => Maybe<A>;
+    Just: <A_1>(_: A_1) => Maybe<A_1>;
     infer: <TMaybe>(_: TMaybe) => Maybe<TMaybe extends Maybe<infer T> ? T : never>;
-    maybe: <B>(_: B) => <A_1>(_: (_: A_1) => B) => (_: Maybe<A_1>) => B;
-    Show: <A_2>(_: IShow<A_2>) => IShow<Maybe<A_2>>;
+    maybe: <B>(_: B) => <A_2>(_: (_: A_2) => B) => (_: Maybe<A_2>) => B;
+    show: <A_3>(_: IShow<A_3>) => (_: Maybe<A_3>) => String;
+    Show: <A_4>(_: IShow<A_4>) => IShow<Maybe<A_4>>;
     Functor: Functor1<"Maybe"> & Functor1.Ext<"Maybe">;
     Apply: Apply1<"Maybe"> & Apply1.Ext<"Maybe">;
     Applicative: Applicative1<"Maybe">;
     Bind: Bind1<"Maybe"> & Bind1.Ext<"Maybe">;
     Monad: Monad1<"Maybe"> & Monad1.Ext<"Maybe">;
-    Semigroup: <A_3>(_: ISemigroup<A_3>) => ISemigroup<Maybe<A_3>>;
-    Monoid: <A_4>(_: ISemigroup<A_4>) => IMonoid<Maybe<A_4>> & IMonoid.Ext<Maybe<A_4>>;
+    Semigroup: <A_5>(_: ISemigroup<A_5>) => ISemigroup<Maybe<A_5>>;
+    Monoid: <A_6>(_: ISemigroup<A_6>) => IMonoid<Maybe<A_6>> & IMonoid.Ext<Maybe<A_6>>;
     Foldable: Foldable1<"Maybe"> & Foldable1.Ext<"Maybe">;
 };
 export default Maybe;

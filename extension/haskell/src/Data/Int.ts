@@ -34,6 +34,12 @@ let create: (value: number) => Int = (
 );
 export {create}
 
+let zero: () => Int = () => create(0);
+export {zero}
+
+let one: () => Int = () => create(1);
+export {one}
+
 let add: (_: Int) => (_: Int) => Int = IInt.add;
 export {add}
 
@@ -63,13 +69,54 @@ let odd: (_: Int) => Bool = (
 );
 export {odd}
 
+let abs: (_: Int) => Int = int => create(Math.abs(int.value));
+export {abs}
+
+let negate: (_: Int) => Int = IInt.negate;
+export {negate}
+
+let eq: (_: Int) => (_: Int) => Bool = (
+	int0 => int1 => Bool(int0.value == int1.value)
+);
+export {eq}
+
+let notEq: (_: Int) => (_: Int) => Bool = (
+	_0 => _1 => Bool.fromI(Eq.notEq(_0)(_1))
+);
+export {notEq}
+
+let compare: (_: Int) => (_: Int) => Ordering = (
+	_0 => _1 => Ordering.fromI(Ord.compare(_0)(_1))
+);
+export {compare}
+
+let lt: (_: Int) => (_: Int) => Bool = (
+	_0 => _1 => Bool.fromI(Ord.lt(_0)(_1))
+);
+export {lt}
+
+let notLt: (_: Int) => (_: Int) => Bool = (
+	_0 => _1 => Bool.fromI(Ord.notLt(_0)(_1))
+);
+export {notLt}
+
+let gt: (_: Int) => (_: Int) => Bool = (
+	_0 => _1 => Bool.fromI(Ord.gt(_0)(_1))
+);
+export {gt}
+
+let notGt: (_: Int) => (_: Int) => Bool = (
+	_0 => _1 => Bool.fromI(Ord.notGt(_0)(_1))
+);
+export {notGt}
+
 let Num = INum.instantiate<Int>({
 	add,
 	sub,
 	mul,
-	zero: () => create(0),
-	one: () => create(1),
-	abs: int => create(Math.abs(int.value)),
+	zero,
+	one,
+	abs,
 });
 export {Num}
 
@@ -79,22 +126,22 @@ let Show = IShow.instantiate<Int>({
 export {Show}
 
 let Semiring = ISemiring.instantiate<Int>({
-	add: int0 => int1 => IInt.add(int0)(int1),
-	zero: () => create(0),
-	mul: int0 => int1 => IInt.mul(int0)(int1),
-	one: () => create(1),
+	add,
+	zero,
+	mul,
+	one,
 });
 export {Semiring}
 
 let Ring = IRing.instantiate<Int>({
 	...Semiring,
-	sub: int0 => int1 => IInt.sub(int0)(int1),
-	negate: int => IInt.negate(int),
+	sub,
+	negate,
 });
 export {Ring}
 
 let Eq = IEq.instantiate<Int>({
-	eq: int0 => int1 => Bool(int0.value == int1.value),
+	eq,
 });
 export {Eq}
 
@@ -120,6 +167,8 @@ export {Ord}
 let Int = Json.assign(create, {
 	URI,
 	fromI,
+	zero,
+	one,
 	add,
 	mul,
 	sub,
@@ -127,6 +176,15 @@ let Int = Json.assign(create, {
 	dec,
 	even,
 	odd,
+	abs,
+	negate,
+	eq,
+	notEq,
+	compare,
+	lt,
+	notLt,
+	gt,
+	notGt,
 	Show,
 	Semiring,
 	Ring,

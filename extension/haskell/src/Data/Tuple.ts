@@ -5,7 +5,7 @@ import {Functor2} from './Functor'
 import {Apply2_} from '../Control/Apply'
 import {Bifunctor2} from './Bifunctor'
 import {String} from './String'
-import {Function} from './Function'
+import {ITuple} from './ITuple'
 import {
 	Json,
 	reinterpret,
@@ -13,10 +13,7 @@ import {
 	S,
 } from '../util/common'
 
-interface Tuple<A, B> {
-	fst: A;
-	snd: B;
-}
+interface Tuple<A, B> extends ITuple<A, B> {}
 export {Tuple}
 
 export const URI = S('Tuple');
@@ -28,12 +25,17 @@ declare module '../util/HKT' {
 	}
 }
 
+let fromI: <A, B>(_: ITuple<A, B>) => Tuple<A, B> = (
+	({fst, snd}) => create(fst, snd)
+);
+export {fromI}
+
 /** fst :: Tuple a b -> a */
-let fst: <A>(_: Tuple<A, any>) => A = tuple => tuple.fst;
+let fst: <A, B>(_: Tuple<A, B>) => A = tuple => tuple.fst;
 export {fst}
 
 /** snd :: Tuple a b -> b */
-let snd: <B>(_: Tuple<any, B>) => B = tuple => tuple.snd;
+let snd: <A, B>(_: Tuple<A, B>) => B = tuple => tuple.snd;
 export {snd}
 
 /** swap :: Tuple a b -> Tuple b a */
@@ -119,6 +121,7 @@ let Bifunctor = Bifunctor2.instantiate<URI>({
 export {Bifunctor}
 
 let Tuple = Json.assign(create, {
+	fromI,
 	fst,
 	snd,
 	swap,
