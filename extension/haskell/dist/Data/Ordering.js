@@ -11,7 +11,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 exports.__esModule = true;
-exports.Ord = exports.Eq = exports.Show = exports.invert = exports.fromI = exports.GT = exports.EQ = exports.LT = exports.Ordering = void 0;
+exports.Ord = exports.Eq = exports.Show = exports.notEq = exports.eq = exports.invert = exports.fromI = exports.GT = exports.EQ = exports.LT = exports.Ordering = void 0;
 var Eq_1 = require("./Eq");
 var Ord_1 = require("./Ord");
 var Show_1 = require("./Show");
@@ -42,12 +42,16 @@ var invert = (function (ordering) { return (ordering.cata({
     GT: function () { return LT; }
 })); });
 exports.invert = invert;
+var eq = (function (ordering0) { return function (ordering1) { return Bool_1.Bool(ordering0.tag === ordering1.tag); }; });
+exports.eq = eq;
+var notEq = (function (_0) { return function (_1) { return Bool_1.Bool.fromI(Eq.notEq(_0)(_1)); }; });
+exports.notEq = notEq;
 var Show = Show_1.IShow.instantiate({
     show: function (ordering) { return String_1.String(ordering.tag); }
 });
 exports.Show = Show;
 var Eq = Eq_1.Eq.instantiate({
-    eq: function (ordering0) { return function (ordering1) { return Bool_1.Bool(ordering0.tag === ordering1.tag); }; }
+    eq: eq
 });
 exports.Eq = Eq;
 var Ord = Ord_1.Ord.instantiate(common_1.define(function (Ord) { return (__assign(__assign({}, Eq), { compare: function (ordering0) { return function (ordering1) { return (ordering0.cata({
@@ -78,6 +82,8 @@ var Ordering = {
     GT: GT,
     fromI: fromI,
     invert: invert,
+    eq: eq,
+    notEq: notEq,
     Show: Show,
     Eq: Eq,
     Ord: Ord

@@ -82,5 +82,14 @@ import {
 		})(({list0, list1}) => apply(List.merge(flip(Int.compare))(list0)(list1)
 		))(_ => apply(List.show(Int.Show)(_).toString()
 		))(console.log)
+	),
+	'sortBy': () => (
+		apply({
+			list0: List.create(
+				[3, 6, 1, -1, 11, 9].map(Int)
+			), 
+		})(({list0}) => apply(List.sortBy(flip(Int.compare))(list0)
+		))(_ => apply(List.show(Int.Show)(_).toString()
+		))(console.log)
 	)
-})['merge']();
+})['sortBy']();

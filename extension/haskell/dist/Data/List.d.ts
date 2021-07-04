@@ -100,6 +100,12 @@ export { populate };
 /** merge :: (a -> a -> Ordering) -> List a -> List a -> List a */
 declare let merge: <A>(f: (_: A) => (_: A) => Ordering) => (_: List<A>) => (_: List<A>) => List<A>;
 export { merge };
+/** mergeAll :: (a -> a -> Ordering) -> List (List a) -> List a */
+declare let mergeAll: <A>(f: (_: A) => (_: A) => Ordering) => (_: List<List<A>>) => List<A>;
+export { mergeAll };
+/** sortBy :: (a -> a -> Ordering) -> List a -> List a */
+declare let sortBy: <A>(f: (_: A) => (_: A) => Ordering) => (_: List<A>) => List<A>;
+export { sortBy };
 /** show :: (Show a) => Show (List a) => List a -> String */
 declare let Show: <A>(_: IShow<A>) => IShow<List<A>>;
 export { Show };
@@ -137,7 +143,9 @@ declare let List: {
     seed: <A_23>() => List<A_23>;
     populate: <A_24>(..._s: A_24[]) => (_: List<A_24>) => List<A_24>;
     merge: <A_25>(f: (_: A_25) => (_: A_25) => Ordering) => (_: List<A_25>) => (_: List<A_25>) => List<A_25>;
-    Show: <A_26>(_: IShow<A_26>) => IShow<List<A_26>>;
+    mergeAll: <A_26>(f: (_: A_26) => (_: A_26) => Ordering) => (_: List<List<A_26>>) => List<A_26>;
+    sortBy: <A_27>(f: (_: A_27) => (_: A_27) => Ordering) => (_: List<A_27>) => List<A_27>;
+    Show: <A_28>(_: IShow<A_28>) => IShow<List<A_28>>;
     Foldable: Foldable1<"List"> & Foldable1.Ext<"List">;
     Populatable: Populatable1<"List">;
 };

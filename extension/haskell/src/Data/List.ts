@@ -482,7 +482,7 @@ let merge: <A>(f: (_: A) => (_: A) => Ordering) => (_: List<A>) => (_: List<A>) 
 				)(Case.infer).cata({
 					0: list => list,
 					1: (head0, tail0, head1, tail1) => (
-						Ordering.Eq.eq(f(head0)(head1))(Ordering.LT).cata({
+						Ordering.eq(f(head0)(head1))(Ordering.LT).cata({
 							True: () => cons(head0)(merge(tail0, list1)),
 							False: () => cons(head1)(merge(list0, tail1))
 						})
@@ -511,7 +511,7 @@ merge = <A>(f: (_: A) => (_: A) => Ordering) => (list0: List<A>) => (list1: List
 					)(Case.infer).cata({
 						0: list => merge(list0, list1, Bool.True, list, cont),
 						1: (head0, tail0, head1, tail1) => (
-							Ordering.Eq.eq(f(head0)(head1))(Ordering.LT).cata({
+							Ordering.eq(f(head0)(head1))(Ordering.LT).cata({
 								True: () => (
 									merge(tail0, list1, done, acc, acc => (
 										merge(list0, list1, Bool.True, cons(head0)(acc), cont)
@@ -531,6 +531,103 @@ merge = <A>(f: (_: A) => (_: A) => Ordering) => (list0: List<A>) => (list1: List
 	)(_ => _(list0, list1, Bool.False, Nil, _ => _))
 );
 export {merge}
+
+/** mergeAll :: (a -> a -> Ordering) -> List (List a) -> List a */
+let mergeAll: <A>(f: (_: A) => (_: A) => Ordering) => (_: List<List<A>>) => List<A> = (
+	<A>(f: (_: A) => (_: A) => Ordering) => (lists: List<List<A>>) => (
+		apply({
+			/** mergePairs :: List (List a) -> List (List a) */
+			mergePairs: create<(_: List<List<A>>) => List<List<A>>>(
+				lists => (
+					apply(
+						recurse<List<List<A>>>()((lists: List<List<A>>) => mergePairs => (
+							apply(
+								lists.cata({
+									Nil: () => Case(0, Nil_<List<A>>()),
+									Cons: (head0, tail0) => (
+										tail0.cata({
+											Nil: () => Case(0, lists),
+											Cons: (head1, tail1) => Case(1, head0, head1, tail1),
+										})
+									)
+								})
+							)(Case.infer).cata({
+								0: lists => lists,
+								1: (head0, head1, tail) => cons(merge(f)(head0)(head1))(mergePairs(tail)),
+							})
+						))
+					)(_ => _(lists))
+				)
+			),
+		})(({mergePairs}) => apply(
+			recurse<List<A>>()((lists: List<List<A>>) => mergeAll => (
+				lists.cata({
+					Nil: () => Nil_<A>(),
+					Cons: (head, tail) => (
+						tail.cata({
+							Nil: () => head,
+							Cons: () => compose(mergeAll, mergePairs)(lists),
+						})
+					),
+				})
+			))
+		))(_ => _(lists))
+	)
+);
+export {mergeAll}
+
+/** sortBy :: (a -> a -> Ordering) -> List a -> List a */
+let sortBy: <A>(f: (_: A) => (_: A) => Ordering) => (_: List<A>) => List<A> = (
+	<A>(f: (_: A) => (_: A) => Ordering) => (list: List<A>) => (
+		apply({
+			/** sequences :: List a -> List (List a) */
+			sequences: recurse<List<List<A>>>()((list: List<A>) => sequences => (
+				apply({
+					/** descending :: a -> List a -> List a -> List (List a) */
+					descending: recurse<List<List<A>>>()((head: A, acc: List<A>, list: List<A>) => descending => (
+						list.cata({
+							Nil: () => singleton(cons(head)(acc)),
+							Cons: (head0, tail0) => (
+								Ordering.eq(f(head)(head0))(Ordering.GT).cata({
+									True: () => descending(head0, cons(head)(acc), tail0),
+									False: () => cons(cons(head)(acc))(sequences(list)),
+								})
+							)
+						})
+					)),
+					/** ascending :: a -> (List a -> List a) -> List a -> List (List a) */
+					ascending: recurse<List<List<A>>>()((head: A, acc: (_: List<A>) => List<A>, list: List<A>) => ascending => (
+						list.cata({
+							Nil: () => singleton(acc(singleton(head))),
+							Cons: (head0, tail0) => (
+								Ordering.eq(f(head)(head0))(Ordering.GT).cata({
+									False: () => ascending(head0, tail1 => acc(cons(head)(tail1)), tail0),
+									True: () => cons(acc(singleton(head)))(sequences(list)),
+								})
+							),
+						})
+					)),
+				})(({descending, ascending}) => (
+					list.cata({
+						Nil: () => Nil_<List<A>>(),
+						Cons: (head0, tail0) => (
+							tail0.cata({
+								Nil: () => singleton(list),
+								Cons: (head1, tail1) => (
+									Ordering.eq(f(head0)(head1))(Ordering.GT).cata({
+										True: () => descending(head1, singleton(head0), tail1),
+										False: () => ascending(head1, cons(head0), tail1),
+									})
+								)
+							})
+						),
+					})
+				))
+			)),
+		})(({sequences}) => compose(mergeAll(f), sequences)(list))
+	)
+);
+export {sortBy}
 
 /** show :: (Show a) => Show (List a) => List a -> String */
 let Show = <A>(_: IShow<A>) => apply(_)(ShowA => (
@@ -586,6 +683,8 @@ let List = {
 	seed,
 	populate,
 	merge,
+	mergeAll,
+	sortBy,
 	Show,
 	Foldable,
 	Populatable,

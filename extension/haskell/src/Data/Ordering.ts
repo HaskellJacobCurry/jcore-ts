@@ -64,13 +64,23 @@ let invert: (_: Ordering) => Ordering = (
 );
 export {invert}
 
+let eq: (_: Ordering) => (_: Ordering) => Bool = (
+	ordering0 => ordering1 => Bool(ordering0.tag === ordering1.tag)
+);
+export {eq}
+
+let notEq: (_: Ordering) => (_: Ordering) => Bool = (
+	_0 => _1 => Bool.fromI(Eq.notEq(_0)(_1))
+);
+export {notEq}
+
 let Show = IShow.instantiate<Ordering>({
 	show: ordering => String(ordering.tag),
 });
 export {Show}
 
 let Eq = IEq.instantiate<Ordering>({
-	eq: ordering0 => ordering1 => Bool(ordering0.tag === ordering1.tag),
+	eq,
 });
 export {Eq}
 
@@ -119,6 +129,8 @@ let Ordering = {
 	GT,
 	fromI,
 	invert,
+	eq,
+	notEq,
 	Show,
 	Eq,
 	Ord,

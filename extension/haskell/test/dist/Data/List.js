@@ -23,5 +23,11 @@ var common_1 = require("../../../dist/util/common");
     })(function (_a) {
         var list0 = _a.list0, list1 = _a.list1;
         return common_1.apply(List_1.List.merge(common_1.flip(Int_1.Int.compare))(list0)(list1));
+    })(function (_) { return common_1.apply(List_1.List.show(Int_1.Int.Show)(_).toString()); })(console.log)); },
+    'sortBy': function () { return (common_1.apply({
+        list0: List_1.List.create([3, 6, 1, -1, 11, 9].map(Int_1.Int))
+    })(function (_a) {
+        var list0 = _a.list0;
+        return common_1.apply(List_1.List.sortBy(common_1.flip(Int_1.Int.compare))(list0));
     })(function (_) { return common_1.apply(List_1.List.show(Int_1.Int.Show)(_).toString()); })(console.log)); }
-})['merge']();
+})['sortBy']();

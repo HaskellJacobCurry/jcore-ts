@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.Populatable = exports.Foldable = exports.Show = exports.merge = exports.populate = exports.seed = exports.foldr = exports.foldl = exports.foldMap = exports.show = exports.reverse = exports.map = exports.reverseMap = exports.find = exports.find_ = exports.index = exports.pop = exports.shiftN = exports.shift = exports.unsnoc = exports.uncons = exports.tail = exports.last = exports.head = exports.singleton = exports.snoc = exports.cons = exports.create = exports.infer = exports.Cons = exports.Nil_ = exports.Nil = exports.URI = exports.List = void 0;
+exports.Populatable = exports.Foldable = exports.Show = exports.sortBy = exports.mergeAll = exports.merge = exports.populate = exports.seed = exports.foldr = exports.foldl = exports.foldMap = exports.show = exports.reverse = exports.map = exports.reverseMap = exports.find = exports.find_ = exports.index = exports.pop = exports.shiftN = exports.shift = exports.unsnoc = exports.uncons = exports.tail = exports.last = exports.head = exports.singleton = exports.snoc = exports.cons = exports.create = exports.infer = exports.Cons = exports.Nil_ = exports.Nil = exports.URI = exports.List = void 0;
 var util_1 = require("../util");
 var Case_1 = require("../util/Case");
 var Throwable_1 = require("../util/Throwable");
@@ -216,6 +216,68 @@ exports.merge = merge = function (f) { return function (list0) { return function
         })); }
     })); }
 })); }; }))(function (_) { return _(list0, list1, Bool_1.Bool.False, Nil, function (_) { return _; }); })); }; }; };
+/** mergeAll :: (a -> a -> Ordering) -> List (List a) -> List a */
+var mergeAll = (function (f) { return function (lists) { return (util_1.apply({
+    /** mergePairs :: List (List a) -> List (List a) */
+    mergePairs: util_1.create(function (lists) { return (util_1.apply(util_1.recurse()(function (lists) { return function (mergePairs) { return (util_1.apply(lists.cata({
+        Nil: function () { return Case_1.Case(0, Nil_()); },
+        Cons: function (head0, tail0) { return (tail0.cata({
+            Nil: function () { return Case_1.Case(0, lists); },
+            Cons: function (head1, tail1) { return Case_1.Case(1, head0, head1, tail1); }
+        })); }
+    }))(Case_1.Case.infer).cata({
+        0: function (lists) { return lists; },
+        1: function (head0, head1, tail) { return cons(merge(f)(head0)(head1))(mergePairs(tail)); }
+    })); }; }))(function (_) { return _(lists); })); })
+})(function (_a) {
+    var mergePairs = _a.mergePairs;
+    return util_1.apply(util_1.recurse()(function (lists) { return function (mergeAll) { return (lists.cata({
+        Nil: function () { return Nil_(); },
+        Cons: function (head, tail) { return (tail.cata({
+            Nil: function () { return head; },
+            Cons: function () { return util_1.compose(mergeAll, mergePairs)(lists); }
+        })); }
+    })); }; }));
+})(function (_) { return _(lists); })); }; });
+exports.mergeAll = mergeAll;
+/** sortBy :: (a -> a -> Ordering) -> List a -> List a */
+var sortBy = (function (f) { return function (list) { return (util_1.apply({
+    /** sequences :: List a -> List (List a) */
+    sequences: util_1.recurse()(function (list) { return function (sequences) { return (util_1.apply({
+        /** descending :: a -> List a -> List a -> List (List a) */
+        descending: util_1.recurse()(function (head, acc, list) { return function (descending) { return (list.cata({
+            Nil: function () { return singleton(cons(head)(acc)); },
+            Cons: function (head0, tail0) { return (Ordering_1.Ordering.eq(f(head)(head0))(Ordering_1.Ordering.GT).cata({
+                True: function () { return descending(head0, cons(head)(acc), tail0); },
+                False: function () { return cons(cons(head)(acc))(sequences(list)); }
+            })); }
+        })); }; }),
+        /** ascending :: a -> (List a -> List a) -> List a -> List (List a) */
+        ascending: util_1.recurse()(function (head, acc, list) { return function (ascending) { return (list.cata({
+            Nil: function () { return singleton(acc(singleton(head))); },
+            Cons: function (head0, tail0) { return (Ordering_1.Ordering.eq(f(head)(head0))(Ordering_1.Ordering.GT).cata({
+                False: function () { return ascending(head0, function (tail1) { return acc(cons(head)(tail1)); }, tail0); },
+                True: function () { return cons(acc(singleton(head)))(sequences(list)); }
+            })); }
+        })); }; })
+    })(function (_a) {
+        var descending = _a.descending, ascending = _a.ascending;
+        return (list.cata({
+            Nil: function () { return Nil_(); },
+            Cons: function (head0, tail0) { return (tail0.cata({
+                Nil: function () { return singleton(list); },
+                Cons: function (head1, tail1) { return (Ordering_1.Ordering.eq(f(head0)(head1))(Ordering_1.Ordering.GT).cata({
+                    True: function () { return descending(head1, singleton(head0), tail1); },
+                    False: function () { return ascending(head1, cons(head0), tail1); }
+                })); }
+            })); }
+        }));
+    })); }; })
+})(function (_a) {
+    var sequences = _a.sequences;
+    return util_1.compose(mergeAll(f), sequences)(list);
+})); }; });
+exports.sortBy = sortBy;
 /** show :: (Show a) => Show (List a) => List a -> String */
 var Show = function (_) { return util_1.apply(_)(function (ShowA) { return (Show_1.IShow.instantiate({
     show: show(ShowA)
@@ -265,6 +327,8 @@ var List = {
     seed: seed,
     populate: populate,
     merge: merge,
+    mergeAll: mergeAll,
+    sortBy: sortBy,
     Show: Show,
     Foldable: Foldable,
     Populatable: Populatable
