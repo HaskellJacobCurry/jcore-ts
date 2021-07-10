@@ -1,11 +1,11 @@
 "use strict";
 exports.__esModule = true;
-var List_1 = require("../../../dist/Data/List");
-var Int_1 = require("../../../dist/Data/Int");
-var Maybe_1 = require("../../../dist/Data/Maybe");
-var Tuple_1 = require("../../../dist/Data/Tuple");
-var LazySequence_1 = require("../../../dist/Clojure/LazySequence");
-var common_1 = require("../../../dist/util/common");
+var List_1 = require("../../../dist/DataStructure/Data/List");
+var Int_1 = require("../../../dist/DataStructure/Data/Int");
+var Maybe_1 = require("../../../dist/DataStructure/Data/Maybe");
+var Tuple_1 = require("../../../dist/DataStructure/Data/Tuple");
+var LazySequence_1 = require("../../../dist/DataStructure/Clojure/LazySequence");
+var common_1 = require("../../../dist/Common/common");
 ({
     0: function () { return (common_1.apply(List_1.List.create(common_1.apply(common_1.create([]))(function (acc) {
         for (var i = 0; i < 1e1; i++) {

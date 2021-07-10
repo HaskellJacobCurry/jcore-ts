@@ -1,0 +1,43 @@
+import { IString } from '../../Typeclass/Data/IString';
+import { IShow } from '../../Typeclass/Data/Show';
+import { ISemigroup } from '../../Typeclass/Data/Semigroup';
+import { IMonoid } from '../../Typeclass/Data/Monoid';
+declare const URI: "String";
+declare type URI = typeof URI;
+export { URI };
+interface String extends IString {
+    URI: URI;
+    value: string;
+}
+export { String };
+declare let fromI: (_: IString) => String;
+export { fromI };
+declare let create_: (value: string) => String;
+export { create_ as create };
+declare let Show: IShow<String>;
+export { Show };
+declare let show: (a: String) => IString;
+export { show };
+declare let Semigroup: ISemigroup<String>;
+export { Semigroup };
+declare let append: (_: String) => (_: String) => String;
+export { append };
+declare let Monoid: IMonoid<String> & IMonoid.Ext<String>;
+export { Monoid };
+declare let mempty: () => String;
+export { mempty };
+declare let mappend: (_: String) => (_: String) => String;
+export { mappend };
+declare let String: ((value: string) => String) & {
+    URI: "String";
+    fromI: (_: IString) => String;
+    create: (value: string) => String;
+    show: (a: String) => IString;
+    append: (_: String) => (_: String) => String;
+    mempty: () => String;
+    mappend: (_: String) => (_: String) => String;
+    Show: IShow<String>;
+    Semigroup: ISemigroup<String>;
+    Monoid: IMonoid<String> & IMonoid.Ext<String>;
+};
+export default String;

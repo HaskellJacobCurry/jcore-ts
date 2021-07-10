@@ -1,6 +1,6 @@
 import { S } from '../../../dependency/jcore/dist/ts-toolbelt/common'
-import {Int} from '../../../dist/Data/Int'
-import {String} from '../../../dist/Data/String'
+import {Int} from '../../../dist/DataStructure/Data/Int'
+import {String} from '../../../dist/DataStructure/Data/String'
 
 console.log(
 	String.Show.show(

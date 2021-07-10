@@ -1,5 +1,5 @@
-import {Ordering} from '../../../dist/Data/Ordering'
-import {Bool} from '../../../dist/Data/Bool'
+import {Ordering} from '../../../dist/DataStructure/Data/Ordering'
+import {Bool} from '../../../dist/DataStructure/Data/Bool'
 import {
 	reinterpret,
 	cast

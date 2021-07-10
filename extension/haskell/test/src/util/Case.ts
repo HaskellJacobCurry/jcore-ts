@@ -1,7 +1,7 @@
-import {Case} from '../../../dist/util/Case'
+import {Case} from '../../../dist/Common/Case'
 import {
 	create
-} from '../../../dist/util'
+} from '../../../dist/Common'
 
 let merge: <T,U>(a: T, b:U) => T|U = <any>1;
 let s = Case(44, ...create<[a: '', b: [123]]>(['', [123]]));

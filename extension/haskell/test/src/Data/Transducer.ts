@@ -1,11 +1,11 @@
-import {Transducer} from '../../../dist/Data/Transducer'
-import {Reducer} from '../../../dist/Data/Reducible'
-import {Bool} from '../../../dist/Data/Bool'
-import {Int} from '../../../dist/Data/Int'
+import {Transducer} from '../../../dist/Typeclass/Data/Transducer'
+import {Reducer} from '../../../dist/Typeclass/Data/Reducible'
+import {Bool} from '../../../dist/DataStructure/Data/Bool'
+import {Int} from '../../../dist/DataStructure/Data/Int'
 import {
 	apply,
 	compose,
-} from '../../../dist/util'
+} from '../../../dist/Common'
 
 let f = <A, B>(reducer: Reducer<A, B>) => (b: B, a: A) => reducer(b)(a);
 

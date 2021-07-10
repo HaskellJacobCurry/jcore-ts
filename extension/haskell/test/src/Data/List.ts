@@ -1,13 +1,13 @@
-import {List} from '../../../dist/Data/List'
-import {Int} from '../../../dist/Data/Int'
-import {Maybe} from '../../../dist/Data/Maybe'
-import {Tuple} from '../../../dist/Data/Tuple'
-import {LazySequence} from '../../../dist/Clojure/LazySequence'
+import {List} from '../../../dist/DataStructure/Data/List'
+import {Int} from '../../../dist/DataStructure/Data/Int'
+import {Maybe} from '../../../dist/DataStructure/Data/Maybe'
+import {Tuple} from '../../../dist/DataStructure/Data/Tuple'
+import {LazySequence} from '../../../dist/DataStructure/Clojure/LazySequence'
 import {
 	apply,
 	create,
 	flip,
-} from '../../../dist/util/common'
+} from '../../../dist/Common/common'
 
 ({
 	0: () => (

@@ -1,4 +1,4 @@
-import {Bool} from '../../../dist/Data/Bool'
+import {Bool} from '../../../dist/DataStructure/Data/Bool'
 
 console.log(
 	Bool.and(Bool.True)(Bool.not(Bool.True)).cata({

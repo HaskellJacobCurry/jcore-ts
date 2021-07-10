@@ -1,10 +1,10 @@
-import {Maybe} from '../../../dist/Data/Maybe'
-import {String} from '../../../dist/Data/String'
-import {Int} from '../../../dist/Data/Int'
+import {Maybe} from '../../../dist/DataStructure/Data/Maybe'
+import {String} from '../../../dist/DataStructure/Data/String'
+import {Int} from '../../../dist/DataStructure/Data/Int'
 import {
 	assign
-} from '../../../dist/util/common'
-import {Bool} from '../../../dist/Data/Bool';
+} from '../../../dist/Common'
+import {Bool} from '../../../dist/DataStructure/Data/Bool';
 
 let maybeStr = (
 	Maybe.Apply.liftA2((a: Int) => (b: Int) => (

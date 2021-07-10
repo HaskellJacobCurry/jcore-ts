@@ -1,11 +1,11 @@
-import {LazySequence} from '../../../dist/Clojure/LazySequence'
-import {Int} from '../../../dist/Data/Int'
-import {Unit} from '../../../dist/Data/Unit'
-import {Bool} from '../../../dist/Data/Bool'
+import {LazySequence} from '../../../dist/DataStructure/Clojure/LazySequence'
+import {Int} from '../../../dist/DataStructure/Data/Int'
+import {Unit} from '../../../dist/DataStructure/Data/Unit'
+import {Bool} from '../../../dist/DataStructure/Data/Bool'
 import {
     trampoline,
     apply,
-} from '../../../dist/util'
+} from '../../../dist/Common'
 
 ({
     0: () => (

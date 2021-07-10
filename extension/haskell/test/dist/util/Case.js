@@ -7,10 +7,10 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return r;
 };
 exports.__esModule = true;
-var Case_1 = require("../../../dist/util/Case");
-var util_1 = require("../../../dist/util");
+var Case_1 = require("../../../dist/Common/Case");
+var Common_1 = require("../../../dist/Common");
 var merge = 1;
-var s = Case_1.Case.apply(void 0, __spreadArrays([44], util_1.create(['', [123]])));
+var s = Case_1.Case.apply(void 0, __spreadArrays([44], Common_1.create(['', [123]])));
 var t = merge(s, Case_1.Case('yo', 3, []));
 Case_1.Case.infer(t).cata({
     '44': function (a, b) { return 1; },

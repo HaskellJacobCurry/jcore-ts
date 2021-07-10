@@ -1,8 +1,8 @@
-import {trampoline__} from '../../../dist/util/trampoline_'
-import {Promise} from '../../../dist/util/Promise'
+import {trampoline__} from '../../../dist/Common/trampoline_'
+import {Promise} from '../../../dist/Common/Promise'
 import {
 	apply
-} from '../../../dist/util'
+} from '../../../dist/Common'
 
 apply(
 	trampoline__<[number, number?], number>((s, n: number, acc = 0) => (
