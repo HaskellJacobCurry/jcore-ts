@@ -14,9 +14,9 @@ interface Semigroupoid2<F extends URI2> {
     compose: <B, C>(_: Kind2<F, B, C>) => <A>(_: Kind2<F, A, B>) => Kind2<F, A, C>;
 }
 export { Semigroupoid2 };
-interface Semigroupoid2_<F extends URI2, T0> {
+interface Semigroupoid2C<F extends URI2, T0> {
     URI: F;
     compose: <C>(_: Kind2<F, T0, C>) => <A>(_: Kind2<F, A, T0>) => Kind2<F, A, C>;
 }
-export { Semigroupoid2_ };
+export { Semigroupoid2C };
 export default Semigroupoid;

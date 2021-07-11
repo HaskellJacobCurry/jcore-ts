@@ -1,5 +1,5 @@
 import { HKT, URI1, URI2, Kind1, Kind2 } from '../../Common/HKT';
-import { Functor, Functor1, Functor2, Functor2_ } from '../Data/Functor';
+import { Functor, Functor1, Functor2, Functor2C } from '../Data/Functor';
 /**
  * class (Functor f) <= Apply f where
  *  ap :: f (a -> b) -> f a -> f b
@@ -60,36 +60,36 @@ interface IExtApply2<F extends URI2> {
 interface Apply2<F extends URI2> extends Functor2<F>, IApply2<F> {
 }
 export { Apply2 };
-interface IApply2_<F extends URI2, T0> {
+interface IApply2C<F extends URI2, T0> {
     ap: <A, B>(_: Kind2<F, T0, (_: A) => B>) => (_: Kind2<F, T0, A>) => Kind2<F, T0, B>;
     liftA2: <A, B, C>(_: (_: A) => (_: B) => C) => (_: Kind2<F, T0, A>) => (_: Kind2<F, T0, B>) => Kind2<F, T0, C>;
 }
-interface IExtApply2_<F extends URI2, T0> {
+interface IExtApply2C<F extends URI2, T0> {
     fstAp: <A>(_: Kind2<F, T0, A>) => <B>(_: Kind2<F, T0, B>) => Kind2<F, T0, A>;
     sndAp: <A>(_: Kind2<F, T0, A>) => <B>(_: Kind2<F, T0, B>) => Kind2<F, T0, B>;
 }
-interface Apply2_<F extends URI2, T0> extends Functor2_<F, T0>, IApply2_<F, T0> {
+interface Apply2C<F extends URI2, T0> extends Functor2C<F, T0>, IApply2C<F, T0> {
 }
-export { Apply2_ };
+export { Apply2C };
 declare namespace Apply1 {
     let Def: <F extends URI1>(_: Apply1<F>) => IApply1<F>;
     interface Ext<F extends URI1> extends IExtApply1<F> {
     }
     let Ext: <F extends URI1>(_: Apply1<F>) => Ext<F>;
-    let instantiate: <F extends "Endo" | "Maybe" | "List">(_: Apply1<F>) => Apply1<F> & Ext<F>;
+    let instantiate: <F extends URI1>(_: Apply1<F>) => Apply1<F> & Ext<F>;
 }
 declare namespace Apply2 {
     let Def: <F extends URI2>(_: Apply2<F>) => IApply2<F>;
     interface Ext<F extends URI2> extends IExtApply2<F> {
     }
     let Ext: <F extends URI2>(_: Apply2<F>) => Ext<F>;
-    let instantiate: <F extends "Function" | "Tuple">(_: Apply2<F>) => Apply2<F> & Ext<F>;
+    let instantiate: <F extends URI2>(_: Apply2<F>) => Apply2<F> & Ext<F>;
 }
-declare namespace Apply2_ {
-    let Def: <F extends URI2, T0>(_: Apply2_<F, T0>) => IApply2_<F, T0>;
-    interface Ext<F extends URI2, T0> extends IExtApply2_<F, T0> {
+declare namespace Apply2C {
+    let Def: <F extends URI2, T0>(_: Apply2C<F, T0>) => IApply2C<F, T0>;
+    interface Ext<F extends URI2, T0> extends IExtApply2C<F, T0> {
     }
-    let Ext: <F extends URI2, T0>(_: Apply2_<F, T0>) => Ext<F, T0>;
-    let instantiate: <F extends "Function" | "Tuple", T0>(_: Apply2_<F, T0>) => Apply2_<F, T0> & Ext<F, T0>;
+    let Ext: <F extends URI2, T0>(_: Apply2C<F, T0>) => Ext<F, T0>;
+    let instantiate: <F extends URI2, T0>(_: Apply2C<F, T0>) => Apply2C<F, T0> & Ext<F, T0>;
 }
 export default Apply;

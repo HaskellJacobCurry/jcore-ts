@@ -14,13 +14,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Monoid = exports.Semigroup = exports.create = exports.get = exports.Sum = exports.URI = void 0;
 var Semigroup_1 = require("../Semigroup");
 var Monoid_1 = require("../Monoid");
-var common_1 = require("../../../Common/common");
-var URI = common_1.S('Sum');
+var Common_1 = require("../../../Common");
+var URI = Common_1.S('Sum');
 exports.URI = URI;
 var get = function (_) { return _.value; };
 exports.get = get;
-var create_ = (function (value) { return ({ URI: URI, value: value }); });
-exports.create = create_;
+var createSum = (function (value) { return ({ URI: URI, value: value }); });
+exports.create = createSum;
 /** Num a => Semigroup (Sum a) */
 var Semigroup = function (_) { return ((function (NumA) {
     if (NumA === void 0) { NumA = _; }
@@ -35,12 +35,12 @@ var Monoid = function (_) { return ((function (NumA) {
     return (Monoid_1.IMonoid.instantiate(__assign(__assign({}, Semigroup(NumA)), { mempty: function () { return Sum(NumA.zero()); } })));
 })()); };
 exports.Monoid = Monoid;
-var Sum = common_1.Json.assign(function (value) { return ({ URI: URI, value: value }); }, {
+var Sum = (Common_1.Json.assign(createSum, {
     URI: URI,
     get: get,
-    create: create_,
+    create: createSum,
     Semigroup: Semigroup,
     Monoid: Monoid,
-});
+}));
 exports.Sum = Sum;
 exports.default = Sum;

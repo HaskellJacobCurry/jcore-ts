@@ -13,7 +13,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Dual = exports.Show = void 0;
 var Dual_1 = require("./Dual_");
 var Show_1 = require("../Show");
-var String_1 = require("../../../DataStructure/Data/String");
+var String_1 = require("../../../Instance/Data/String");
 var common_1 = require("../../../Common/common");
 /** Show a => Show (Dual a) */
 var Show = function (_) { return ((function (ShowA) {
@@ -23,9 +23,9 @@ var Show = function (_) { return ((function (ShowA) {
     }));
 })()); };
 exports.Show = Show;
-var _Dual = common_1.Json.assign(Dual_1.Dual, {
+var _Dual = (common_1.Json.assign(Dual_1.Dual, {
     Show: Show,
-});
+}));
 exports.Dual = _Dual;
 __exportStar(require("./Dual_"), exports);
 exports.default = _Dual;

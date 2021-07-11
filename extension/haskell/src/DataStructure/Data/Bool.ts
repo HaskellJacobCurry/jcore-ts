@@ -73,23 +73,27 @@ let not: (_: Bool) => Bool = (
 );
 export {not}
 
-let Show = IShow.instantiate<Bool>({
-	show: bool => (
-		bool.cata({
-			True: () => String('True'),
-			False: () => String('False'),
-		})
-	)
-});
-export {Show}
+type Constructor = typeof createBool;
+export {Constructor}
 
-let Bool = Json.assign(createBool, {
-	fromI,
-	and,
-	or,
-	not,
-	False,
-	True,
-	Show,
-});
+interface HBool {
+	fromI: (_: IBool) => Bool;
+	False: Bool;
+	True: Bool;
+	and: (_: Bool) => (_: Bool) => Bool;
+	or: (_: Bool) => (_: Bool) => Bool;
+	not: (_: Bool) => Bool;
+}
+export {HBool}
+
+let Bool: Constructor & HBool = (
+	Json.assign(createBool, {
+		fromI,
+		False,
+		True,
+		and,
+		or,
+		not,
+	})
+);
 export default Bool

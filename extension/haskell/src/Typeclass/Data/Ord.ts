@@ -70,8 +70,10 @@ namespace Ord {
 		)
 	);
 
-	export let instantiate = <A>(_: Ord<A>) => (
-		assign(_)((_: Ord<A>) => Json.assign(_, Ext(_)))
+	export let instantiate: <A>(_: Ord<A>) => Ord<A> & Ext<A> = (
+		<A>(_: Ord<A>) => (
+			assign(_)((_: Ord<A>) => Json.assign(_, Ext(_)))
+		)
 	);
 }
 export {Ord}

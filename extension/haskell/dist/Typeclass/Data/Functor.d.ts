@@ -68,35 +68,35 @@ interface Functor2<F extends URI2> extends IFunctor2<F> {
     URI: F;
 }
 export { Functor2 };
-interface IFunctor2_<F extends URI2, T0> {
+interface IFunctor2C<F extends URI2, T0> {
     fmap: <A, B>(_: (_: A) => B) => (_: Kind2<F, T0, A>) => Kind2<F, T0, B>;
 }
-interface IExtFunctor2_<F extends URI2, T0> {
+interface IExtFunctor2C<F extends URI2, T0> {
     lfmap: <A>(_: A) => <B>(_: Kind2<F, T0, B>) => Kind2<F, T0, A>;
     rfmap: <A>(_: Kind2<F, T0, A>) => <B>(_: B) => Kind2<F, T0, B>;
     ffmap: <A>(_: Kind2<F, T0, A>) => <B>(_: (_: A) => B) => Kind2<F, T0, B>;
     void: <A>(_: Kind2<F, T0, A>) => Kind2<F, T0, IUnit>;
 }
-interface Functor2_<F extends URI2, T0> extends IFunctor2_<F, T0> {
+interface Functor2C<F extends URI2, T0> extends IFunctor2C<F, T0> {
     URI: F;
 }
-export { Functor2_ };
+export { Functor2C };
 declare namespace Functor1 {
     interface Ext<F extends URI1> extends IExtFunctor1<F> {
     }
     let Ext: <F extends URI1>(_: Functor1<F>) => Ext<F>;
-    let instantiate: <F extends "Endo" | "Maybe" | "List">(_: Functor1<F>) => Functor1<F> & Ext<F>;
+    let instantiate: <F extends URI1>(_: Functor1<F>) => Functor1<F> & Ext<F>;
 }
 declare namespace Functor2 {
     interface Ext<F extends URI2> extends IExtFunctor2<F> {
     }
     let Ext: <F extends URI2>(_: Functor2<F>) => Ext<F>;
-    let instantiate: <F extends "Function" | "Tuple">(_: Functor2<F>) => Functor2<F> & Ext<F>;
+    let instantiate: <F extends URI2>(_: Functor2<F>) => Functor2<F> & Ext<F>;
 }
-declare namespace Functor2_ {
-    interface Ext<F extends URI2, T0> extends IExtFunctor2_<F, T0> {
+declare namespace Functor2C {
+    interface Ext<F extends URI2, T0> extends IExtFunctor2C<F, T0> {
     }
-    let Ext: <F extends URI2, T0>(_: Functor2_<F, T0>) => Ext<F, T0>;
-    let instantiate: <F extends "Function" | "Tuple", T0>(_: Functor2_<F, T0>) => Functor2_<F, T0> & Ext<F, T0>;
+    let Ext: <F extends URI2, T0>(_: Functor2C<F, T0>) => Ext<F, T0>;
+    let instantiate: <F extends URI2, T0>(_: Functor2C<F, T0>) => Functor2C<F, T0> & Ext<F, T0>;
 }
 export default Functor;

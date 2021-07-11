@@ -60,8 +60,10 @@ namespace Functor {
 		)
 	);
 
-	export let instantiate = <F>(_: Functor<F>) => (
-		assign(_)((_: Functor<F>) => Json.assign(_, Ext(_)))
+	export let instantiate: <F>(_: Functor<F>) => Functor<F> & Ext<F> = (
+		<F>(_: Functor<F>) => (
+			assign(_)((_: Functor<F>) => Json.assign(_, Ext(_)))
+		)
 	);
 }
 
@@ -103,19 +105,19 @@ interface Functor2<F extends URI2> extends IFunctor2<F> {
 }
 export {Functor2}
 
-interface IFunctor2_<F extends URI2, T0> {
+interface IFunctor2C<F extends URI2, T0> {
 	fmap: <A, B>(_: (_: A) => B) => (_: Kind2<F, T0, A>) => Kind2<F, T0, B>;
 }
-interface IExtFunctor2_<F extends URI2, T0> {
+interface IExtFunctor2C<F extends URI2, T0> {
 	lfmap: <A>(_: A) => <B>(_: Kind2<F, T0, B>) => Kind2<F, T0, A>;
 	rfmap: <A>(_: Kind2<F, T0, A>) => <B>(_: B) => Kind2<F, T0, B>;
 	ffmap: <A>(_: Kind2<F, T0, A>) => <B>(_: (_: A) => B) => Kind2<F, T0, B>;
 	void: <A>(_: Kind2<F, T0, A>) => Kind2<F, T0, IUnit>;
 }
-interface Functor2_<F extends URI2, T0> extends IFunctor2_<F, T0> {
+interface Functor2C<F extends URI2, T0> extends IFunctor2C<F, T0> {
 	URI: F;
 }
-export {Functor2_}
+export {Functor2C}
 
 namespace Functor1 {
 	export interface Ext<F extends URI1> extends IExtFunctor1<F> {}
@@ -130,8 +132,10 @@ namespace Functor1 {
 		)
 	);
 
-	export let instantiate = <F extends URI1>(_: Functor1<F>) => (
-		assign(_)((_: Functor1<F>) => Json.assign(_, Ext(_)))
+	export let instantiate: <F extends URI1>(_: Functor1<F>) => Functor1<F> & Ext<F> = (
+		<F extends URI1>(_: Functor1<F>) => (
+			assign(_)((_: Functor1<F>) => Json.assign(_, Ext(_)))
+		)
 	);
 }
 
@@ -148,15 +152,17 @@ namespace Functor2 {
 		)
 	);
 
-	export let instantiate = <F extends URI2>(_: Functor2<F>) => (
-		assign(_)((_: Functor2<F>) => Json.assign(_, Ext(_)))
+	export let instantiate: <F extends URI2>(_: Functor2<F>) => Functor2<F> & Ext<F> = (
+		<F extends URI2>(_: Functor2<F>) => (
+			assign(_)((_: Functor2<F>) => Json.assign(_, Ext(_)))
+		)
 	);
 }
 
-namespace Functor2_ {
-	export interface Ext<F extends URI2, T0> extends IExtFunctor2_<F, T0> {}
-	export let Ext: <F extends URI2, T0>(_: Functor2_<F, T0>) => Ext<F, T0> = (
-		<F extends URI2, T0>(Functor: Functor2_<F, T0>) => (
+namespace Functor2C {
+	export interface Ext<F extends URI2, T0> extends IExtFunctor2C<F, T0> {}
+	export let Ext: <F extends URI2, T0>(_: Functor2C<F, T0>) => Ext<F, T0> = (
+		<F extends URI2, T0>(Functor: Functor2C<F, T0>) => (
 			define<Ext<F, T0>>(Ext => ({
 				lfmap: _0 => _1 => Functor.fmap(const_(_0))(_1),
 				rfmap: _0 => _1 => Ext().lfmap(_1)(_0),
@@ -166,8 +172,10 @@ namespace Functor2_ {
 		)
 	);
 
-	export let instantiate = <F extends URI2, T0>(_: Functor2_<F, T0>) => (
-		assign(_)((_: Functor2_<F, T0>) => Json.assign(_, Ext(_)))
+	export let instantiate: <F extends URI2, T0>(_: Functor2C<F, T0>) => Functor2C<F, T0> & Ext<F, T0> = (
+		<F extends URI2, T0>(_: Functor2C<F, T0>) => (
+			assign(_)((_: Functor2C<F, T0>) => Json.assign(_, Ext(_)))
+		)
 	);
 }
 

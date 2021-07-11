@@ -13,8 +13,10 @@ interface Ring<A> extends IRing<A>, Semiring<A> {}
 export {Ring}
 export {Ring as IRing}
 namespace Ring {
-	export let instantiate = <A>(_: Ring<A>) => (
-		_
+	export let instantiate: <A>(_: Ring<A>) => Ring<A> = (
+		<A>(_: Ring<A>) => (
+			_
+		)
 	);
 }
 export default Ring

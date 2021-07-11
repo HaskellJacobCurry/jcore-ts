@@ -1,7 +1,7 @@
 import {LazySequence} from '../../../dist/DataStructure/Clojure/LazySequence'
-import {Int} from '../../../dist/DataStructure/Data/Int'
-import {Unit} from '../../../dist/DataStructure/Data/Unit'
-import {Bool} from '../../../dist/DataStructure/Data/Bool'
+import {Int} from '../../../dist/Instance/Data/Int'
+import {Unit} from '../../../dist/Instance/Data/Unit'
+import {Bool} from '../../../dist/Instance/Data/Bool'
 import {
     trampoline,
     apply,
@@ -15,7 +15,7 @@ import {
                     LazySequence<Int>(Int.Ring.add(Int(1)))(Int(1))
                 )(_ => apply(
                     LazySequence.filter<Int>(Int.odd)(_)
-                ))(_ => LazySequence.fmap(Int.Ring.mul(Int(3)))(_))
+                ))(_ => LazySequence.map(Int.Ring.mul(Int(3)))(_))
             )
         })(({lazy}) => (
             apply(
@@ -43,7 +43,7 @@ import {
                 )(_ => apply(
                     LazySequence.filter<Int>(Int.odd)(_)
                 ))(_ => apply(
-                    LazySequence.fmap(Int.Ring.mul(Int(3)))(_)
+                    LazySequence.map(Int.Ring.mul(Int(3)))(_)
                 ))(_ => (
                     //LazySequence.take(Int(0))(_)
                     LazySequence.until<Int>(_ => Bool.fromI(Int.Ord.lt(Int(66))(_)))(_)

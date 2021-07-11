@@ -1,8 +1,8 @@
 import {Reducer} from './Reducer'
 import {Reduced} from './Reduced'
-import {Bool} from '../Data/Bool'
+import {Bool} from '../../Instance/Data/Bool'
 import {ITuple} from '../../Typeclass/Data/ITuple'
-import {Int} from '../Data/Int'
+import {Int} from '../../Instance/Data/Int'
 import {IEq} from '../../Typeclass/Data/Eq'
 import {Maybe} from '../Data/Maybe'
 import {

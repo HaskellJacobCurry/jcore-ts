@@ -33,8 +33,10 @@ namespace Transducible {
 		}))
 	);
 
-	export let instantiate = <F>(_: Transducible<F>) => (
-		Json.assign(_, Ext(_))
+	export let instantiate: <F>(_: Transducible<F>) => Transducible<F> & Ext<F> = (
+		<F>(_: Transducible<F>) => (
+			Json.assign(_, Ext(_))
+		)
 	);
 }
 
@@ -61,8 +63,10 @@ namespace Transducible1 {
 		}))
 	);
 
-	export let instantiate = <F extends URI1>(_: Transducible1<F>) => (
-		Json.assign(_, Ext(_))
+	export let instantiate: <F extends URI1>(_: Transducible1<F>) => Transducible1<F> & Ext<F> = (
+		<F extends URI1>(_: Transducible1<F>) => (
+			Json.assign(_, Ext(_))
+		)
 	);
 }
 

@@ -1,24 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toPopulatable = exports.toPopulatable1 = exports.evaluate = exports.foldl = exports.until = exports.filter = exports.fmap = exports.map = exports.create = exports.LazySequence = void 0;
-var Bool_1 = require("../Data/Bool");
-var Int_1 = require("../Data/Int");
+exports.toPopulatable = exports.toPopulatable1 = exports.evaluate = exports.foldl = exports.until = exports.filter = exports.map = exports.create = exports.URI = exports.LazySequence = void 0;
+var Bool_1 = require("../../Instance/Data/Bool");
+var Int_1 = require("../../Instance/Data/Int");
 var Unit_1 = require("../Data/Unit");
 var Common_1 = require("../../Common");
-var create_ = (function (transform) { return function (seed) { return (Common_1.apply(Common_1.recurse()(function (value) { return function (makeSequence) { return ({
+var URI = Common_1.S('LazySequence');
+exports.URI = URI;
+var createLazySequence = (function (transform) { return function (seed) { return (Common_1.apply(Common_1.recurse()(function (value) { return function (makeSequence) { return ({
     value: value,
     done: Bool_1.Bool.False,
     next: function () { return makeSequence(transform(value)); },
 }); }; }))(function (_) { return _(seed); })); }; });
-exports.create = create_;
+exports.create = createLazySequence;
 var map = (function (f) { return function (lazyA) { return (Common_1.apply(Common_1.recurse()(function (lazy) { return function (map) { return ({
     value: f(lazy.value),
     done: lazy.done,
     next: function () { return map(lazy.next()); }
 }); }; }))(function (_) { return _(lazyA); })); }; });
 exports.map = map;
-var fmap = map;
-exports.fmap = fmap;
 var filter = (function (f) { return function (lazyA) { return (Common_1.apply(Common_1.recurse()(function (lazy) { return function (filter) { return (f(lazy.value).cata({
     False: function () { return filter(lazy.next()); },
     True: function () { return Common_1.create({
@@ -64,10 +64,10 @@ var toPopulatable1 = (function (PopulatableF) { return function (lazyA) { return
 exports.toPopulatable1 = toPopulatable1;
 var toPopulatable = toPopulatable1;
 exports.toPopulatable = toPopulatable;
-var LazySequence = Common_1.Json.assign(create_, {
-    create: create_,
+var LazySequence = (Common_1.Json.assign(createLazySequence, {
+    URI: URI,
+    create: createLazySequence,
     map: map,
-    fmap: fmap,
     filter: filter,
     until: until,
     take: take,
@@ -75,5 +75,6 @@ var LazySequence = Common_1.Json.assign(create_, {
     evaluate: evaluate,
     toPopulatable: toPopulatable,
     toPopulatable1: toPopulatable1,
-});
+}));
 exports.LazySequence = LazySequence;
+exports.default = LazySequence;

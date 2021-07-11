@@ -167,8 +167,10 @@ namespace Foldable {
 		)
 	);
 
-	export let instantiate = <F>(_: Foldable<F>) => (
-		assign(Json.assign(Def(_), _))((_: Foldable<F>) => Json.assign(_, Ext(_)))
+	export let instantiate: <F>(_: Foldable<F>) => Foldable<F> & Ext<F> = (
+		<F>(_: Foldable<F>) => (
+			assign(Json.assign(Def(_), _))((_: Foldable<F>) => Json.assign(_, Ext(_)))
+		)
 	);
 }
 
@@ -202,13 +204,13 @@ interface Foldable2<F extends URI2> {
 }
 export {Foldable2}
 
-interface Foldable2_<F extends URI2, T0> {
+interface Foldable2C<F extends URI2, T0> {
 	URI: F;
 	foldl: <A, B>(_: (_: B) => (_: A) => B) => (_: B) => (_: Kind2<F, T0, A>) => B;
 	foldr: <A, B>(_: (_: A) => (_: B) => B) => (_: B) => (_: Kind2<F, T0, A>) => B;
 	foldMap: <G>(_: Monoid<G>) => <A>(_: (_: A) => G) => (_: Kind2<F, T0, A>) => G;
 }
-export {Foldable2_}
+export {Foldable2C}
 
 namespace Foldable1 {
 	export let Def: <F extends URI1>(_: Foldable1<F>) => IFoldable1<F> = (
@@ -303,8 +305,10 @@ namespace Foldable1 {
 		)
 	);
 
-	export let instantiate = <F extends URI1>(_: Foldable1<F>) => (
-		assign(Json.assign(Def(_), _))((_: Foldable1<F>) => Json.assign(_, Ext(_)))
+	export let instantiate: <F extends URI1>(_: Foldable1<F>) => Foldable1<F> & Ext<F> = (
+		<F extends URI1>(_: Foldable1<F>) => (
+			assign(Json.assign(Def(_), _))((_: Foldable1<F>) => Json.assign(_, Ext(_)))
+		)
 	);
 }
 

@@ -21,6 +21,6 @@ interface Populatable1<F extends URI1> extends IPopulatable1<F> {
 export { Populatable1 };
 export { Populatable1 as IPopulatable1 };
 declare namespace Populatable1 {
-    let instantiate: <F extends "Endo" | "Maybe" | "List">(_: Populatable1<F>) => Populatable1<F>;
+    let instantiate: <F extends URI1>(_: Populatable1<F>) => Populatable1<F>;
 }
 export default Populatable;

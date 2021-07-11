@@ -13,8 +13,8 @@ var stateless = (function (f) { return createReducer({
     step: function (s) { return function (b) { return function (a) { return ITuple_1.ITuple(s, Reduced_1.Reduced.Continue(f(b)(a))); }; }; },
 }); });
 exports.stateless = stateless;
-var Reducer = Common_1.Json.assign(createReducer, {
+var Reducer = (Common_1.Json.assign(createReducer, {
     create: createReducer,
     stateless: stateless,
-});
+}));
 exports.Reducer = Reducer;

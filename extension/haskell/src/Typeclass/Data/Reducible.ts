@@ -32,8 +32,10 @@ namespace Reducible {
 		)
 	);
 
-	export let instantiate = <F>(_: Reducible<F>) => (
-		Json.assign(_, Ext(_))
+	export let instantiate: <F>(_: Reducible<F>) => Reducible<F> & Ext<F> = (
+		<F>(_: Reducible<F>) => (
+			Json.assign(_, Ext(_))
+		)
 	);
 }
 
@@ -59,8 +61,10 @@ namespace Reducible1 {
 		)
 	);
 
-	export let instantiate = <F extends URI1>(_: Reducible1<F>) => (
-		Json.assign(_, Ext(_))
+	export let instantiate: <F extends URI1>(_: Reducible1<F>) => Reducible1<F> & Ext<F> = (
+		<F extends URI1>(_: Reducible1<F>) => (
+			Json.assign(_, Ext(_))
+		)
 	);
 }
 

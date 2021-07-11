@@ -1,6 +1,4 @@
 import {IUnit} from '../../Typeclass/Data/IUnit'
-import {IShow} from '../../Typeclass/Data/Show'
-import {String} from './String'
 import {
 	Json,
 	cast,
@@ -9,20 +7,29 @@ import {
 interface Unit extends IUnit {}
 export {Unit}
 
+let createUnit: () => Unit = (
+	() => ({})
+);
+export {createUnit}
+
 let fromI: (_: IUnit) => Unit = (
 	unit => cast(unit)()
 );
 export {fromI}
 
-let Show = IShow.instantiate<Unit>({
-	show: _ => String('Unit'),
-});
-export {Show}
+type Constructor = typeof createUnit;
+export {Constructor}
 
-let Unit = Json.assign(
-	(): Unit => ({}), {
+interface HUnit {
+	create: () => Unit;
+	fromI: (_: IUnit) => Unit;
+}
+export {HUnit}
+
+let Unit: Constructor & HUnit = (
+	Json.assign(createUnit, {
+		create: createUnit,
 		fromI,
-		Show
-	}
+	})
 );
 export default Unit

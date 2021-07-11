@@ -1,7 +1,7 @@
-import {List} from '../../../dist/DataStructure/Data/List'
-import {Int} from '../../../dist/DataStructure/Data/Int'
-import {Maybe} from '../../../dist/DataStructure/Data/Maybe'
-import {Tuple} from '../../../dist/DataStructure/Data/Tuple'
+import {List} from '../../../dist/Instance/Data/List'
+import {Int} from '../../../dist/Instance/Data/Int'
+import {Maybe} from '../../../dist/Instance/Data/Maybe'
+import {Tuple} from '../../../dist/Instance/Data/Tuple'
 import {LazySequence} from '../../../dist/DataStructure/Clojure/LazySequence'
 import {
 	apply,

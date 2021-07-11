@@ -1,5 +1,4 @@
 import { IBool } from '../../Typeclass/Data/IBool';
-import { IShow } from '../../Typeclass/Data/Show';
 /** data Bool = True | False */
 declare type Bool = IBool & (False | True);
 export { Bool };
@@ -23,15 +22,16 @@ declare let or: (_: Bool) => (_: Bool) => Bool;
 export { or };
 declare let not: (_: Bool) => Bool;
 export { not };
-declare let Show: IShow<Bool>;
-export { Show };
-declare let Bool: ((value: boolean) => Bool) & {
+declare type Constructor = typeof createBool;
+export { Constructor };
+interface HBool {
     fromI: (_: IBool) => Bool;
+    False: Bool;
+    True: Bool;
     and: (_: Bool) => (_: Bool) => Bool;
     or: (_: Bool) => (_: Bool) => Bool;
     not: (_: Bool) => Bool;
-    False: Bool;
-    True: Bool;
-    Show: IShow<Bool>;
-};
+}
+export { HBool };
+declare let Bool: Constructor & HBool;
 export default Bool;

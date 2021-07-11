@@ -1,7 +1,7 @@
 import { Kind1, URI1 } from '../../Common/HKT';
 import { Populatable1 } from '../../Typeclass/Data/Populatable';
-import { Bool } from '../Data/Bool';
-import { Int } from '../Data/Int';
+import { Bool } from '../../Instance/Data/Bool';
+import { Int } from '../../Instance/Data/Int';
 import { Unit } from '../Data/Unit';
 interface LazySequence<T> {
     value: T;
@@ -9,12 +9,18 @@ interface LazySequence<T> {
     next: () => LazySequence<T>;
 }
 export { LazySequence };
-declare let create_: <T>(transform: (_: T) => T) => (seed: T) => LazySequence<T>;
-export { create_ as create };
+declare const URI: "LazySequence";
+declare type URI = typeof URI;
+declare module '../../Common/HKT' {
+    interface KindsByURI1<A> {
+        [URI]: LazySequence<A>;
+    }
+}
+export { URI };
+declare let createLazySequence: <T>(transform: (_: T) => T) => (seed: T) => LazySequence<T>;
+export { createLazySequence as create };
 declare let map: <A, B>(f: (_: A) => B) => (_: LazySequence<A>) => LazySequence<B>;
 export { map };
-declare let fmap: <A, B>(f: (_: A) => B) => (_: LazySequence<A>) => LazySequence<B>;
-export { fmap };
 declare let filter: <A>(f: (_: A) => Bool) => (_: LazySequence<A>) => LazySequence<A>;
 export { filter };
 declare let until: <A>(f: (_: A) => Bool) => (_: LazySequence<A>) => LazySequence<A>;
@@ -25,17 +31,22 @@ declare let evaluate: <A>(f: (_: A) => Unit) => (_: LazySequence<A>) => Unit;
 export { evaluate };
 declare let toPopulatable1: <F extends URI1>(_: Populatable1<F>) => <A>(_: LazySequence<A>) => Kind1<F, A>;
 export { toPopulatable1 };
-declare let toPopulatable: <F extends "Endo" | "Maybe" | "List">(_: Populatable1<F>) => <A>(_: LazySequence<A>) => Kind1<F, A>;
+declare let toPopulatable: typeof toPopulatable1;
 export { toPopulatable };
-declare let LazySequence: (<T>(transform: (_: T) => T) => (seed: T) => LazySequence<T>) & {
+declare type Constructor = typeof createLazySequence;
+export { Constructor };
+interface HLazySequence {
+    URI: URI;
     create: <T>(transform: (_: T) => T) => (seed: T) => LazySequence<T>;
     map: <A, B>(f: (_: A) => B) => (_: LazySequence<A>) => LazySequence<B>;
-    fmap: <A, B>(f: (_: A) => B) => (_: LazySequence<A>) => LazySequence<B>;
-    filter: <A_1>(f: (_: A_1) => Bool) => (_: LazySequence<A_1>) => LazySequence<A_1>;
-    until: <A_2>(f: (_: A_2) => Bool) => (_: LazySequence<A_2>) => LazySequence<A_2>;
-    take: (_: Int) => <A_3>(_: LazySequence<A_3>) => LazySequence<A_3>;
-    foldl: <A_4, B_1>(f: (_: B_1) => (_: A_4) => B_1) => (_: B_1) => (_: LazySequence<A_4>) => B_1;
-    evaluate: <A_5>(f: (_: A_5) => Unit) => (_: LazySequence<A_5>) => Unit;
-    toPopulatable: <F extends "Endo" | "Maybe" | "List">(_: Populatable1<F>) => <A_6>(_: LazySequence<A_6>) => Kind1<F, A_6>;
-    toPopulatable1: <F extends "Endo" | "Maybe" | "List">(_: Populatable1<F>) => <A_6>(_: LazySequence<A_6>) => Kind1<F, A_6>;
-};
+    filter: <A>(f: (_: A) => Bool) => (_: LazySequence<A>) => LazySequence<A>;
+    until: <A>(f: (_: A) => Bool) => (_: LazySequence<A>) => LazySequence<A>;
+    take: (_: Int) => <A>(_: LazySequence<A>) => LazySequence<A>;
+    foldl: <A, B>(f: (_: B) => (_: A) => B) => (_: B) => (_: LazySequence<A>) => B;
+    evaluate: <A>(f: (_: A) => Unit) => (_: LazySequence<A>) => Unit;
+    toPopulatable1: <F extends URI1>(_: Populatable1<F>) => <A>(_: LazySequence<A>) => Kind1<F, A>;
+    toPopulatable: this['toPopulatable1'];
+}
+export { HLazySequence };
+declare let LazySequence: Constructor & HLazySequence;
+export default LazySequence;

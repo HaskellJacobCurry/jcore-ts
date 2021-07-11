@@ -96,131 +96,22 @@ let maybe: <B>(_: B) => <A>(_: (_: A) => B) => (_: Maybe<A>) => B = (
 );
 export {maybe}
 
-let show: <A>(_: IShow<A>) => (_: Maybe<A>) => String = (
-	ShowA => maybeA => (
-		maybeA.cata({
-			Nothing: () => String('Nothing'),
-			Just: value => (
-				apply(
-					String.Semigroup.append(String('(Just '))(String.fromI(ShowA.show(value)))
-				)(_ => String.Semigroup.append(_)(String(')')))
-			),
-		})
-	)
-);
-export {show}
+interface HMaybe {
+	URI: URI;
+	Nothing: Maybe<never>;
+	Nothing_: <A>() => Maybe<A>;
+	Just: <A>(_: A) => Maybe<A>;
+	infer: typeof infer;
+	maybe: <B>(_: B) => <A>(_: (_: A) => B) => (_: Maybe<A>) => B;
+}
+export {HMaybe}
 
-let Show = <A>(_: IShow<A>) => apply(_)(ShowA => (
-	IShow.instantiate<Maybe<A>>({
-		show: show(ShowA),
-	})
-))
-export {Show}
-
-let Functor = Functor1.instantiate<URI>({
-	URI,
-	fmap: f => maybeA => (
-		apply(
-			maybeA.cata({
-				Nothing: () => Nothing,
-				Just: value => Just(f(value)),
-			})
-		)(infer)
-	),
-});
-export {Functor}
-
-let Apply = Apply1.instantiate<URI>({
-	...Functor,
-	ap: maybeF => maybeA => (
-		apply(
-			maybeF.cata({
-				Just: f => Functor.fmap(f)(reinterpret(maybeA)),
-				Nothing: () => Nothing,
-			})
-		)(infer)
-	),
-	liftA2: reinterpret(),
-});
-export {Apply}
-
-let Applicative = Applicative1.instantiate<URI>({
-	...Apply,
-	pure: Just,
-});
-export {Applicative}
-
-let Bind = Bind1.instantiate<URI>({
-	...Apply,
-	bind: maybeA => f => (
-		apply(
-			maybeA.cata({
-				Just: f,
-				Nothing: () => Nothing,
-			})
-		)(infer)
-	)
-});
-export {Bind}
-
-let Monad = Monad1.instantiate<URI>({
-	...Applicative,
-	...Bind,
-});
-export {Monad}
-
-let Semigroup = <A>(_: ISemigroup<A>) => (
-	((SemigroupA = _) => (
-		ISemigroup.instantiate<Maybe<A>>({
-			append: maybe0 => maybe1 => (
-				maybe0.cata({
-					Nothing: () => maybe1,
-					Just: value0 => (
-						maybe1.cata({
-							Nothing: () => maybe0,
-							Just: value1 => Just(SemigroupA.append(value0)(value1)),
-						})
-					)
-				})
-			),
-		})
-	))()
-);
-export {Semigroup}
-
-let Monoid = <A>(_: ISemigroup<A>) => (
-	((SemigroupA = _) => (
-		IMonoid.instantiate<Maybe<A>>({
-			...Semigroup(SemigroupA),
-			mempty: () => reinterpret(Nothing),
-		})
-	))()
-);
-export {Monoid}
-
-let Foldable = Foldable1.instantiate<URI>({
-	URI,
-	foldMap: Monoid => maybe(Monoid.mempty()),
-	foldr: reinterpret(),
-});
-export {Foldable}
-
-let Maybe = {
+let Maybe: HMaybe = {
 	URI,
 	Nothing,
 	Nothing_,
 	Just,
 	infer,
 	maybe,
-	show,
-	Show,
-	Functor,
-	Apply,
-	Applicative,
-	Bind,
-	Monad,
-	Semigroup,
-	Monoid,
-	Foldable,
 };
 export default Maybe

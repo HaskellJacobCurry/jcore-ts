@@ -4,7 +4,7 @@ import {INum} from '../../GHC/Num'
 import {
 	Json,
 	S,
-} from '../../../Common/common'
+} from '../../../Common'
 
 const URI = S('Sum');
 type URI = typeof URI;
@@ -19,10 +19,10 @@ export {Sum}
 let get: <A>(_: Sum<A>) => A = _ => _.value;
 export {get}
 
-let create_: <A>(value: A) => Sum<A> = (
+let createSum: <A>(value: A) => Sum<A> = (
 	value => ({URI, value})
 );
-export {create_ as create}
+export {createSum as create}
 
 /** Num a => Semigroup (Sum a) */
 let Semigroup = <A>(_: INum<A>) => (
@@ -45,13 +45,25 @@ let Monoid = <A>(_: INum<A>) => (
 );
 export {Monoid}
 
-let Sum = Json.assign(
-	<A>(value: A) => <Sum<A>>{URI, value}, {
+type Constructor = typeof createSum;
+export {Constructor}
+
+interface HSum {
+	URI: URI;
+	get: <A>(_: Sum<A>) => A;
+	create: <A>(value: A) => Sum<A>;
+	Semigroup: typeof Semigroup;
+	Monoid: typeof Monoid;
+}
+export {HSum}
+
+let Sum: Constructor & HSum = (
+	Json.assign(createSum, {
 		URI,
 		get,
-		create: create_,
+		create: createSum,
 		Semigroup,
 		Monoid,
-	}
+	})
 );
 export default Sum

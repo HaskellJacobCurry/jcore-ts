@@ -14,7 +14,9 @@ interface Populatable<F> extends IPopulatable<F> {
 export {Populatable}
 export {Populatable as IPopulatable}
 namespace Populatable {
-	export let instantiate = <F>(_: Populatable<F>) => _;
+	export let instantiate: <F>(_: Populatable<F>) => Populatable<F> = (
+		<F>(_: Populatable<F>) => _
+	);
 }
 
 interface IPopulatable1<F extends URI1> {
@@ -28,7 +30,9 @@ export {Populatable1}
 export {Populatable1 as IPopulatable1}
 
 namespace Populatable1 {
-	export let instantiate = <F extends URI1>(_: Populatable1<F>) => _;
+	export let instantiate: <F extends URI1>(_: Populatable1<F>) => Populatable1<F> = (
+		<F extends URI1>(_: Populatable1<F>) => _
+	);
 }
 
 export default Populatable

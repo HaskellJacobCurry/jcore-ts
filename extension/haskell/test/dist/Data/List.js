@@ -1,9 +1,9 @@
 "use strict";
 exports.__esModule = true;
-var List_1 = require("../../../dist/DataStructure/Data/List");
-var Int_1 = require("../../../dist/DataStructure/Data/Int");
-var Maybe_1 = require("../../../dist/DataStructure/Data/Maybe");
-var Tuple_1 = require("../../../dist/DataStructure/Data/Tuple");
+var List_1 = require("../../../dist/Instance/Data/List");
+var Int_1 = require("../../../dist/Instance/Data/Int");
+var Maybe_1 = require("../../../dist/Instance/Data/Maybe");
+var Tuple_1 = require("../../../dist/Instance/Data/Tuple");
 var LazySequence_1 = require("../../../dist/DataStructure/Clojure/LazySequence");
 var common_1 = require("../../../dist/Common/common");
 ({

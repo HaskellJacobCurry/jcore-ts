@@ -1,19 +1,9 @@
 import {IInt} from '../../Typeclass/Data/IInt'
-import {INum} from '../../Typeclass/GHC/Num'
-import {ISemiring} from '../../Typeclass/Data/Semiring'
-import {IRing} from '../../Typeclass/Data/Ring'
-import {IEq} from '../../Typeclass/Data/Eq'
-import {IOrd} from '../../Typeclass/Data/Ord'
-import {IShow} from '../../Typeclass/Data/Show'
-import {String} from './String'
-import {Bool} from './Bool'
-import {Ordering} from './Ordering'
+import {Bool} from '../../Instance/Data/Bool'
 import {
 	Json,
-	assign,
-	define,
 	S,
-} from '../../Common/common'
+} from '../../Common'
 
 const URI = S('Int');
 type URI = typeof URI;
@@ -29,15 +19,15 @@ let fromI: (_: IInt) => Int = (
 );
 export {fromI}
 
-let create: (value: number) => Int = (
+let createInt: (value: number) => Int = (
 	value => ({URI, value})
 );
-export {create}
+export {createInt as create}
 
-let zero: () => Int = () => create(0);
+let zero: () => Int = () => createInt(0);
 export {zero}
 
-let one: () => Int = () => create(1);
+let one: () => Int = () => createInt(1);
 export {one}
 
 let add: (_: Int) => (_: Int) => Int = IInt.add;
@@ -69,7 +59,7 @@ let odd: (_: Int) => Bool = (
 );
 export {odd}
 
-let abs: (_: Int) => Int = int => create(Math.abs(int.value));
+let abs: (_: Int) => Int = int => createInt(Math.abs(int.value));
 export {abs}
 
 let negate: (_: Int) => Int = IInt.negate;
@@ -80,115 +70,44 @@ let eq: (_: Int) => (_: Int) => Bool = (
 );
 export {eq}
 
-let notEq: (_: Int) => (_: Int) => Bool = (
-	_0 => _1 => Bool.fromI(Eq.notEq(_0)(_1))
+type Constructor = typeof createInt;
+export {Constructor}
+
+interface HInt {
+	create: (value: number) => Int;
+	fromI: (_: IInt) => Int;
+	zero: () => Int;
+	one: () => Int;
+	add: (_: Int) => (_: Int) => Int;
+	mul: (_: Int) => (_: Int) => Int;
+	sub: (_: Int) => (_: Int) => Int;
+	inc: (_: Int) => Int;
+	dec: (_: Int) => Int;
+	even: (_: Int) => Bool;
+	odd: (_: Int) => Bool;
+	abs: (_: Int) => Int;
+	negate: (_: Int) => Int;
+	eq: (_: Int) => (_: Int) => Bool;
+}
+export {HInt}
+
+let Int: Constructor & HInt = (
+	Json.assign(createInt, {
+		URI,
+		create: createInt,
+		fromI,
+		zero,
+		one,
+		add,
+		mul,
+		sub,
+		inc,
+		dec,
+		even,
+		odd,
+		abs,
+		negate,
+		eq,
+	})
 );
-export {notEq}
-
-let compare: (_: Int) => (_: Int) => Ordering = (
-	_0 => _1 => Ordering.fromI(Ord.compare(_0)(_1))
-);
-export {compare}
-
-let lt: (_: Int) => (_: Int) => Bool = (
-	_0 => _1 => Bool.fromI(Ord.lt(_0)(_1))
-);
-export {lt}
-
-let notLt: (_: Int) => (_: Int) => Bool = (
-	_0 => _1 => Bool.fromI(Ord.notLt(_0)(_1))
-);
-export {notLt}
-
-let gt: (_: Int) => (_: Int) => Bool = (
-	_0 => _1 => Bool.fromI(Ord.gt(_0)(_1))
-);
-export {gt}
-
-let notGt: (_: Int) => (_: Int) => Bool = (
-	_0 => _1 => Bool.fromI(Ord.notGt(_0)(_1))
-);
-export {notGt}
-
-let Num = INum.instantiate<Int>({
-	add,
-	sub,
-	mul,
-	zero,
-	one,
-	abs,
-});
-export {Num}
-
-let Show = IShow.instantiate<Int>({
-	show: int => String(`${int.value}`),
-});
-export {Show}
-
-let Semiring = ISemiring.instantiate<Int>({
-	add,
-	zero,
-	mul,
-	one,
-});
-export {Semiring}
-
-let Ring = IRing.instantiate<Int>({
-	...Semiring,
-	sub,
-	negate,
-});
-export {Ring}
-
-let Eq = IEq.instantiate<Int>({
-	eq,
-});
-export {Eq}
-
-let Ord = IOrd.instantiate<Int>(
-	define<IOrd<Int>>(Ord => ({
-		...Eq,
-		compare: int0 => int1 => (
-			Ord().lt(int0)(int1).cata({
-				True: () => Ordering.LT,
-				False: () => (
-					Ord().lt(int1)(int0).cata({
-						True: () => Ordering.GT,
-						False: () => Ordering.EQ,
-					})
-				)
-			})
-		),
-		lt: int0 => int1 => Bool(int0.value < int1.value),
-	}))
-);
-export {Ord}
-
-let Int = Json.assign(create, {
-	URI,
-	fromI,
-	zero,
-	one,
-	add,
-	mul,
-	sub,
-	inc,
-	dec,
-	even,
-	odd,
-	abs,
-	negate,
-	eq,
-	notEq,
-	compare,
-	lt,
-	notLt,
-	gt,
-	notGt,
-	Show,
-	Semiring,
-	Ring,
-	Eq,
-	Ord,
-});
 export default Int

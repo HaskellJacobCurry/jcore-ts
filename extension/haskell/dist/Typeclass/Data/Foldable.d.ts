@@ -95,18 +95,18 @@ interface Foldable2<F extends URI2> {
     foldMap: <G>(_: Monoid<G>) => <A>(_: (_: A) => G) => <T0>(_: Kind2<F, T0, A>) => G;
 }
 export { Foldable2 };
-interface Foldable2_<F extends URI2, T0> {
+interface Foldable2C<F extends URI2, T0> {
     URI: F;
     foldl: <A, B>(_: (_: B) => (_: A) => B) => (_: B) => (_: Kind2<F, T0, A>) => B;
     foldr: <A, B>(_: (_: A) => (_: B) => B) => (_: B) => (_: Kind2<F, T0, A>) => B;
     foldMap: <G>(_: Monoid<G>) => <A>(_: (_: A) => G) => (_: Kind2<F, T0, A>) => G;
 }
-export { Foldable2_ };
+export { Foldable2C };
 declare namespace Foldable1 {
     let Def: <F extends URI1>(_: Foldable1<F>) => IFoldable1<F>;
     interface Ext<F extends URI1> extends IExtFoldable1<F> {
     }
     let Ext: <F extends URI1>(_: Foldable1<F>) => Ext<F>;
-    let instantiate: <F extends "Endo" | "Maybe" | "List">(_: Foldable1<F>) => Foldable1<F> & Ext<F>;
+    let instantiate: <F extends URI1>(_: Foldable1<F>) => Foldable1<F> & Ext<F>;
 }
 export default Foldable;

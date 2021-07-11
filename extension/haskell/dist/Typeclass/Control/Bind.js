@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Bind2_ = exports.Bind2 = exports.Bind1 = exports.IBind = exports.Bind = void 0;
+exports.Bind2C = exports.Bind2 = exports.Bind1 = exports.IBind = exports.Bind = void 0;
 var Apply_1 = require("./Apply");
 var common_1 = require("../../Common/common");
 var Bind;
@@ -11,7 +11,7 @@ var Bind;
             sequence: ApplyExt.sndAp,
         }); }));
     })()); });
-    Bind_1.instantiate = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Bind_1.Ext(_)); })); };
+    Bind_1.instantiate = (function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Bind_1.Ext(_)); })); });
 })(Bind || (Bind = {}));
 exports.Bind = Bind;
 exports.IBind = Bind;
@@ -23,7 +23,7 @@ var Bind1;
             sequence: ApplyExt.sndAp,
         }); }));
     })()); });
-    Bind1.instantiate = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Bind1.Ext(_)); })); };
+    Bind1.instantiate = (function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Bind1.Ext(_)); })); });
 })(Bind1 || (Bind1 = {}));
 exports.Bind1 = Bind1;
 var Bind2;
@@ -34,18 +34,18 @@ var Bind2;
             sequence: ApplyExt.sndAp,
         }); }));
     })()); });
-    Bind2.instantiate = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Bind2.Ext(_)); })); };
+    Bind2.instantiate = (function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Bind2.Ext(_)); })); });
 })(Bind2 || (Bind2 = {}));
 exports.Bind2 = Bind2;
-var Bind2_;
-(function (Bind2_) {
-    Bind2_.Ext = (function (Bind) { return ((function (ApplyExt) {
-        if (ApplyExt === void 0) { ApplyExt = Apply_1.Apply2_.Ext(Bind); }
+var Bind2C;
+(function (Bind2C) {
+    Bind2C.Ext = (function (Bind) { return ((function (ApplyExt) {
+        if (ApplyExt === void 0) { ApplyExt = Apply_1.Apply2C.Ext(Bind); }
         return (common_1.define(function (Ext) { return ({
             sequence: ApplyExt.sndAp,
         }); }));
     })()); });
-    Bind2_.instantiate = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Bind2_.Ext(_)); })); };
-})(Bind2_ || (Bind2_ = {}));
-exports.Bind2_ = Bind2_;
+    Bind2C.instantiate = (function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Bind2C.Ext(_)); })); });
+})(Bind2C || (Bind2C = {}));
+exports.Bind2C = Bind2C;
 exports.default = Bind;

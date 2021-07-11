@@ -34,6 +34,6 @@ declare namespace Transducible1 {
     interface Ext<F extends URI1> extends IExtTransducible1<F> {
     }
     let Ext: <F extends URI1>(_: Transducible1<F>) => Ext<F>;
-    let instantiate: <F extends "Endo" | "Maybe" | "List">(_: Transducible1<F>) => Transducible1<F> & Ext<F>;
+    let instantiate: <F extends URI1>(_: Transducible1<F>) => Transducible1<F> & Ext<F>;
 }
 export default Transducible;

@@ -1,0 +1,34 @@
+import { String, HString as _HString, Constructor } from '../../DataStructure/Data/String';
+import { IString } from '../../Typeclass/Data/IString';
+import { IShow } from '../../Typeclass/Data/Show';
+import { ISemigroup } from '../../Typeclass/Data/Semigroup';
+import { IMonoid } from '../../Typeclass/Data/Monoid';
+export * from '../../DataStructure/Data/String';
+declare let show: (_: String) => IString;
+export { show };
+declare let append: (_: String) => (_: String) => String;
+export { append };
+declare let mempty: () => String;
+export { mempty };
+declare let mappend: (_: String) => (_: String) => String;
+export { mappend };
+declare let Show: IShow<String>;
+export { Show };
+declare let Semigroup: ISemigroup<String>;
+export { Semigroup };
+declare let Monoid: IMonoid<String> & IMonoid.Ext<String>;
+export { Monoid };
+interface HString extends _HString {
+    Show: typeof Show;
+    Semigroup: typeof Semigroup;
+    Monoid: typeof Monoid;
+    show: (_: String) => IString;
+    append: (_: String) => (_: String) => String;
+    mempty: () => String;
+    mappend: (_: String) => (_: String) => String;
+}
+export { HString };
+declare type _String = String;
+declare let _String: Constructor & HString;
+export { _String as String };
+export default _String;

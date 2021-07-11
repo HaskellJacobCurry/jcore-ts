@@ -15,17 +15,21 @@ interface Endo<A> {
 export { Endo };
 declare let get: <A>(_: Endo<A>) => (_: A) => A;
 export { get };
-declare let create_: <A>(fn: (_: A) => A) => Endo<A>;
-export { create_ as create };
+declare let createEndo: <A>(fn: (_: A) => A) => Endo<A>;
+export { createEndo as create };
 declare let Semigroup: <A>() => ISemigroup<Endo<A>>;
 export { Semigroup };
 declare let Monoid: <A>() => IMonoid<Endo<A>> & IMonoid.Ext<Endo<A>>;
 export { Monoid };
-declare let Endo: (<A>(fn: (_: A) => A) => Endo<A>) & {
-    URI: "Endo";
-    get: <A_1>(_: Endo<A_1>) => (_: A_1) => A_1;
-    create: <A_2>(fn: (_: A_2) => A_2) => Endo<A_2>;
-    Semigroup: <A_3>() => ISemigroup<Endo<A_3>>;
-    Monoid: <A_4>() => IMonoid<Endo<A_4>> & IMonoid.Ext<Endo<A_4>>;
-};
+declare type Constructor = typeof createEndo;
+export { Constructor };
+interface HEndo {
+    URI: URI;
+    get: <A>(_: Endo<A>) => (_: A) => A;
+    create: <A>(fn: (_: A) => A) => Endo<A>;
+    Semigroup: typeof Semigroup;
+    Monoid: typeof Monoid;
+}
+export { HEndo };
+declare let Endo: Constructor & HEndo;
 export default Endo;

@@ -11,7 +11,11 @@ declare let createReducer: <S, A, B>(_: Reducer<S, A, B>) => Reducer<S, A, B>;
 export { createReducer as create };
 declare let stateless: <A, B>(f: (_: B) => (_: A) => B) => Reducer<IUnit, A, B>;
 export { stateless };
-declare let Reducer: (<S, A, B>(_: Reducer<S, A, B>) => Reducer<S, A, B>) & {
+declare type Constructor = typeof createReducer;
+export { Constructor };
+interface HReducer {
     create: <S, A, B>(_: Reducer<S, A, B>) => Reducer<S, A, B>;
-    stateless: <A_1, B_1>(f: (_: B_1) => (_: A_1) => B_1) => Reducer<IUnit, A_1, B_1>;
-};
+    stateless: <A, B>(f: (_: B) => (_: A) => B) => Reducer<IUnit, A, B>;
+}
+export { HReducer };
+declare let Reducer: Constructor & HReducer;

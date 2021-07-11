@@ -1,6 +1,6 @@
-import {Dual} from './Dual_'
+import {Dual, HDual as _HDual, Constructor, URI} from './Dual_'
 import {IShow} from '../Show'
-import {String} from '../../../DataStructure/Data/String'
+import {String} from '../../../Instance/Data/String'
 import {
 	Json,
 	assign,
@@ -22,9 +22,16 @@ let Show = <A>(_: IShow<A>) => (
 );
 export {Show}
 
-let _Dual = Json.assign(Dual, {
-	Show,
-});
+interface HDual extends _HDual {
+	Show: typeof Show;
+}
+
+type _Dual<A> = Dual<A>;
+let _Dual: Constructor & HDual = (
+	Json.assign(Dual, {
+		Show,
+	})
+);
 
 export * from './Dual_'
 export {_Dual as Dual}

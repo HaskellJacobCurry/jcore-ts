@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Functor2_ = exports.Functor2 = exports.Functor1 = exports.IFunctor = exports.Functor = void 0;
+exports.Functor2C = exports.Functor2 = exports.Functor1 = exports.IFunctor = exports.Functor = void 0;
 var IUnit_1 = require("./IUnit");
 var common_1 = require("../../Common/common");
 var Functor;
@@ -11,7 +11,7 @@ var Functor;
         ffmap: function (_0) { return function (_1) { return Functor.fmap(_1)(_0); }; },
         void: function (_) { return Ext().lfmap(IUnit_1.IUnit())(_); },
     }); })); });
-    Functor_1.instantiate = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Functor_1.Ext(_)); })); };
+    Functor_1.instantiate = (function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Functor_1.Ext(_)); })); });
 })(Functor || (Functor = {}));
 exports.Functor = Functor;
 exports.IFunctor = Functor;
@@ -32,7 +32,7 @@ var Functor1;
         ffmap: function (_0) { return function (_1) { return Functor.fmap(_1)(_0); }; },
         void: function (_) { return Ext().lfmap(IUnit_1.IUnit())(_); },
     }); })); });
-    Functor1.instantiate = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Functor1.Ext(_)); })); };
+    Functor1.instantiate = (function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Functor1.Ext(_)); })); });
 })(Functor1 || (Functor1 = {}));
 exports.Functor1 = Functor1;
 var Functor2;
@@ -43,18 +43,18 @@ var Functor2;
         ffmap: function (_0) { return function (_1) { return Functor.fmap(_1)(_0); }; },
         void: function (_) { return Ext().lfmap(IUnit_1.IUnit())(_); },
     }); })); });
-    Functor2.instantiate = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Functor2.Ext(_)); })); };
+    Functor2.instantiate = (function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Functor2.Ext(_)); })); });
 })(Functor2 || (Functor2 = {}));
 exports.Functor2 = Functor2;
-var Functor2_;
-(function (Functor2_) {
-    Functor2_.Ext = (function (Functor) { return (common_1.define(function (Ext) { return ({
+var Functor2C;
+(function (Functor2C) {
+    Functor2C.Ext = (function (Functor) { return (common_1.define(function (Ext) { return ({
         lfmap: function (_0) { return function (_1) { return Functor.fmap(common_1.const_(_0))(_1); }; },
         rfmap: function (_0) { return function (_1) { return Ext().lfmap(_1)(_0); }; },
         ffmap: function (_0) { return function (_1) { return Functor.fmap(_1)(_0); }; },
         void: function (_) { return Ext().lfmap(IUnit_1.IUnit())(_); },
     }); })); });
-    Functor2_.instantiate = function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Functor2_.Ext(_)); })); };
-})(Functor2_ || (Functor2_ = {}));
-exports.Functor2_ = Functor2_;
+    Functor2C.instantiate = (function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Functor2C.Ext(_)); })); });
+})(Functor2C || (Functor2C = {}));
+exports.Functor2C = Functor2C;
 exports.default = Functor;

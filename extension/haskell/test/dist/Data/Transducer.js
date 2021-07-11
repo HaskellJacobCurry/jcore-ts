@@ -1,8 +1,8 @@
 "use strict";
 exports.__esModule = true;
 var Transducer_1 = require("../../../dist/Typeclass/Data/Transducer");
-var Bool_1 = require("../../../dist/DataStructure/Data/Bool");
-var Int_1 = require("../../../dist/DataStructure/Data/Int");
+var Bool_1 = require("../../../dist/Instance/Data/Bool");
+var Int_1 = require("../../../dist/Instance/Data/Int");
 var Common_1 = require("../../../dist/Common");
 var f = function (reducer) { return function (b, a) { return reducer(b)(a); }; };
 Common_1.apply(Array.apply(void 0, Array(1e1)).map(function (_, i) { return i + 1; })

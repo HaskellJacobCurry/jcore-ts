@@ -1,10 +1,10 @@
 "use strict";
 exports.__esModule = true;
-var Maybe_1 = require("../../../dist/DataStructure/Data/Maybe");
-var String_1 = require("../../../dist/DataStructure/Data/String");
-var Int_1 = require("../../../dist/DataStructure/Data/Int");
+var Maybe_1 = require("../../../dist/Instance/Data/Maybe");
+var String_1 = require("../../../dist/Instance/Data/String");
+var Int_1 = require("../../../dist/Instance/Data/Int");
 var Common_1 = require("../../../dist/Common");
-var Bool_1 = require("../../../dist/DataStructure/Data/Bool");
+var Bool_1 = require("../../../dist/Instance/Data/Bool");
 var maybeStr = (Maybe_1.Maybe.Apply.liftA2(function (a) { return function (b) { return (Common_1.assign(Int_1.Int.Show.show(Int_1.Int.Ring.mul(a)(b)))(function (_) { return String_1.String.fromI(_); })); }; })(Maybe_1.Maybe.Just(Int_1.Int(33)))(Maybe_1.Maybe.Just(Int_1.Int(11))));
 console.log(Maybe_1.Maybe.Show(String_1.String.Show).show(maybeStr).toString());
 var a = (Maybe_1.Maybe.Apply.fstAp(Maybe_1.Maybe.Just(Int_1.Int(3)))(Maybe_1.Maybe.Just(String_1.String('shit'))));

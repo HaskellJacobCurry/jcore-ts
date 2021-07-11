@@ -37,6 +37,6 @@ declare namespace Reducible1 {
     interface Ext<F extends URI1> extends IExtReducible1<F> {
     }
     let Ext: <F extends URI1>(_: Reducible1<F>) => Ext<F>;
-    let instantiate: <F extends "Endo" | "Maybe" | "List">(_: Reducible1<F>) => Reducible1<F> & Ext<F>;
+    let instantiate: <F extends URI1>(_: Reducible1<F>) => Reducible1<F> & Ext<F>;
 }
 export default Reducible;

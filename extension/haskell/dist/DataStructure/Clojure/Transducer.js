@@ -4,7 +4,7 @@ exports.map = exports.take = exports.filter = exports.Transducer = void 0;
 var Reducer_1 = require("./Reducer");
 var Reduced_1 = require("./Reduced");
 var ITuple_1 = require("../../Typeclass/Data/ITuple");
-var Int_1 = require("../Data/Int");
+var Int_1 = require("../../Instance/Data/Int");
 var Common_1 = require("../../Common");
 var filter = (function () { return function (f) { return function (reducer) { return Reducer_1.Reducer({
     state: reducer.state,

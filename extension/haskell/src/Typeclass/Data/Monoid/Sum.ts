@@ -1,6 +1,6 @@
-import {Sum} from './Sum_'
+import {Sum, HSum as _HSum, Constructor, URI} from './Sum_'
 import {IShow} from '../Show'
-import {String} from '../../../DataStructure/Data/String'
+import {String} from '../../../Instance/Data/String'
 import {
 	Json,
 	assign,
@@ -22,9 +22,17 @@ let Show = <A>(_: IShow<A>) => (
 );
 export {Show}
 
-let _Sum = Json.assign(Sum, {
-	Show,
-});
+interface HSum extends _HSum {
+	Show: typeof Show;
+}
+export {HSum}
+
+type _Sum<A> = Sum<A>;
+let _Sum: Constructor & HSum = (
+	Json.assign(Sum, {
+		Show,
+	})
+);
 
 export * from './Sum_'
 export {_Sum as Sum}

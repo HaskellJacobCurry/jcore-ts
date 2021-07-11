@@ -1,7 +1,7 @@
-import {Any} from './Any_'
+import {Any, HAny as _HAny, Constructor, URI} from './Any_'
 import {IShow} from '../Show'
-import {String} from '../../../DataStructure/Data/String'
-import {Bool} from '../../../DataStructure/Data/Bool'
+import {String} from '../../../Instance/Data/String'
+import {Bool} from '../../../Instance/Data/Bool'
 import {
 	Json,
 	assign,
@@ -19,9 +19,16 @@ let Show: IShow<Any> = ({
 });
 export {Show}
 
-let _Any = Json.assign(Any, {
-	Show,
-});
+interface HAny extends _HAny {
+	Show: typeof Show;
+}
+
+type _Any = Any;
+let _Any: Constructor & HAny = (
+	Json.assign(Any, {
+		Show,
+	})
+);
 
 export * from './Any_'
 export {_Any as Any}

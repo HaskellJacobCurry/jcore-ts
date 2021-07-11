@@ -11,19 +11,23 @@ interface Any {
 export { Any };
 declare let get: (_: Any) => IBool;
 export { get };
-declare let create_: (value: IBool) => Any;
-export { create_ as create };
+declare let createAny: (value: IBool) => Any;
+export { createAny as create };
 /** Semigroup Any */
 declare let Semigroup: ISemigroup<Any>;
 export { Semigroup };
 /** Monoid Any */
 declare let Monoid: IMonoid<Any> & IMonoid.Ext<Any>;
 export { Monoid };
-declare let Any: ((value: IBool) => Any) & {
-    URI: "Any";
+declare type Constructor = typeof createAny;
+export { Constructor };
+interface HAny {
+    URI: URI;
     get: (_: Any) => IBool;
     create: (value: IBool) => Any;
-    Semigroup: ISemigroup<Any>;
-    Monoid: IMonoid<Any> & IMonoid.Ext<Any>;
-};
+    Semigroup: typeof Semigroup;
+    Monoid: typeof Monoid;
+}
+export { HAny };
+declare let Any: Constructor & HAny;
 export default Any;

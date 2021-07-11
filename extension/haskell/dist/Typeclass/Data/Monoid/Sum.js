@@ -13,7 +13,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Sum = exports.Show = void 0;
 var Sum_1 = require("./Sum_");
 var Show_1 = require("../Show");
-var String_1 = require("../../../DataStructure/Data/String");
+var String_1 = require("../../../Instance/Data/String");
 var common_1 = require("../../../Common/common");
 /** Show a => Show (Sum a) */
 var Show = function (_) { return ((function (ShowA) {
@@ -23,9 +23,9 @@ var Show = function (_) { return ((function (ShowA) {
     }));
 })()); };
 exports.Show = Show;
-var _Sum = common_1.Json.assign(Sum_1.Sum, {
+var _Sum = (common_1.Json.assign(Sum_1.Sum, {
     Show: Show,
-});
+}));
 exports.Sum = _Sum;
 __exportStar(require("./Sum_"), exports);
 exports.default = _Sum;

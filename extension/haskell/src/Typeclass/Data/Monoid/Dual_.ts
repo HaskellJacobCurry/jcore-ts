@@ -2,8 +2,6 @@ import {ISemigroup} from '../Semigroup'
 import {IMonoid} from '../Monoid'
 import {
 	Json,
-	assign,
-	compose,
 	S,
 } from '../../../Common/common'
 
@@ -20,16 +18,16 @@ export {Dual}
 let get: <A>(_: Dual<A>) => A = _ => _.value;
 export {get}
 
-let create_: <A>(value: A) => Dual<A> = (
+let createDual: <A>(value: A) => Dual<A> = (
 	value => ({URI, value})
 );
-export {create_ as create}
+export {createDual as create}
 
 /** Semigroup a => Semigroup (Dual a) */
 let Semigroup = <A>(_: ISemigroup<A>) => (
 	((SemigroupA = _) => (
 		ISemigroup.instantiate<Dual<A>>({
-			append: dual0 => dual1 => create_(SemigroupA.append(dual1.value)(dual0.value))
+			append: dual0 => dual1 => createDual(SemigroupA.append(dual1.value)(dual0.value))
 		})
 	))()
 );
@@ -45,11 +43,25 @@ let Monoid = <A>(_: IMonoid<A>) => (
 );
 export {Monoid}
 
-let Dual = Json.assign(create_, {
-	URI,
-	get,
-	create: create_,
-	Semigroup,
-	Monoid,
-});
+type Constructor = typeof createDual;
+export {Constructor}
+
+interface HDual {
+	URI: URI;
+	get: <A>(_: Dual<A>) => A;
+	create: <A>(value: A) => Dual<A>;
+	Semigroup: typeof Semigroup;
+	Monoid: typeof Monoid;
+}
+export {HDual}
+
+let Dual: Constructor & HDual = (
+	Json.assign(createDual, {
+		URI,
+		get,
+		create: createDual,
+		Semigroup,
+		Monoid,
+	})
+);
 export default Dual

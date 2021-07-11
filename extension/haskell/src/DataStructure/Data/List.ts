@@ -16,16 +16,16 @@ import {
 } from '../../Common'
 import {Case} from '../../Common/Case'
 import {Throwable} from '../../Common/Throwable'
-import {String} from './String'
-import {Bool} from './Bool'
+import {String} from '../../Instance/Data/String'
+import {Bool} from '../../Instance/Data/Bool'
 import {Foldable1} from '../../Typeclass/Data/Foldable'
 import {Populatable1} from '../../Typeclass/Data/Populatable'
 import {IShow} from '../../Typeclass/Data/Show'
 import {Monoid} from '../../Typeclass/Data/Monoid'
-import {Maybe} from './Maybe'
-import {Tuple} from './Tuple'
-import {Int} from './Int'
-import {Ordering} from './Ordering'
+import {Maybe} from '../../Instance/Data/Maybe'
+import {Tuple} from '../../Instance/Data/Tuple'
+import {Int} from '../../Instance/Data/Int'
+import {Ordering} from '../../Instance/Data/Ordering'
 import IString from '../../Typeclass/Data/IString'
 
 /** data List a = Nil | Cons a (List a) */
@@ -97,7 +97,7 @@ let infer: <TList>(_: TList) => List<TList extends List<infer T> ? T : never> = 
 );
 export {infer}
 
-let create_: <A>(_: A[]) => List<A> = (
+let createList: <A>(_: A[]) => List<A> = (
 	<A>(as: A[]) => (
 		apply(
 			trampoline<List<A>>()((acc: List<A>, i: number) => collect => (
@@ -109,7 +109,7 @@ let create_: <A>(_: A[]) => List<A> = (
 		)(_ => _(Nil, as.length - 1))
 	)
 );
-export {create_ as create}
+export {createList as create}
 
 let cons: <A>(head: A) => (tail: List<A>) => List<A> = (
 	head => tail => Cons(head, tail)
@@ -358,78 +358,6 @@ let reverse: <A>(_: List<A>) => List<A> = (
 );
 export {reverse}
 
-let show: <A>(_: IShow<A>) => (_: List<A>) => IString = (
-	<A>(ShowA: IShow<A>) => (listA: List<A>) => (
-		apply(
-			recurse<String>()((list: List<A>) => show => (
-				list.cata({
-					Nil: () => String('Nil'),
-					Cons: (head, tail) => (
-						apply((String('(Cons ')
-						))(_ => apply(String.append(_)(String.fromI(ShowA.show(head)))
-						))(_ => apply(String.append(_)(String(' '))
-						))(_ => apply(String.append(_)(show(tail))
-						))(_ => String.append(_)(String(')')))
-					)
-				})
-			))
-		)(_ => _(listA))
-	)
-);
-show = <A>(ShowA: IShow<A>) => (listA: List<A>) => (
-	apply(
-		trampoline<String>()((list: List<A>, done: Bool, acc: String, cont: trampoline.Cont<String>) => show => (
-			done.cata({
-				True: () => cont(acc),
-				False: () => (
-					list.cata({
-						Nil: () => cont(String('Nil')),
-						Cons: (head, tail) => (
-							show(tail, done, acc, acc => (
-								apply((String('(Cons ')
-								))(_ => apply(String.append(_)(String.fromI(ShowA.show(head)))
-								))(_ => apply(String.append(_)(String(' '))
-								))(_ => apply(String.append(_)(acc)
-								))(_ => apply(String.append(_)(String(')'))
-								))(acc => show(list, Bool.True, acc, cont))
-							))
-						)
-					})
-				)
-			})
-		))
-	)(_ => _(listA, Bool.False, String.mempty(), _ => _))
-);
-export {show}
-
-let foldMap: <G>(_: Monoid<G>) => <A>(_: (_: A) => G) => (_: List<A>) => G = (
-	<G>(MonoidG: Monoid<G>) => <A>(f: (_: A) => G) => (listA: List<A>) => (
-		apply({
-			MonoidExtG: Monoid.Ext(MonoidG),
-		})(({MonoidExtG}) => apply(
-			recurse<G>()((acc: G, listA: List<A>) => foldMap => (
-				listA.cata({
-					Nil: () => acc,
-					Cons: (head, tail) => apply(MonoidExtG.mappend(acc)(f(head)))(_ => foldMap(_, tail)),
-				})
-			))
-		))(_ => _(MonoidG.mempty(), listA))
-	)
-);
-foldMap = <G>(MonoidG: Monoid<G>) => <A>(f: (_: A) => G) => (listA: List<A>) => (
-	apply({
-		MonoidExtG: Monoid.Ext(MonoidG),
-	})(({MonoidExtG}) => apply(
-		trampoline<G>()((acc: G, listA: List<A>) => foldMap => (
-			listA.cata({
-				Nil: () => acc,
-				Cons: (head, tail) => apply(MonoidExtG.mappend(acc)(f(head)))(_ => foldMap(_, tail)),
-			})
-		))
-	))(_ => _(MonoidG.mempty(), listA))
-);
-export {foldMap}
-
 let foldl: <A, B>(_: (_: B) => (_: A) => B) => (_: B) => (_: List<A>) => B = (
 	<A, B>(f: (_: B) => (_: A) => B) => (b: B) => (listA: List<A>) => (
 		apply(
@@ -451,18 +379,6 @@ let foldr: <A, B>(_: (_: A) => (_: B) => B) => (_: B) => (_: List<A>) => B = (
 	)
 );
 export {foldr}
-
-let seed: <A>() => List<A> = (
-	() => Nil
-);
-export {seed}
-
-let populate: <A>(..._s: A[]) => (_: List<A>) => List<A> = (
-	<A>(...as: A[]) => (listA: List<A>) => (
-		foldr<A, List<A>>(cons)(listA)(create_(as))
-	)
-);
-export {populate}
 
 /** merge :: (a -> a -> Ordering) -> List a -> List a -> List a */
 let merge: <A>(f: (_: A) => (_: A) => Ordering) => (_: List<A>) => (_: List<A>) => List<A> = (
@@ -677,64 +593,67 @@ let sortBy: <A>(f: (_: A) => (_: A) => Ordering) => (_: List<A>) => List<A> = (
 );
 export {sortBy}
 
-/** show :: (Show a) => Show (List a) => List a -> String */
-let Show = <A>(_: IShow<A>) => apply(_)(ShowA => (
-	IShow.instantiate<List<A>>({
-		show: show(ShowA),
+type Constructor = typeof createList;
+export {Constructor}
+
+interface HList {
+	URI: URI;
+	Nil: List<never>;
+	Nil_: <A>() => List<A>;
+	Cons: <A>(head: A, tail: List<A>) => List<A>;
+	infer: typeof infer;
+	create: <A>(_: A[]) => List<A>;
+	cons: <A>(head: A) => (tail: List<A>) => List<A>;
+	snoc: <A>(init: List<A>) => (last: A) => List<A>;
+	singleton: <A>(_: A) => List<A>;
+	head: <A>(_: List<A>) => A;
+	last: <A>(_: List<A>) => A;
+	tail: <A>(_: List<A>) => List<A>;
+	uncons: <A>(_: List<A>) => Maybe<Tuple<A, List<A>>>;
+	unsnoc: <A>(_: List<A>) => Maybe<Tuple<List<A>, A>>
+	shift: <A>(_: List<A>) => Maybe<List<A>>;
+	shiftN: (n: Int) => <A>(_: List<A>) => Maybe<List<A>>;
+	pop: <A>(_: List<A>) => Maybe<List<A>>;
+	index: (i: Int) => <A>(_: List<A>) => Maybe<A>;
+	find_: <A>(f: (_: A) => Bool) => (_: List<A>) => Maybe<Tuple<A, Int>>;
+	find: <A>(f: (_: A) => Bool) => (_: List<A>) => Maybe<A>;
+	reverseMap: <A, B>(f: (_: A) => B) => (_: List<A>) => List<B>;
+	map: <A, B>(f: (_: A) => B) => (_: List<A>) => List<B>;
+	reverse: <A>(_: List<A>) => List<A>;
+	merge: <A>(f: (_: A) => (_: A) => Ordering) => (_: List<A>) => (_: List<A>) => List<A>;
+	mergeAll: <A>(f: (_: A) => (_: A) => Ordering) => (_: List<List<A>>) => List<A>;
+	sortBy: <A>(f: (_: A) => (_: A) => Ordering) => (_: List<A>) => List<A>;
+}
+export {HList}
+
+let List: Constructor & HList = (
+	Json.assign(createList, {
+		URI,
+		Nil,
+		Nil_,
+		Cons,
+		infer,
+		create: createList,
+		cons,
+		snoc,
+		singleton,
+		head,
+		last,
+		tail,
+		uncons,
+		unsnoc,
+		shift,
+		shiftN,
+		pop,
+		index,
+		find_,
+		find,
+		reverseMap,
+		map,
+		reverse,
+		merge,
+		mergeAll,
+		sortBy,
 	})
-));
-export {Show}
-
-let Foldable = Foldable1.instantiate<URI>({
-	URI,
-	foldMap,
-	foldr: placeholder(),
-});
-Foldable.foldl = foldl;
-Foldable.foldr = foldr;
-export {Foldable}
-
-let Populatable = Populatable1.instantiate<URI>({
-	URI,
-	seed,
-	populate,
-});
-export {Populatable}
-
-let List = {
-	URI,
-	Nil,
-	Nil_,
-	Cons,
-	infer,
-	create: create_,
-	cons,
-	snoc,
-	singleton,
-	head,
-	last,
-	tail,
-	uncons,
-	unsnoc,
-	shift,
-	shiftN,
-	pop,
-	index,
-	find_,
-	reverseMap,
-	map,
-	reverse,
-	show,
-	foldMap,
-	foldl,
-	foldr,
-	seed,
-	populate,
-	merge,
-	mergeAll,
-	sortBy,
-	Show,
-	Foldable,
-	Populatable,
-};
+);
 export default List

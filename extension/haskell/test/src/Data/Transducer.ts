@@ -1,7 +1,7 @@
 import {Transducer} from '../../../dist/Typeclass/Data/Transducer'
 import {Reducer} from '../../../dist/Typeclass/Data/Reducible'
-import {Bool} from '../../../dist/DataStructure/Data/Bool'
-import {Int} from '../../../dist/DataStructure/Data/Int'
+import {Bool} from '../../../dist/Instance/Data/Bool'
+import {Int} from '../../../dist/Instance/Data/Int'
 import {
 	apply,
 	compose,

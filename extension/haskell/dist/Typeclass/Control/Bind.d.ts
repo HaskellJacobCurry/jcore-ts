@@ -1,5 +1,5 @@
 import { HKT, URI1, URI2, Kind1, Kind2 } from '../../Common/HKT';
-import { Apply, Apply1, Apply2, Apply2_ } from './Apply';
+import { Apply, Apply1, Apply2, Apply2C } from './Apply';
 /**
  * class (Apply f) <= Bind f where
  *  bind :: f a -> (a -> f b) -> f b
@@ -47,31 +47,31 @@ interface IExtBind2<F extends URI2> {
 interface Bind2<F extends URI2> extends IBind2<F>, Apply2<F> {
 }
 export { Bind2 };
-interface IBind2_<F extends URI2, T0> {
+interface IBind2C<F extends URI2, T0> {
     bind: <A>(_: Kind2<F, T0, A>) => <B>(_: (_: A) => Kind2<F, T0, B>) => Kind2<F, T0, B>;
 }
-interface IExtBind2_<F extends URI2, T0> {
+interface IExtBind2C<F extends URI2, T0> {
     sequence: <A>(_: Kind2<F, T0, A>) => <B>(_: Kind2<F, T0, B>) => Kind2<F, T0, B>;
 }
-interface Bind2_<F extends URI2, T0> extends IBind2_<F, T0>, Apply2_<F, T0> {
+interface Bind2C<F extends URI2, T0> extends IBind2C<F, T0>, Apply2C<F, T0> {
 }
-export { Bind2_ };
+export { Bind2C };
 declare namespace Bind1 {
     interface Ext<F extends URI1> extends IExtBind1<F> {
     }
     let Ext: <F extends URI1>(_: Bind1<F>) => Ext<F>;
-    let instantiate: <F extends "Endo" | "Maybe" | "List">(_: Bind1<F>) => Bind1<F> & Ext<F>;
+    let instantiate: <F extends URI1>(_: Bind1<F>) => Bind1<F> & Ext<F>;
 }
 declare namespace Bind2 {
     interface Ext<F extends URI2> extends IExtBind2<F> {
     }
     let Ext: <F extends URI2>(_: Bind2<F>) => Ext<F>;
-    let instantiate: <F extends "Function" | "Tuple">(_: Bind2<F>) => Bind2<F> & Ext<F>;
+    let instantiate: <F extends URI2>(_: Bind2<F>) => Bind2<F> & Ext<F>;
 }
-declare namespace Bind2_ {
-    interface Ext<F extends URI2, T0> extends IExtBind2_<F, T0> {
+declare namespace Bind2C {
+    interface Ext<F extends URI2, T0> extends IExtBind2C<F, T0> {
     }
-    let Ext: <F extends URI2, T0>(_: Bind2_<F, T0>) => Ext<F, T0>;
-    let instantiate: <F extends "Function" | "Tuple", T0>(_: Bind2_<F, T0>) => Bind2_<F, T0> & Ext<F, T0>;
+    let Ext: <F extends URI2, T0>(_: Bind2C<F, T0>) => Ext<F, T0>;
+    let instantiate: <F extends URI2, T0>(_: Bind2C<F, T0>) => Bind2C<F, T0> & Ext<F, T0>;
 }
 export default Bind;

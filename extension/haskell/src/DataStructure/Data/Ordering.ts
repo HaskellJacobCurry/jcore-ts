@@ -1,9 +1,9 @@
 import {IOrdering} from '../../Typeclass/Data/IOrdering'
-import {Eq as IEq} from '../../Typeclass/Data/Eq'
-import {Ord as IOrd} from '../../Typeclass/Data/Ord'
+import {IEq} from '../../Typeclass/Data/Eq'
+import {IOrd} from '../../Typeclass/Data/Ord'
 import {IShow} from '../../Typeclass/Data/Show'
 import {String} from './String'
-import {Bool} from './Bool'
+import {Bool} from '../../Instance/Data/Bool'
 import {
 	Json,
 	define,
@@ -64,74 +64,20 @@ let invert: (_: Ordering) => Ordering = (
 );
 export {invert}
 
-let eq: (_: Ordering) => (_: Ordering) => Bool = (
-	ordering0 => ordering1 => Bool(ordering0.tag === ordering1.tag)
-);
-export {eq}
+interface HOrdering {
+	LT: Ordering;
+	EQ: Ordering;
+	GT: Ordering;
+	fromI: (_: IOrdering) => Ordering;
+	invert: (_: Ordering) => Ordering;
+}
+export {HOrdering}
 
-let notEq: (_: Ordering) => (_: Ordering) => Bool = (
-	_0 => _1 => Bool.fromI(Eq.notEq(_0)(_1))
-);
-export {notEq}
-
-let Show = IShow.instantiate<Ordering>({
-	show: ordering => String(ordering.tag),
-});
-export {Show}
-
-let Eq = IEq.instantiate<Ordering>({
-	eq,
-});
-export {Eq}
-
-let Ord = IOrd.instantiate<Ordering>(
-	define<IOrd<Ordering>>(Ord => ({
-		...Eq,
-		compare: ordering0 => ordering1 => (
-			ordering0.cata({
-				LT: () => (
-					ordering1.cata({
-						LT: () => EQ,
-						EQ: () => LT,
-						GT: () => LT,
-					})
-				),
-				EQ: () => (
-					ordering1.cata({
-						LT: () => GT,
-						EQ: () => EQ,
-						GT: () => LT,
-					})
-				),
-				GT: () => (
-					ordering1.cata({
-						LT: () => GT,
-						EQ: () => GT,
-						GT: () => EQ,
-					})
-				)
-			})
-		),
-		lt: ordering0 => ordering1 => (
-			Ord().compare(ordering0)(ordering1).cata({
-				LT: () => Bool.True,
-				EQ: () => Bool.False,
-				GT: () => Bool.False,
-			})
-		),
-	}))
-);
-export {Ord}
-
-let Ordering = {
+let Ordering: HOrdering = {
 	LT,
 	EQ,
 	GT,
 	fromI,
 	invert,
-	eq,
-	notEq,
-	Show,
-	Eq,
-	Ord,
 };
+export default Ordering

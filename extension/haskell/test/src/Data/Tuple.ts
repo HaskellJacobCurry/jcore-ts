@@ -1,6 +1,6 @@
-import {Tuple} from '../../../dist/DataStructure/Data/Tuple'
-import {String} from '../../../dist/DataStructure/Data/String'
-import {Int} from '../../../dist/DataStructure/Data/Int'
+import {Tuple} from '../../../dist/Instance/Data/Tuple'
+import {String} from '../../../dist/Instance/Data/String'
+import {Int} from '../../../dist/Instance/Data/Int'
 
 console.log(
 	Tuple.Show(Int.Show, String.Show).show(

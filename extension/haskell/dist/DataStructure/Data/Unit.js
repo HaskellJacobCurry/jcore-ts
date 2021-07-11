@@ -1,18 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Show = exports.fromI = exports.Unit = void 0;
-var Show_1 = require("../../Typeclass/Data/Show");
-var String_1 = require("./String");
+exports.fromI = exports.createUnit = exports.Unit = void 0;
 var common_1 = require("../../Common/common");
+var createUnit = (function () { return ({}); });
+exports.createUnit = createUnit;
 var fromI = (function (unit) { return common_1.cast(unit)(); });
 exports.fromI = fromI;
-var Show = Show_1.IShow.instantiate({
-    show: function (_) { return String_1.String('Unit'); },
-});
-exports.Show = Show;
-var Unit = common_1.Json.assign(function () { return ({}); }, {
+var Unit = (common_1.Json.assign(createUnit, {
+    create: createUnit,
     fromI: fromI,
-    Show: Show
-});
+}));
 exports.Unit = Unit;
 exports.default = Unit;

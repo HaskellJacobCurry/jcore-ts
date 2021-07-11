@@ -1,0 +1,42 @@
+import { List, HList as _HList, Constructor } from '../../DataStructure/Data/List';
+import { String } from './String';
+import { Foldable1 } from '../../Typeclass/Data/Foldable';
+import { Populatable1 } from '../../Typeclass/Data/Populatable';
+import { IShow } from '../../Typeclass/Data/Show';
+import { Monoid } from '../../Typeclass/Data/Monoid';
+export * from '../../DataStructure/Data/List';
+declare let show: <A>(_: IShow<A>) => (_: List<A>) => String;
+export { show };
+declare let foldMap: <G>(_: Monoid<G>) => <A>(_: (_: A) => G) => (_: List<A>) => G;
+export { foldMap };
+declare let foldl: <A, B>(_: (_: B) => (_: A) => B) => (_: B) => (_: List<A>) => B;
+export { foldl };
+declare let foldr: <A, B>(_: (_: A) => (_: B) => B) => (_: B) => (_: List<A>) => B;
+export { foldr };
+declare let seed: <A>() => List<A>;
+export { seed };
+declare let populate: <A>(..._s: A[]) => (_: List<A>) => List<A>;
+export { populate };
+/** show :: (Show a) => Show (List a) => List a -> String */
+declare let Show: <A>(_: IShow<A>) => IShow<List<A>>;
+export { Show };
+declare let Foldable: Foldable1<"List"> & Foldable1.Ext<"List">;
+export { Foldable };
+declare let Populatable: Populatable1<"List">;
+export { Populatable };
+interface HList extends _HList {
+    Show: typeof Show;
+    Foldable: typeof Foldable;
+    Populatable: typeof Populatable;
+    show: <A>(_: IShow<A>) => (_: List<A>) => String;
+    foldMap: <G>(_: Monoid<G>) => <A>(_: (_: A) => G) => (_: List<A>) => G;
+    foldl: <A, B>(_: (_: B) => (_: A) => B) => (_: B) => (_: List<A>) => B;
+    foldr: <A, B>(_: (_: A) => (_: B) => B) => (_: B) => (_: List<A>) => B;
+    seed: <A>() => List<A>;
+    populate: <A>(..._s: A[]) => (_: List<A>) => List<A>;
+}
+export { HList };
+declare type _List<A> = List<A>;
+declare let _List: Constructor & HList;
+export { _List as List };
+export default _List;

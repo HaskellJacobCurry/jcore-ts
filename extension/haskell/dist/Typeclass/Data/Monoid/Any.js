@@ -12,17 +12,17 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Any = exports.Show = void 0;
 var Any_1 = require("./Any_");
-var String_1 = require("../../../DataStructure/Data/String");
-var Bool_1 = require("../../../DataStructure/Data/Bool");
+var String_1 = require("../../../Instance/Data/String");
+var Bool_1 = require("../../../Instance/Data/Bool");
 var common_1 = require("../../../Common/common");
 /** Show Any */
 var Show = ({
     show: function (any) { return (common_1.assign(Bool_1.Bool.fromI(any.value))(function (_) { return common_1.assign(String_1.String(_.tag)); })(function (_) { return String_1.String.Semigroup.append(String_1.String('Any '))(_); })); },
 });
 exports.Show = Show;
-var _Any = common_1.Json.assign(Any_1.Any, {
+var _Any = (common_1.Json.assign(Any_1.Any, {
     Show: Show,
-});
+}));
 exports.Any = _Any;
 __exportStar(require("./Any_"), exports);
 exports.default = _Any;

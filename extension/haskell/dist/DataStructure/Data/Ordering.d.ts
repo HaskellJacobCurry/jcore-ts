@@ -1,8 +1,4 @@
 import { IOrdering } from '../../Typeclass/Data/IOrdering';
-import { Eq as IEq } from '../../Typeclass/Data/Eq';
-import { Ord as IOrd } from '../../Typeclass/Data/Ord';
-import { IShow } from '../../Typeclass/Data/Show';
-import { Bool } from './Bool';
 declare type Ordering = IOrdering & (LT | EQ | GT);
 export { Ordering };
 interface LT {
@@ -24,25 +20,13 @@ declare let fromI: (_: IOrdering) => Ordering;
 export { fromI };
 declare let invert: (_: Ordering) => Ordering;
 export { invert };
-declare let eq: (_: Ordering) => (_: Ordering) => Bool;
-export { eq };
-declare let notEq: (_: Ordering) => (_: Ordering) => Bool;
-export { notEq };
-declare let Show: IShow<Ordering>;
-export { Show };
-declare let Eq: IEq<Ordering> & IEq.Ext<Ordering>;
-export { Eq };
-declare let Ord: IOrd<Ordering> & IOrd.Ext<Ordering>;
-export { Ord };
-declare let Ordering: {
-    LT: IOrdering & LT;
-    EQ: IOrdering & EQ;
-    GT: IOrdering & GT;
+interface HOrdering {
+    LT: Ordering;
+    EQ: Ordering;
+    GT: Ordering;
     fromI: (_: IOrdering) => Ordering;
     invert: (_: Ordering) => Ordering;
-    eq: (_: Ordering) => (_: Ordering) => Bool;
-    notEq: (_: Ordering) => (_: Ordering) => Bool;
-    Show: IShow<Ordering>;
-    Eq: IEq<Ordering> & IEq.Ext<Ordering>;
-    Ord: IOrd<Ordering> & IOrd.Ext<Ordering>;
-};
+}
+export { HOrdering };
+declare let Ordering: HOrdering;
+export default Ordering;

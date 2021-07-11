@@ -39,8 +39,10 @@ namespace Num {
 		})
 	);
 
-	export let instantiate = <A>(_: Num<A>) => (
-		assign(_)((_: Num<A>) => Json.assign(_, Ext(_)))
+	export let instantiate: <A>(_: Num<A>) => Num<A> & Ext<A> = (
+		<A>(_: Num<A>) => (
+			assign(_)((_: Num<A>) => Json.assign(_, Ext(_)))
+		)
 	);
 }
 export default Num

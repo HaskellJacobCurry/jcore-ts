@@ -1,9 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Show = exports.not = exports.or = exports.and = exports.create = exports.fromI = exports.True = exports.False = exports.Bool = void 0;
+exports.not = exports.or = exports.and = exports.create = exports.fromI = exports.True = exports.False = exports.Bool = void 0;
 var IBool_1 = require("../../Typeclass/Data/IBool");
-var Show_1 = require("../../Typeclass/Data/Show");
-var String_1 = require("./String");
 var common_1 = require("../../Common/common");
 var False = common_1.create(common_1.Json.assign(common_1.create({ tag: 'False' }), common_1.create({
     cata: function (fs) { return fs['False'](); },
@@ -32,21 +30,13 @@ var or = (function (bool0) { return function (bool1) { return IBool_1.IBool.or(b
 exports.or = or;
 var not = (function (bool) { return IBool_1.IBool.not(bool); });
 exports.not = not;
-var Show = Show_1.IShow.instantiate({
-    show: function (bool) { return (bool.cata({
-        True: function () { return String_1.String('True'); },
-        False: function () { return String_1.String('False'); },
-    })); }
-});
-exports.Show = Show;
-var Bool = common_1.Json.assign(createBool, {
+var Bool = (common_1.Json.assign(createBool, {
     fromI: fromI,
+    False: False,
+    True: True,
     and: and,
     or: or,
     not: not,
-    False: False,
-    True: True,
-    Show: Show,
-});
+}));
 exports.Bool = Bool;
 exports.default = Bool;

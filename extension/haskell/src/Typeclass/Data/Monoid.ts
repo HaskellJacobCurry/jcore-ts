@@ -29,8 +29,10 @@ namespace Monoid {
 		)
 	);
 
-	export let instantiate = <A>(_: Monoid<A>) => (
-		assign(_)((_: Monoid<A>) => Json.assign(_, Ext(_)))
+	export let instantiate: <A>(_: Monoid<A>) => Monoid<A> & Ext<A> = (
+		<A>(_: Monoid<A>) => (
+			assign(_)((_: Monoid<A>) => Json.assign(_, Ext(_)))
+		)
 	);
 }
 export default Monoid

@@ -1,6 +1,6 @@
-import {Transducer, Transducer_} from './Reducible'
-import {Bool} from '../../DataStructure/Data/Bool'
-import {Int} from '../../DataStructure/Data/Int'
+import {Transducer, Transducer_} from '../../Typeclass/Data/Reducible'
+import {Bool} from './Bool'
+import {Int} from '../../Instance/Data/Int'
 
 let map: <A, C = A>(f: (_: A) => C) => <B>() => Transducer_<A, B, C> = (
 	f => () => reducer => (

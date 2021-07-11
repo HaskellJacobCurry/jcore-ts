@@ -1,6 +1,6 @@
 import { HKT, URI1, URI2, Kind1, Kind2 } from '../../Common/HKT';
-import { Applicative, Applicative1, Applicative2, Applicative2_ } from './Applicative';
-import { Bind, Bind1, Bind2, Bind2_ } from './Bind';
+import { Applicative, Applicative1, Applicative2, Applicative2C } from './Applicative';
+import { Bind, Bind1, Bind2, Bind2C } from './Bind';
 /**
  * class (Applicative f, Bind f) <= Monad f
  * return :: a -> f a
@@ -39,28 +39,28 @@ interface IExtMonad2<F extends URI2> {
 interface Monad2<F extends URI2> extends Applicative2<F>, Bind2<F> {
 }
 export { Monad2 };
-interface IExtMonad2_<F extends URI2, T0> {
+interface IExtMonad2C<F extends URI2, T0> {
     return: <A>(_: A) => Kind2<F, T0, A>;
 }
-interface Monad2_<F extends URI2, T0> extends Applicative2_<F, T0>, Bind2_<F, T0> {
+interface Monad2C<F extends URI2, T0> extends Applicative2C<F, T0>, Bind2C<F, T0> {
 }
-export { Monad2_ };
+export { Monad2C };
 declare namespace Monad1 {
     interface Ext<F extends URI1> extends IExtMonad1<F> {
     }
     let Ext: <F extends URI1>(_: Monad1<F>) => Ext<F>;
-    let instantiate: <F extends "Endo" | "Maybe" | "List">(_: Monad1<F>) => Monad1<F> & Ext<F>;
+    let instantiate: <F extends URI1>(_: Monad1<F>) => Monad1<F> & Ext<F>;
 }
 declare namespace Monad2 {
     interface Ext<F extends URI2> extends IExtMonad2<F> {
     }
     let Ext: <F extends URI2>(_: Monad2<F>) => Ext<F>;
-    let instantiate: <F extends "Function" | "Tuple">(_: Monad2<F>) => Monad2<F> & Ext<F>;
+    let instantiate: <F extends URI2>(_: Monad2<F>) => Monad2<F> & Ext<F>;
 }
-declare namespace Monad2_ {
-    interface Ext<F extends URI2, T0> extends IExtMonad2_<F, T0> {
+declare namespace Monad2C {
+    interface Ext<F extends URI2, T0> extends IExtMonad2C<F, T0> {
     }
-    let Ext: <F extends URI2, T0>(_: Monad2_<F, T0>) => Ext<F, T0>;
-    let instantiate: <F extends "Function" | "Tuple", T0>(_: Monad2_<F, T0>) => Monad2_<F, T0> & Ext<F, T0>;
+    let Ext: <F extends URI2, T0>(_: Monad2C<F, T0>) => Ext<F, T0>;
+    let instantiate: <F extends URI2, T0>(_: Monad2C<F, T0>) => Monad2C<F, T0> & Ext<F, T0>;
 }
 export default Monad;

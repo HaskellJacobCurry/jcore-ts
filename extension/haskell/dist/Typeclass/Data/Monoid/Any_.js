@@ -20,22 +20,22 @@ var URI = common_1.S('Any');
 exports.URI = URI;
 var get = function (_) { return _.value; };
 exports.get = get;
-var create_ = (function (value) { return ({ URI: URI, value: value }); });
-exports.create = create_;
+var createAny = (function (value) { return ({ URI: URI, value: value }); });
+exports.create = createAny;
 /** Semigroup Any */
 var Semigroup = Semigroup_1.ISemigroup.instantiate({
-    append: function (any0) { return function (any1) { return create_(IBool_1.IBool.or(any0.value)(any1.value)); }; },
+    append: function (any0) { return function (any1) { return createAny(IBool_1.IBool.or(any0.value)(any1.value)); }; },
 });
 exports.Semigroup = Semigroup;
 /** Monoid Any */
-var Monoid = Monoid_1.IMonoid.instantiate(__assign(__assign({}, Semigroup), { mempty: function () { return create_(IBool_1.IBool.False); } }));
+var Monoid = Monoid_1.IMonoid.instantiate(__assign(__assign({}, Semigroup), { mempty: function () { return createAny(IBool_1.IBool.False); } }));
 exports.Monoid = Monoid;
-var Any = common_1.Json.assign(create_, {
+var Any = (common_1.Json.assign(createAny, {
     URI: URI,
     get: get,
-    create: create_,
+    create: createAny,
     Semigroup: Semigroup,
     Monoid: Monoid,
-});
+}));
 exports.Any = Any;
 exports.default = Any;

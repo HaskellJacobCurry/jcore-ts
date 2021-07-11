@@ -26,10 +26,10 @@ export {Endo}
 let get: <A>(_: Endo<A>) => (_: A) => A = _ => _.fn;
 export {get}
 
-let create_: <A>(fn: (_: A) => A) => Endo<A> = (
+let createEndo: <A>(fn: (_: A) => A) => Endo<A> = (
 	fn => ({URI, fn})
 );
-export {create_ as create}
+export {createEndo as create}
 
 let Semigroup = <A>() => ISemigroup.instantiate<Endo<A>>({
 	append: endo0 => endo1 => Endo(compose(endo0.fn, endo1.fn)),
@@ -42,13 +42,25 @@ let Monoid = <A>() => IMonoid.instantiate<Endo<A>>({
 });
 export {Monoid}
 
-let Endo = Json.assign(
-	<A>(fn: (_: A) => A) => <Endo<A>>{URI, fn}, {
+type Constructor = typeof createEndo;
+export {Constructor}
+
+interface HEndo {
+	URI: URI;
+	get: <A>(_: Endo<A>) => (_: A) => A;
+	create: <A>(fn: (_: A) => A) => Endo<A>;
+	Semigroup: typeof Semigroup;
+	Monoid: typeof Monoid;
+}
+export {HEndo}
+
+let Endo: Constructor & HEndo = (
+	Json.assign(createEndo, {
 		URI,
 		get,
-		create: create_,
+		create: createEndo,
 		Semigroup,
 		Monoid,
-	}
+	})
 );
 export default Endo

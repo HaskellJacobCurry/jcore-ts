@@ -1,7 +1,7 @@
-import {All} from './All_'
+import {All, HAll as _HAll, Constructor, URI} from './All_'
 import {IShow} from '../Show'
-import {String} from '../../../DataStructure/Data/String'
-import {Bool} from '../../../DataStructure/Data/Bool'
+import {String} from '../../../Instance/Data/String'
+import {Bool} from '../../../Instance/Data/Bool'
 import {
 	Json,
 	assign,
@@ -19,10 +19,17 @@ let Show: IShow<All> = ({
 });
 export {Show}
 
-let _All = Json.assign(All, {
-	Show,
-});
+interface HAll extends _HAll {
+	Show: typeof Show;
+}
 
-export * from './Any_'
-export {_All}
+type _All = All;
+let _All: Constructor & HAll = (
+	Json.assign(All, {
+		Show,
+	})
+);
+
+export * from './All_'
+export {_All as All}
 export default _All

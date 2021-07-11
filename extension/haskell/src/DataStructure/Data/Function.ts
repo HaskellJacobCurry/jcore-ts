@@ -1,8 +1,9 @@
-import {Semigroupoid2} from '../../Typeclass/Control/Semigroupoid'
-import {Category2} from '../../Typeclass/Control/Category'
 import {
+	Json,
 	Function as IFunction,
 	S,
+	define as define_,
+	assign as assign_,
 } from '../../Common/common'
 
 const URI = S('Function');
@@ -17,6 +18,9 @@ declare module '../../Common/HKT' {
 
 interface Function<A, B> extends IFunction<[A], B> {}
 export {Function}
+
+let createFunction: <A, B>(_: (_: A) => B) => Function<A, B> = f => f;
+export {createFunction as create}
 
 /** flip :: (a -> b -> c) -> b -> a -> c */
 let flip: <A, B, C>(_: (_: A) => (_: B) => C) => (_: B) => (_: A) => C = (
@@ -45,38 +49,37 @@ let on: <B, C>(_: (_: B) => (_: B) => C) => <A>(_: (_: A) => B) => (_: A) => (_:
 );
 export {on}
 
-let define = IFunction.define;
+let define = define_;
 export {define}
 
-let assign = IFunction.assign;
+let assign = assign_;
 export {assign}
 
-/** compose :: Semigroupoid Function => Function b c -> Function a b -> Function a c */
-let Semigroupoid: Semigroupoid2<URI> = {
-	URI,
-	compose: f0 => f1 => a => f0(f1(a)),
-};
-export {Semigroupoid}
+type Constructor = typeof createFunction;
+export {Constructor}
 
-/** identity :: Category Function => Function a a */
-let Category: Category2<URI> = {
-	...Semigroupoid,
-	identity: () => a => a,
-};
-export {Category}
+interface HFunction {
+	URI: URI;
+	create: <A, B>(_: (_: A) => B) => Function<A, B>;
+	flip: <A, B, C>(_: (_: A) => (_: B) => C) => (_: B) => (_: A) => C;
+	const: <A>(_: A) => <B>(_: B) => A;
+	apply: <A, B>(_: (_: A) => B) => (_: A) => B;
+	on: <B, C>(_: (_: B) => (_: B) => C) => <A>(_: (_: A) => B) => (_: A) => (_: A) => C;
+	define: <T>(f: (_: () => T) => T) => T;
+	assign: <T>(_: T) => <U>(f: (_: T) => U) => U;
+}
+export {HFunction}
 
-let id = Category.identity;
-export {id}
-
-let Function = {
-	URI,
-	flip,
-	const: const_,
-	apply,
-	on,
-	define,
-	assign,
-	id,
-	Semigroupoid,
-	Category
-};
+let Function: Constructor & HFunction = (
+	Json.assign(createFunction, {
+		URI,
+		create: createFunction,
+		flip,
+		const: const_,
+		apply,
+		on,
+		define,
+		assign,
+	})
+);
+export default Function

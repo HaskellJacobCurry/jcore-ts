@@ -55,8 +55,10 @@ namespace Traversable {
 		)
 	);
 
-	export let instantiate = <F>(_: Traversable<F>) => (
-		assign(Json.assign(Def(_), _))((_: Traversable<F>) => Json.assign(_, Ext(_)))
+	export let instantiate: <F>(_: Traversable<F>) => Traversable<F> = (
+		<F>(_: Traversable<F>) => (
+			assign(Json.assign(Def(_), _))((_: Traversable<F>) => Json.assign(_, Ext(_)))
+		)
 	);
 }
 
@@ -99,8 +101,10 @@ namespace ITraversable1 {
 		)
 	);
 
-	export let instantiate = <F extends URI1>(_: Traversable1<F>) => (
-		assign(Json.assign(Def(_), _))((_: Traversable1<F>) => Json.assign(_, Ext(_)))
+	export let instantiate: <F extends URI1>(_: Traversable1<F>) => Traversable1<F> & Ext<F> = (
+		<F extends URI1>(_: Traversable1<F>) => (
+			assign(Json.assign(Def(_), _))((_: Traversable1<F>) => Json.assign(_, Ext(_)))
+		)
 	);
 }
 

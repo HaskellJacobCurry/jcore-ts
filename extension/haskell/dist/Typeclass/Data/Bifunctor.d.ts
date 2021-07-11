@@ -38,6 +38,6 @@ declare namespace Bifunctor2 {
     interface Ext<F extends URI2> extends IExtBifunctor2<F> {
     }
     let Ext: <F extends URI2>(_: Bifunctor2<F>) => Ext<F>;
-    let instantiate: <F extends "Function" | "Tuple">(_: Bifunctor2<F>) => Bifunctor2<F> & Ext<F>;
+    let instantiate: <F extends URI2>(_: Bifunctor2<F>) => Bifunctor2<F> & Ext<F>;
 }
 export default Bifunctor;

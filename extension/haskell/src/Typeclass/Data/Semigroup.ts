@@ -13,8 +13,10 @@ interface Semigroup<A> extends ISemigroup<A> {}
 export {Semigroup}
 export {Semigroup as ISemigroup};
 namespace Semigroup {
-	export let instantiate = <A>(_: Semigroup<A>) => (
-		_
+	export let instantiate: <A>(_: Semigroup<A>) => Semigroup<A> = (
+		<A>(_: Semigroup<A>) => (
+			_
+		)
 	);
 }
 export default Semigroup

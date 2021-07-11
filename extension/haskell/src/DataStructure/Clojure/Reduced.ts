@@ -1,10 +1,20 @@
 import {
 	Json,
 	create,
+	S,
 } from '../../Common'
 
 type Reduced<A> = IReduced<A> & (Break<A> | Continue<A>);
 export {Reduced}
+
+const URI = S('Reduced');
+type URI = typeof URI;
+declare module '../../Common/HKT' {
+	interface KindsByURI1<A> {
+		[URI]: Reduced<A>;
+	}
+}
+export {URI}
 
 interface IReduced<A> {
 	cata: <T, U>(
@@ -47,10 +57,27 @@ let Continue: <A>(value: A) => Reduced<A> = (
 );
 export {Continue}
 
-let Reduced = Json.assign(Break, {
-	Break,
-	Continue,
-	extract: create<<A>(_: Reduced<A>) => A>(
-		reduced => reduced.value
-	),
-});
+let extract: <A>(_: Reduced<A>) => A = (
+	reduced => reduced.value
+);
+export {extract}
+
+type Constructor = typeof Break;
+export {Constructor}
+
+interface HReduced {
+	URI: URI;
+	Break: <A>(value: A) => Reduced<A>;
+	Continue: <A>(value: A) => Reduced<A>;
+	extract: <A>(_: Reduced<A>) => A;
+}
+
+let Reduced: Constructor & HReduced = (
+	Json.assign(Break, {
+		URI,
+		Break,
+		Continue,
+		extract,
+	})
+);
+export default Reduced

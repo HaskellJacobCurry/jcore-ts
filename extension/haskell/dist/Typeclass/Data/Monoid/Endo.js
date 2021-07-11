@@ -19,20 +19,20 @@ var URI = common_1.S('Endo');
 exports.URI = URI;
 var get = function (_) { return _.fn; };
 exports.get = get;
-var create_ = (function (fn) { return ({ URI: URI, fn: fn }); });
-exports.create = create_;
+var createEndo = (function (fn) { return ({ URI: URI, fn: fn }); });
+exports.create = createEndo;
 var Semigroup = function () { return Semigroup_1.ISemigroup.instantiate({
     append: function (endo0) { return function (endo1) { return Endo(common_1.compose(endo0.fn, endo1.fn)); }; },
 }); };
 exports.Semigroup = Semigroup;
 var Monoid = function () { return Monoid_1.IMonoid.instantiate(__assign(__assign({}, Semigroup()), { mempty: function () { return Endo(common_1.id); } })); };
 exports.Monoid = Monoid;
-var Endo = common_1.Json.assign(function (fn) { return ({ URI: URI, fn: fn }); }, {
+var Endo = (common_1.Json.assign(createEndo, {
     URI: URI,
     get: get,
-    create: create_,
+    create: createEndo,
     Semigroup: Semigroup,
     Monoid: Monoid,
-});
+}));
 exports.Endo = Endo;
 exports.default = Endo;

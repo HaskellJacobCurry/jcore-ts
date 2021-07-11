@@ -1,10 +1,8 @@
 import {ISemigroup} from '../Semigroup'
 import {IMonoid} from '../Monoid'
-import {INum} from '../../GHC/Num'
 import {IBool} from '../IBool'
 import {
 	Json,
-	assign,
 	S,
 } from '../../../Common/common'
 
@@ -21,29 +19,43 @@ export {Any}
 let get: (_: Any) => IBool = _ => _.value;
 export {get}
 
-let create_: (value: IBool) => Any = (
+let createAny: (value: IBool) => Any = (
 	value => ({URI, value})
 );
-export {create_ as create}
+export {createAny as create}
 
 /** Semigroup Any */
 let Semigroup = ISemigroup.instantiate<Any>({
-	append: any0 => any1 => create_(IBool.or(any0.value)(any1.value)),
+	append: any0 => any1 => createAny(IBool.or(any0.value)(any1.value)),
 });
 export {Semigroup}
 
 /** Monoid Any */
 let Monoid = IMonoid.instantiate<Any>({
 	...Semigroup,
-	mempty: () => create_(IBool.False),
+	mempty: () => createAny(IBool.False),
 });
 export {Monoid}
 
-let Any = Json.assign(create_, {
-	URI,
-	get,
-	create: create_,
-	Semigroup,
-	Monoid,
-});
+type Constructor = typeof createAny;
+export {Constructor}
+
+interface HAny {
+	URI: URI;
+	get: (_: Any) => IBool;
+	create: (value: IBool) => Any;
+	Semigroup: typeof Semigroup;
+	Monoid: typeof Monoid;
+}
+export {HAny}
+
+let Any: Constructor & HAny = (
+	Json.assign(createAny, {
+		URI,
+		get,
+		create: createAny,
+		Semigroup,
+		Monoid,
+	})
+);
 export default Any

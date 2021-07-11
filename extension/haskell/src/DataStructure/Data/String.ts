@@ -23,51 +23,30 @@ let fromI: (_: IString) => String = (
 );
 export {fromI}
 
-let create_ = (value: string): String => ({
-	URI,
-	value,
-	toString: () => value,
-});
-export {create_ as create}
+let createString: (value: string) => String = (
+	value => ({
+		URI,
+		value,
+		toString: () => value,
+	})
+);
+export {createString as create}
 
-let Show = IShow.instantiate<String>({
-	show: string => `"${string.toString()}"`,
-});
-export {Show}
+type Constructor = typeof createString;
+export {Constructor}
 
-let show = Show.show;
-export {show}
+interface HString {
+	URI: URI;
+	create: (value: string) => String;
+	fromI: (_: IString) => String;
+}
+export {HString}
 
-let Semigroup = ISemigroup.instantiate<String>({
-	append: _0 => _1 => create_(`${_0.value}${_1.value}`)
-});
-export {Semigroup}
-
-let append = Semigroup.append;
-export {append}
-
-let Monoid = IMonoid.instantiate<String>({
-	...Semigroup,
-	mempty: () => create_(''),
-});
-export {Monoid}
-
-let mempty = Monoid.mempty;
-export {mempty}
-
-let mappend = Monoid.mappend;
-export {mappend}
-
-let String = Json.assign(create_, {
-	URI,
-	fromI,
-	create: create_,
-	show,
-	append,
-	mempty,
-	mappend,
-	Show,
-	Semigroup,
-	Monoid,
-});
+let String: Constructor & HString = (
+	Json.assign(createString, {
+		URI,
+		create: createString,
+		fromI,
+	})
+);
 export default String

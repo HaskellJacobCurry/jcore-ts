@@ -1,5 +1,5 @@
 import { HKT, URI1, URI2, Kind1, Kind2 } from '../../Common/HKT';
-import { Apply, Apply1, Apply2, Apply2_ } from './Apply';
+import { Apply, Apply1, Apply2, Apply2C } from './Apply';
 /**
  * class (Apply f) <= Applicative f where
  *  pure :: a -> f a
@@ -29,13 +29,13 @@ interface IApplicative2<F extends URI2> {
 interface Applicative2<F extends URI2> extends IApplicative2<F>, Apply2<F> {
 }
 export { Applicative2 };
-interface IApplicative2_<F extends URI2, T0> {
+interface IApplicative2C<F extends URI2, T0> {
     pure: <A>(_: A) => Kind2<F, T0, A>;
 }
-interface Applicative2_<F extends URI2, T0> extends IApplicative2_<F, T0>, Apply2_<F, T0> {
+interface Applicative2C<F extends URI2, T0> extends IApplicative2C<F, T0>, Apply2C<F, T0> {
 }
-export { Applicative2_ };
+export { Applicative2C };
 declare namespace Applicative1 {
-    let instantiate: <F extends "Endo" | "Maybe" | "List">(_: Applicative1<F>) => Applicative1<F>;
+    let instantiate: <F extends URI1>(_: Applicative1<F>) => Applicative1<F>;
 }
 export default Applicative;

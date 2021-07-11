@@ -1,9 +1,10 @@
 import {Kind1, URI1} from '../../Common/HKT'
 import {Populatable1} from '../../Typeclass/Data/Populatable'
-import {Bool} from '../Data/Bool'
-import {Int} from '../Data/Int'
+import {Bool} from '../../Instance/Data/Bool'
+import {Int} from '../../Instance/Data/Int'
 import {Unit} from '../Data/Unit'
 import {
+    S,
     create,
     trampoline,
     recurse,
@@ -18,7 +19,16 @@ interface LazySequence<T> {
 }
 export {LazySequence}
 
-let create_: <T>(transform: (_: T) => T) => (seed: T) => LazySequence<T> = (
+const URI = S('LazySequence');
+type URI = typeof URI;
+declare module '../../Common/HKT' {
+	interface KindsByURI1<A> {
+		[URI]: LazySequence<A>;
+	}
+}
+export {URI}
+
+let createLazySequence: <T>(transform: (_: T) => T) => (seed: T) => LazySequence<T> = (
     <T>(transform: (_: T) => T) => (seed: T) => (
         apply(
             recurse<LazySequence<T>>()((value: T) => makeSequence => ({
@@ -29,7 +39,7 @@ let create_: <T>(transform: (_: T) => T) => (seed: T) => LazySequence<T> = (
         )(_ => _(seed))
     )
 );
-export {create_ as create}
+export {createLazySequence as create}
 
 let map: <A, B>(f: (_: A) => B) => (_: LazySequence<A>) => LazySequence<B> = (
     <A, B>(f: (_: A) => B) => (lazyA: LazySequence<A>) => (
@@ -43,9 +53,6 @@ let map: <A, B>(f: (_: A) => B) => (_: LazySequence<A>) => LazySequence<B> = (
     )
 );
 export {map}
-
-let fmap = map;
-export {fmap}
 
 let filter: <A>(f: (_: A) => Bool) => (_: LazySequence<A>) => LazySequence<A> = (
     <A>(f: (_: A) => Bool) => (lazyA: LazySequence<A>) => (
@@ -136,18 +143,38 @@ let toPopulatable1: <F extends URI1>(_: Populatable1<F>) => <A>(_: LazySequence<
 );
 export {toPopulatable1}
 
-let toPopulatable = toPopulatable1;
+let toPopulatable: typeof toPopulatable1 = toPopulatable1;
 export {toPopulatable}
 
-let LazySequence = Json.assign(create_, {
-    create: create_,
-    map,
-    fmap,
-    filter,
-    until,
-    take,
-    foldl,
-    evaluate,
-    toPopulatable,
-    toPopulatable1,
-});
+type Constructor = typeof createLazySequence;
+export {Constructor}
+
+interface HLazySequence {
+    URI: URI;
+    create: <T>(transform: (_: T) => T) => (seed: T) => LazySequence<T>;
+    map: <A, B>(f: (_: A) => B) => (_: LazySequence<A>) => LazySequence<B>;
+    filter: <A>(f: (_: A) => Bool) => (_: LazySequence<A>) => LazySequence<A>;
+    until: <A>(f: (_: A) => Bool) => (_: LazySequence<A>) => LazySequence<A>;
+    take: (_: Int) => <A>(_: LazySequence<A>) => LazySequence<A>;
+    foldl: <A, B>(f: (_: B) => (_: A) => B) => (_: B) => (_: LazySequence<A>) => B;
+    evaluate: <A>(f: (_: A) => Unit) => (_: LazySequence<A>) => Unit;
+    toPopulatable1: <F extends URI1>(_: Populatable1<F>) => <A>(_: LazySequence<A>) => Kind1<F, A>;
+    toPopulatable: this['toPopulatable1'];
+}
+export {HLazySequence}
+
+let LazySequence: Constructor & HLazySequence = (
+    Json.assign(createLazySequence, {
+        URI,
+        create: createLazySequence,
+        map,
+        filter,
+        until,
+        take,
+        foldl,
+        evaluate,
+        toPopulatable,
+        toPopulatable1,
+    })
+);
+export default LazySequence
