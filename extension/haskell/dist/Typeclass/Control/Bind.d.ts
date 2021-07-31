@@ -18,6 +18,7 @@ interface IBind<F> {
 }
 interface IExtBind<F> {
     sequence: <A>(_: HKT<F, A>) => <B>(_: HKT<F, B>) => HKT<F, B>;
+    bindFirst: <A>(_: HKT<F, A>) => <B>(f: (_: A) => HKT<F, B>) => HKT<F, A>;
 }
 interface Bind<F> extends IBind<F>, Apply<F> {
 }
@@ -34,6 +35,7 @@ interface IBind1<F extends URI1> {
 }
 interface IExtBind1<F extends URI1> {
     sequence: <A>(_: Kind1<F, A>) => <B>(_: Kind1<F, B>) => Kind1<F, B>;
+    bindFirst: <A>(_: Kind1<F, A>) => <B>(f: (_: A) => Kind1<F, B>) => Kind1<F, A>;
 }
 interface Bind1<F extends URI1> extends IBind1<F>, Apply1<F> {
 }

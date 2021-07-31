@@ -1,3 +1,4 @@
+import { Json } from '../../dependency/jcore/dist/ts-toolbelt';
 export * from '../../dependency/jcore/dist/ts-toolbelt';
 export * from '../../dependency/jcore/dist/ts-toolbelt/common';
 export * from '../../dependency/jcore/dist/common/compose';
@@ -31,3 +32,13 @@ interface X<A> {
     (x: X<A>): A;
 }
 export { X };
+declare let merge: typeof Json.assign;
+export { merge };
+declare let json: <K extends string, V>(k: K, v: V) => {
+    [_ in K]: V;
+};
+export { json };
+declare let chain: <T>(_: T) => <U>(f: (next: typeof chain) => (_: T) => U) => U;
+export { chain };
+declare let _: <A>() => A;
+export { _ };

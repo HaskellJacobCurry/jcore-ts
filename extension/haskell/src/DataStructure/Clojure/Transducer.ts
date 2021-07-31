@@ -34,8 +34,8 @@ let take: <S, A>() => (n: Int) => Transducer<S, ITuple<Int, S>, A, A> = (
             Int.gt(n)(Int(0)).cata({
                 False: () => ITuple(ITuple(n, s), Reduced(acc)),
                 True: () => (
-                    apply((reducer.step(s)(acc)(a)
-                    ))(({fst: s, snd: reduced}) => ITuple(ITuple(Int.dec(n), s), reduced))
+                    apply(reducer.step(s)(acc)(a))
+                    (({fst: s, snd: reduced}) => ITuple(ITuple(Int.dec(n), s), reduced))
                 ),
             })
         ),

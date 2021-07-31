@@ -208,9 +208,9 @@ let unsnoc: <A>(_: List<A>) => Maybe<Tuple<List<A>, A>> = (
 						tail.cata({
 							Nil: () => Maybe.Just(Tuple(Nil, head)),
 							Cons: () => (
-								apply((Tuple.Bifunctor.lmap(cons(head))
-								))(_ => apply(Maybe.Functor.fmap(_)
-								))(_ => _(unsnoc(tail)))
+								apply(Tuple.Bifunctor.lmap(cons(head)))
+								(_ => apply(Maybe.Functor.fmap(_)))
+								(_ => _(unsnoc(tail)))
 							),
 						})
 					),
@@ -230,17 +230,17 @@ unsnoc = <A>(list: List<A>) => (
 						Cons: (head, tail) => (
 							tail.cata({
 								Nil: () => (
-									apply((Tuple.Bifunctor.rmap<A, A>(const_(head))
-									))(_ => apply(Maybe.Functor.fmap(_)
-									))(_ => apply(_(acc)
-									))(cont)
+									apply(Tuple.Bifunctor.rmap<A, A>(const_(head)))
+									(_ => apply(Maybe.Functor.fmap(_)))
+									(_ => apply(_(acc)))
+									(cont)
 								),
 								Cons: () => (
 									unsnoc(tail, done, acc, acc => (
-										apply((Tuple.Bifunctor.lmap(cons(head))
-										))(_ => apply(Maybe.Functor.fmap(_)
-										))(_ => apply(_(acc)
-										))(acc => unsnoc(list, Bool.True, acc, cont))
+										apply(Tuple.Bifunctor.lmap(cons(head)))
+										(_ => apply(Maybe.Functor.fmap(_)))
+										(_ => apply(_(acc)))
+										(acc => unsnoc(list, Bool.True, acc, cont))
 									))
 								),
 							})
@@ -332,8 +332,8 @@ export {find_}
 
 let find: <A>(f: (_: A) => Bool) => (_: List<A>) => Maybe<A> = (
 	<A>(f: (_: A) => Bool) => (listA: List<A>) => (
-		apply((find_(f)(listA)
-		))(Maybe.Functor.fmap<Tuple<A, Int>, A>(Tuple.fst))
+		apply(find_(f)(listA))
+		(Maybe.Functor.fmap<Tuple<A, Int>, A>(Tuple.fst))
 	)
 );
 export {find}
@@ -347,8 +347,8 @@ export {reverseMap}
 
 let map: <A, B>(f: (_: A) => B) => (_: List<A>) => List<B> = (
 	<A, B>(f: (_: A) => B) => (listA: List<A>) => (
-		apply((reverseMap(f)(listA)
-		))(reverse)
+		apply(reverseMap(f)(listA))
+		(reverse)
 	)
 );
 export {map}
@@ -374,8 +374,8 @@ export {foldl}
 
 let foldr: <A, B>(_: (_: A) => (_: B) => B) => (_: B) => (_: List<A>) => B = (
 	<A, B>(f: (_: A) => (_: B) => B) => (b: B) => (listA: List<A>) => (
-		apply((reverse(listA)
-		))(foldl<A, B>(b => a => f(a)(b))(b))
+		apply(reverse(listA))
+		(foldl<A, B>(b => a => f(a)(b))(b))
 	)
 );
 export {foldr}

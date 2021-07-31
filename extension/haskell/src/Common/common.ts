@@ -1,4 +1,8 @@
-import {reinterpret} from '../../dependency/jcore/dist/ts-toolbelt'
+import {
+	reinterpret,
+	Json,
+	cast,
+} from '../../dependency/jcore/dist/ts-toolbelt'
 
 export * from '../../dependency/jcore/dist/ts-toolbelt'
 export * from '../../dependency/jcore/dist/ts-toolbelt/common'
@@ -83,3 +87,19 @@ interface X<A> {
 	(x: X<A>): A;
 }
 export {X}
+
+let merge = Json.assign;
+export {merge}
+
+let json: <K extends string, V>(k: K, v: V) => {[_ in K]: V} = (
+    (k, v) => cast({[k]: v})()
+);
+export {json}
+
+let chain: <T>(_: T) => <U>(f: (next: typeof chain) => (_: T) => U) => U = (
+    _ => f => f(chain)(_)
+);
+export {chain}
+
+let _ = placeholder;
+export {_}

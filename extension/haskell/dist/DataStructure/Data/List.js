@@ -77,7 +77,7 @@ var unsnoc = (function (list) { return (Common_1.apply(Common_1.recurse()(functi
     Nil: function () { return Maybe_1.Maybe.Nothing; },
     Cons: function (head, tail) { return (tail.cata({
         Nil: function () { return Maybe_1.Maybe.Just(Tuple_1.Tuple(Nil, head)); },
-        Cons: function () { return (Common_1.apply((Tuple_1.Tuple.Bifunctor.lmap(cons(head))))(function (_) { return Common_1.apply(Maybe_1.Maybe.Functor.fmap(_)); })(function (_) { return _(unsnoc(tail)); })); },
+        Cons: function () { return (Common_1.apply(Tuple_1.Tuple.Bifunctor.lmap(cons(head)))(function (_) { return Common_1.apply(Maybe_1.Maybe.Functor.fmap(_)); })(function (_) { return _(unsnoc(tail)); })); },
     })); },
 })); }; }))(function (_) { return _(list); })); });
 exports.unsnoc = unsnoc;
@@ -86,8 +86,8 @@ exports.unsnoc = unsnoc = function (list) { return (Common_1.apply(Common_1.tram
     False: function () { return (list.cata({
         Nil: function () { return cont(Maybe_1.Maybe.Nothing); },
         Cons: function (head, tail) { return (tail.cata({
-            Nil: function () { return (Common_1.apply((Tuple_1.Tuple.Bifunctor.rmap(Common_1.const_(head))))(function (_) { return Common_1.apply(Maybe_1.Maybe.Functor.fmap(_)); })(function (_) { return Common_1.apply(_(acc)); })(cont)); },
-            Cons: function () { return (unsnoc(tail, done, acc, function (acc) { return (Common_1.apply((Tuple_1.Tuple.Bifunctor.lmap(cons(head))))(function (_) { return Common_1.apply(Maybe_1.Maybe.Functor.fmap(_)); })(function (_) { return Common_1.apply(_(acc)); })(function (acc) { return unsnoc(list, Bool_1.Bool.True, acc, cont); })); })); },
+            Nil: function () { return (Common_1.apply(Tuple_1.Tuple.Bifunctor.rmap(Common_1.const_(head)))(function (_) { return Common_1.apply(Maybe_1.Maybe.Functor.fmap(_)); })(function (_) { return Common_1.apply(_(acc)); })(cont)); },
+            Cons: function () { return (unsnoc(tail, done, acc, function (acc) { return (Common_1.apply(Tuple_1.Tuple.Bifunctor.lmap(cons(head)))(function (_) { return Common_1.apply(Maybe_1.Maybe.Functor.fmap(_)); })(function (_) { return Common_1.apply(_(acc)); })(function (acc) { return unsnoc(list, Bool_1.Bool.True, acc, cont); })); })); },
         })); },
     })); }
 })); }; }))(function (_) { return _(list, Bool_1.Bool.False, Maybe_1.Maybe.Just(Tuple_1.Tuple(Nil, Common_1.placeholder())), function (_) { return _; }); })); };
@@ -125,11 +125,11 @@ var find_ = (function (f) { return function (listA) { return (Common_1.apply(Com
     })); },
 })); }; }))(function (_) { return _(listA, Int_1.Int(0)); })); }; });
 exports.find_ = find_;
-var find = (function (f) { return function (listA) { return (Common_1.apply((find_(f)(listA)))(Maybe_1.Maybe.Functor.fmap(Tuple_1.Tuple.fst))); }; });
+var find = (function (f) { return function (listA) { return (Common_1.apply(find_(f)(listA))(Maybe_1.Maybe.Functor.fmap(Tuple_1.Tuple.fst))); }; });
 exports.find = find;
 var reverseMap = (function (f) { return function (listA) { return (foldl(function (acc) { return function (a) { return cons(f(a))(acc); }; })(Nil)(listA)); }; });
 exports.reverseMap = reverseMap;
-var map = (function (f) { return function (listA) { return (Common_1.apply((reverseMap(f)(listA)))(reverse)); }; });
+var map = (function (f) { return function (listA) { return (Common_1.apply(reverseMap(f)(listA))(reverse)); }; });
 exports.map = map;
 var reverse = (function (_) { return reverseMap(Common_1.id)(_); });
 exports.reverse = reverse;
@@ -138,7 +138,7 @@ var foldl = (function (f) { return function (b) { return function (listA) { retu
     Cons: function (head, tail) { return foldl(f(acc)(head), tail); },
 })); }; }))(function (_) { return _(b, listA); })); }; }; });
 exports.foldl = foldl;
-var foldr = (function (f) { return function (b) { return function (listA) { return (Common_1.apply((reverse(listA)))(foldl(function (b) { return function (a) { return f(a)(b); }; })(b))); }; }; });
+var foldr = (function (f) { return function (b) { return function (listA) { return (Common_1.apply(reverse(listA))(foldl(function (b) { return function (a) { return f(a)(b); }; })(b))); }; }; });
 exports.foldr = foldr;
 /** merge :: (a -> a -> Ordering) -> List a -> List a -> List a */
 var merge = (function (f) { return function (list0) { return function (list1) { return (Common_1.apply(Common_1.recurse()(function (list0, list1) { return function (merge) { return (Common_1.apply(list0.cata({

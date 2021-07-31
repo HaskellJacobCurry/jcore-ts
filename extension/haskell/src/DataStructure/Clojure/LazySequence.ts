@@ -146,6 +146,15 @@ export {toPopulatable1}
 let toPopulatable: typeof toPopulatable1 = toPopulatable1;
 export {toPopulatable}
 
+let range: (min: Int, max: Int) => <F extends URI1>(_: Populatable1<F>) => Kind1<F, Int> = (
+    (min, max) => PopulatableF => (
+        apply(createLazySequence(Int.inc)(min))
+        (_ => apply(until(Int.lt(max))(_)))
+        (toPopulatable(PopulatableF))
+    )
+);
+export {range}
+
 type Constructor = typeof createLazySequence;
 export {Constructor}
 
@@ -160,6 +169,7 @@ interface HLazySequence {
     evaluate: <A>(f: (_: A) => Unit) => (_: LazySequence<A>) => Unit;
     toPopulatable1: <F extends URI1>(_: Populatable1<F>) => <A>(_: LazySequence<A>) => Kind1<F, A>;
     toPopulatable: this['toPopulatable1'];
+    range: (min: Int, max: Int) => <F extends URI1>(_: Populatable1<F>) => Kind1<F, Int>
 }
 export {HLazySequence}
 
@@ -175,6 +185,7 @@ let LazySequence: Constructor & HLazySequence = (
         evaluate,
         toPopulatable,
         toPopulatable1,
+        range,
     })
 );
 export default LazySequence

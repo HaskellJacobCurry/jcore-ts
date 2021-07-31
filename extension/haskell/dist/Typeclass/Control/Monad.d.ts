@@ -16,6 +16,14 @@ interface IMonad<F> {
 }
 interface IExtMonad<F> {
     return: <A>(_: A) => HKT<F, A>;
+    assign_: <K extends string>(k: K) => <A, B>(f: (_: A) => HKT<F, B>) => (_: HKT<F, A>) => HKT<F, A & {
+        [_ in K]: B;
+    }>;
+    assign: <A>(_: HKT<F, A>) => <K extends string>(k: K) => <B>(f: (_: A) => HKT<F, B>) => HKT<F, A & {
+        [_ in K]: B;
+    }>;
+    run: <A>(_: HKT<F, A>) => <B>(f: (_: A) => HKT<F, B>) => HKT<F, A>;
+    Do: <A>(f: (Do: HKT<F, {}>) => HKT<F, A>) => HKT<F, A>;
 }
 interface Monad<F> extends IMonad<F>, Applicative<F>, Bind<F> {
 }
@@ -27,10 +35,20 @@ declare namespace Monad {
     let Ext: <F>(_: Monad<F>) => Ext<F>;
     let instantiate: <F>(_: Monad<F>) => Monad<F> & Ext<F>;
 }
+interface IMonad1<F extends URI1> {
+}
 interface IExtMonad1<F extends URI1> {
     return: <A>(_: A) => Kind1<F, A>;
+    assign_: <K extends string>(k: K) => <A, B>(f: (_: A) => Kind1<F, B>) => (_: Kind1<F, A>) => Kind1<F, A & {
+        [_ in K]: B;
+    }>;
+    assign: <A>(_: Kind1<F, A>) => <K extends string>(k: K) => <B>(f: (_: A) => Kind1<F, B>) => Kind1<F, A & {
+        [_ in K]: B;
+    }>;
+    run: <A>(_: Kind1<F, A>) => <B>(f: (_: A) => Kind1<F, B>) => Kind1<F, A>;
+    Do: <TMonad extends Monad1<F>>(_: TMonad) => <A>(f: (Do: Kind1<F, {}>, api: TMonad) => Kind1<F, A>) => Kind1<F, A>;
 }
-interface Monad1<F extends URI1> extends Applicative1<F>, Bind1<F> {
+interface Monad1<F extends URI1> extends IMonad1<F>, Applicative1<F>, Bind1<F> {
 }
 export { Monad1 };
 interface IExtMonad2<F extends URI2> {

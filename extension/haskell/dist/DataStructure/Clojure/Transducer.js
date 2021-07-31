@@ -22,7 +22,7 @@ var take = (function () { return function (n) { return function (reducer) { retu
         var n = _a.fst, s = _a.snd;
         return function (acc) { return function (a) { return (Int_1.Int.gt(n)(Int_1.Int(0)).cata({
             False: function () { return ITuple_1.ITuple(ITuple_1.ITuple(n, s), Reduced_1.Reduced(acc)); },
-            True: function () { return (Common_1.apply((reducer.step(s)(acc)(a)))(function (_a) {
+            True: function () { return (Common_1.apply(reducer.step(s)(acc)(a))(function (_a) {
                 var s = _a.fst, reduced = _a.snd;
                 return ITuple_1.ITuple(ITuple_1.ITuple(Int_1.Int.dec(n), s), reduced);
             })); },

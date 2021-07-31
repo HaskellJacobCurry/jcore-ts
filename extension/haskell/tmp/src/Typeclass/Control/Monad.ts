@@ -1,13 +1,13 @@
 import {HKT, URI1, URI2, Kind1, Kind2} from '../../Common/HKT'
-import {Applicative, Applicative1, Applicative2, Applicative2C} from './Applicative'
-import {Bind, Bind1, Bind2, Bind2C} from './Bind'
+import {Applicative, Applicative1, Applicative2, Applicative2C} from '../../../../dist/Typeclass/Control/Applicative'
+import {Bind, Bind1, Bind2, Bind2C} from '../../../../dist/Typeclass/Control/Bind'
 import {
 	Json,
 	define,
 	assign,
 	merge,
 	json,
-} from '../../Common/common'
+} from '../../Common'
 
 /**
  * class (Applicative f, Bind f) <= Monad f
@@ -23,10 +23,6 @@ import {
 interface IMonad<F> {}
 interface IExtMonad<F> {
 	return: <A>(_: A) => HKT<F, A>;
-	assign_: <K extends string>(k: K) => <A, B>(f: (_: A) => HKT<F, B>) => (_: HKT<F, A>) => HKT<F, A & {[_ in K]: B}>;
-	assign: <A>(_: HKT<F, A>) => <K extends string>(k: K) => <B>(f: (_: A) => HKT<F, B>) => HKT<F, A & {[_ in K]: B}>;
-	run: <A>(_: HKT<F, A>) => <B>(f: (_: A) => HKT<F, B>) => HKT<F, A>;
-	Do: <TMonad extends Monad<F>>(_: TMonad) => <A>(f: (Do: HKT<F, {}>, api: TMonad) => HKT<F, A>) => HKT<F, A>;
 }
 interface Monad<F> extends IMonad<F>, Applicative<F>, Bind<F> {}
 export {Monad}
@@ -34,30 +30,16 @@ export {Monad as IMonad}
 namespace Monad {
 	export interface Ext<F> extends IExtMonad<F> {}
 	export let Ext: <F>(_: Monad<F>) => Ext<F> = (
-		<F>(MonadF: Monad<F>) => (
-			((BindExtF = Bind.Ext(MonadF)) => (
-				define<Ext<F>>(Ext => ({
-					return: MonadF.pure,
-					assign_: <K extends string>(k: K) => <A, B>(f: (_: A) => HKT<F, B>) => (monadA: HKT<F, A>) => (
-						MonadF.bind(monadA)(a => (
-							MonadF.fmap((b: B) => merge({}, a, json(k, b)))(f(a))
-						))
-					),
-					assign: <A>(monadA: HKT<F, A>) => <K extends string>(k: K) => <B>(f: (_: A) => HKT<F, B>) => (
-						MonadF.bind(monadA)(a => (
-							MonadF.fmap((b: B) => merge({}, a, json(k, b)))(f(a))
-						))
-					),
-					run: BindExtF.bindFirst,
-					Do: api => f => f(MonadF.pure({}), api),
-				}))
-			))()
+		<F>(Monad: Monad<F>) => (
+			define<Ext<F>>(Ext => ({
+				return: Monad.pure,
+			}))
 		)
 	);
 
 	export let instantiate: <F>(_: Monad<F>) => Monad<F> & Ext<F> = (
 		<F>(_: Monad<F>) => (
-			assign(_)(_ => merge(_, Ext(_)))
+			assign(_)((_: Monad<F>) => Json.assign(_, Ext(_)))
 		)
 	);
 }
@@ -65,10 +47,10 @@ namespace Monad {
 interface IMonad1<F extends URI1> {}
 interface IExtMonad1<F extends URI1> {
 	return: <A>(_: A) => Kind1<F, A>;
+	MDo: () => Kind1<F, {}>;
+	Do: () => Kind1<F, {}>;
 	assign_: <K extends string>(k: K) => <A, B>(f: (_: A) => Kind1<F, B>) => (_: Kind1<F, A>) => Kind1<F, A & {[_ in K]: B}>;
-	assign: <A>(_: Kind1<F, A>) => <K extends string>(k: K) => <B>(f: (_: A) => Kind1<F, B>) => Kind1<F, A & {[_ in K]: B}>;
-	run: <A>(_: Kind1<F, A>) => <B>(f: (_: A) => Kind1<F, B>) => Kind1<F, A>;
-	Do: <TMonad extends Monad1<F>>(_: TMonad) => <A>(f: (Do: Kind1<F, {}>, api: TMonad) => Kind1<F, A>) => Kind1<F, A>;
+	assign: <A>(_: Kind1<F, A>) => <K extends string>(k: K) => <B>(f: (_: A) => Kind1<F, B>) => Kind1<F, A & {[k in K]: B}>;
 }
 interface Monad1<F extends URI1> extends IMonad1<F>, Applicative1<F>, Bind1<F> {}
 export {Monad1}
@@ -89,23 +71,21 @@ namespace Monad1 {
 	export interface Ext<F extends URI1> extends IExtMonad1<F> {}
 	export let Ext: <F extends URI1>(_: Monad1<F>) => Ext<F> = (
 		<F extends URI1>(MonadF: Monad1<F>) => (
-			((BindExtF = Bind1.Ext(MonadF)) => (
-				define<Ext<F>>(Ext => ({
-					return: MonadF.pure,
-					assign_: <K extends string>(k: K) => <A, B>(f: (_: A) => Kind1<F, B>) => (monadA: Kind1<F, A>) => (
-						MonadF.bind(monadA)(a => (
-							MonadF.fmap((b: B) => merge({}, a, json(k, b)))(f(a))
-						))
-					),
-					assign: <A>(monadA: Kind1<F, A>) => <K extends string>(k: K) => <B>(f: (_: A) => Kind1<F, B>) => (
-						MonadF.bind(monadA)(a => (
-							MonadF.fmap((b: B) => merge({}, a, json(k, b)))(f(a))
-						))
-					),
-					run: BindExtF.bindFirst,
-					Do: api => f => f(MonadF.pure({}), api),
-				}))
-			))()
+			define<Ext<F>>(Ext => ({
+				return: MonadF.pure,
+				MDo: () => MonadF.pure({}),
+				Do: () => MonadF.pure({}),
+				assign_: <K extends string>(k: K) => <A, B>(f: (_: A) => Kind1<F, B>) => (monadA: Kind1<F, A>) => (
+					MonadF.bind(monadA)(a => (
+						MonadF.fmap((b: B) => merge({}, a, json(k, b)))(f(a))
+					))
+				),
+				assign: <A>(monadA: Kind1<F, A>) => <K extends string>(k: K) => <B>(f: (_: A) => Kind1<F, B>) => (
+					MonadF.bind(monadA)(a => (
+						MonadF.fmap((b: B) => merge({}, a, json(k, b)))(f(a))
+					))
+				)
+			}))
 		)
 	);
 

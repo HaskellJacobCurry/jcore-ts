@@ -17,7 +17,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.recurse_ = exports.recurse = exports.create = exports.apply = exports.define = exports.assign = exports.flip = exports.const_ = exports.const = exports.id_ = exports.id = exports.placeholder = void 0;
+exports._ = exports.chain = exports.json = exports.merge = exports.recurse_ = exports.recurse = exports.create = exports.apply = exports.define = exports.assign = exports.flip = exports.const_ = exports.const = exports.id_ = exports.id = exports.placeholder = void 0;
 var ts_toolbelt_1 = require("../../dependency/jcore/dist/ts-toolbelt");
 __exportStar(require("../../dependency/jcore/dist/ts-toolbelt"), exports);
 __exportStar(require("../../dependency/jcore/dist/ts-toolbelt/common"), exports);
@@ -90,3 +90,14 @@ var recurse_ = (function (f) { return function () {
     }; })))(function (_) { return _.apply(void 0, as); }));
 }; });
 exports.recurse_ = recurse_;
+var merge = ts_toolbelt_1.Json.assign;
+exports.merge = merge;
+var json = (function (k, v) {
+    var _a;
+    return ts_toolbelt_1.cast((_a = {}, _a[k] = v, _a))();
+});
+exports.json = json;
+var chain = (function (_) { return function (f) { return f(chain)(_); }; });
+exports.chain = chain;
+var _ = placeholder;
+exports._ = _;

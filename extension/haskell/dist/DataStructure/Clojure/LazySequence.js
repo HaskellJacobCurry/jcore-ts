@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toPopulatable = exports.toPopulatable1 = exports.evaluate = exports.foldl = exports.until = exports.filter = exports.map = exports.create = exports.URI = exports.LazySequence = void 0;
+exports.range = exports.toPopulatable = exports.toPopulatable1 = exports.evaluate = exports.foldl = exports.until = exports.filter = exports.map = exports.create = exports.URI = exports.LazySequence = void 0;
 var Bool_1 = require("../../Instance/Data/Bool");
 var Int_1 = require("../../Instance/Data/Int");
 var Unit_1 = require("../Data/Unit");
@@ -64,6 +64,8 @@ var toPopulatable1 = (function (PopulatableF) { return function (lazyA) { return
 exports.toPopulatable1 = toPopulatable1;
 var toPopulatable = toPopulatable1;
 exports.toPopulatable = toPopulatable;
+var range = (function (min, max) { return function (PopulatableF) { return (Common_1.apply(createLazySequence(Int_1.Int.inc)(min))(function (_) { return Common_1.apply(until(Int_1.Int.lt(max))(_)); })(toPopulatable(PopulatableF))); }; });
+exports.range = range;
 var LazySequence = (Common_1.Json.assign(createLazySequence, {
     URI: URI,
     create: createLazySequence,
@@ -75,6 +77,7 @@ var LazySequence = (Common_1.Json.assign(createLazySequence, {
     evaluate: evaluate,
     toPopulatable: toPopulatable,
     toPopulatable1: toPopulatable1,
+    range: range,
 }));
 exports.LazySequence = LazySequence;
 exports.default = LazySequence;

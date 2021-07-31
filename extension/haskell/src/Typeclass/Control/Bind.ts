@@ -4,7 +4,7 @@ import {
 	Json,
 	assign,
 	define,
-	const_,
+	merge,
 	id_,
 } from '../../Common/common'
 
@@ -26,6 +26,7 @@ interface IBind<F> {
 }
 interface IExtBind<F> {
 	sequence: <A>(_: HKT<F, A>) => <B>(_: HKT<F, B>) => HKT<F, B>;
+	bindFirst: <A>(_: HKT<F, A>) => <B>(f: (_: A) => HKT<F, B>) => HKT<F, A>;
 }
 interface Bind<F> extends IBind<F>, Apply<F> {}
 export {Bind}
@@ -33,10 +34,15 @@ export {Bind as IBind}
 namespace Bind {
 	export interface Ext<F> extends IExtBind<F> {}
 	export let Ext: <F>(_: Bind<F>) => Ext<F> = (
-		<F>(Bind: Bind<F>) => (
-			((ApplyExt = Apply.Ext(Bind)) => (
+		<F>(BindF: Bind<F>) => (
+			((ApplyExt = Apply.Ext(BindF)) => (
 				define<Ext<F>>(Ext => ({
 					sequence: ApplyExt.sndAp,
+					bindFirst: <A>(BindA: HKT<F, A>) => <B>(f: (_: A) => HKT<F, B>) => (
+						BindF.bind(BindA)(a => (
+							BindF.fmap((_: B) => a)(f(a))
+						))
+					)
 				}))
 			))()
 		)
@@ -44,7 +50,7 @@ namespace Bind {
 
 	export let instantiate: <F>(_: Bind<F>) => Bind<F> & Ext<F> = (
 		<F>(_: Bind<F>) => (
-			assign(_)((_: Bind<F>) => Json.assign(_, Ext(_)))
+			assign(_)(_ => merge(_, Ext(_)))
 		)
 	);
 }
@@ -54,6 +60,7 @@ interface IBind1<F extends URI1> {
 }
 interface IExtBind1<F extends URI1> {
 	sequence: <A>(_: Kind1<F, A>) => <B>(_: Kind1<F, B>) => Kind1<F, B>;
+	bindFirst: <A>(_: Kind1<F, A>) => <B>(f: (_: A) => Kind1<F, B>) => Kind1<F, A>;
 }
 interface Bind1<F extends URI1> extends IBind1<F>, Apply1<F> {}
 export {Bind1}
@@ -79,10 +86,15 @@ export {Bind2C}
 namespace Bind1 {
 	export interface Ext<F extends URI1> extends IExtBind1<F> {}
 	export let Ext: <F extends URI1>(_: Bind1<F>) => Ext<F> = (
-		<F extends URI1>(Bind: Bind1<F>) => (
-			((ApplyExt = Apply1.Ext(Bind)) => (
+		<F extends URI1>(BindF: Bind1<F>) => (
+			((ApplyExt = Apply1.Ext(BindF)) => (
 				define<Ext<F>>(Ext => ({
 					sequence: ApplyExt.sndAp,
+					bindFirst: <A>(BindA: Kind1<F, A>) => <B>(f: (_: A) => Kind1<F, B>) => (
+						BindF.bind(BindA)(a => (
+							BindF.fmap((_: B) => a)(f(a))
+						))
+					)
 				}))
 			))()
 		)
