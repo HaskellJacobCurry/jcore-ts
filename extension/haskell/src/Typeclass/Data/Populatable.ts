@@ -1,6 +1,6 @@
 import {HKT, URI1, URI2, Kind1, Kind2} from '../../Common/HKT'
 import {
-	Json,
+	merge,
 	define
 } from '../../Common'
 
@@ -14,8 +14,8 @@ interface Populatable<F> extends IPopulatable<F> {
 export {Populatable}
 export {Populatable as IPopulatable}
 namespace Populatable {
-	export let instantiate: <F>(_: Populatable<F>) => Populatable<F> = (
-		<F>(_: Populatable<F>) => _
+	export let instantiate: <F>() => <TPopulatable extends Populatable<F>>(_: TPopulatable) => TPopulatable = (
+		() => _ => _
 	);
 }
 
@@ -30,8 +30,8 @@ export {Populatable1}
 export {Populatable1 as IPopulatable1}
 
 namespace Populatable1 {
-	export let instantiate: <F extends URI1>(_: Populatable1<F>) => Populatable1<F> = (
-		<F extends URI1>(_: Populatable1<F>) => _
+	export let instantiate: <F extends URI1>() => <TPopulatable extends Populatable1<F>>(_: TPopulatable) => TPopulatable = (
+		() => _ => _
 	);
 }
 

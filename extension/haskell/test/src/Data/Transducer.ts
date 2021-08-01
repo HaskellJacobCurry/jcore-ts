@@ -1,4 +1,4 @@
-import {Transducer} from '../../../dist/Typeclass/Data/Transducer'
+import {Transducer} from '../../../dist/DataStructure/Data/Transducer'
 import {Reducer} from '../../../dist/Typeclass/Data/Reducible'
 import {Bool} from '../../../dist/Instance/Data/Bool'
 import {Int} from '../../../dist/Instance/Data/Int'

@@ -20,7 +20,7 @@ declare namespace Reducible {
     interface Ext<F> extends IExtReducible<F> {
     }
     let Ext: <F>(_: Reducible<F>) => Ext<F>;
-    let instantiate: <F>(_: Reducible<F>) => Reducible<F> & Ext<F>;
+    let instantiate: <F>() => <TReducible extends Reducible<F>>(_: TReducible) => TReducible & Ext<F>;
 }
 interface IReducible1<F extends URI1> {
     reduce: <A, B>(reducer: Reducer<A, B>) => (seed: B) => (_: Kind1<F, A>) => B;
@@ -37,6 +37,6 @@ declare namespace Reducible1 {
     interface Ext<F extends URI1> extends IExtReducible1<F> {
     }
     let Ext: <F extends URI1>(_: Reducible1<F>) => Ext<F>;
-    let instantiate: <F extends URI1>(_: Reducible1<F>) => Reducible1<F> & Ext<F>;
+    let instantiate: <F extends URI1>() => <TReducible extends Reducible1<F>>(_: TReducible) => TReducible & Ext<F>;
 }
 export default Reducible;

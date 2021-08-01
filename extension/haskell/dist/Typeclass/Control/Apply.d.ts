@@ -32,11 +32,13 @@ interface Apply<F> extends Functor<F>, IApply<F> {
 export { Apply };
 export { Apply as IApply };
 declare namespace Apply {
+    interface Base<F> extends IApply<F> {
+    }
     let Def: <F>(_: Apply<F>) => IApply<F>;
     interface Ext<F> extends IExtApply<F> {
     }
     let Ext: <F>(_: Apply<F>) => Ext<F>;
-    let instantiate: <F>(_: Apply<F>) => Apply<F> & Ext<F>;
+    let instantiate: <F>() => <TApply extends Apply<F>>(_: TApply) => TApply & Ext<F>;
 }
 interface IApply1<F extends URI1> {
     ap: <A, B>(_: Kind1<F, (_: A) => B>) => (_: Kind1<F, A>) => Kind1<F, B>;
@@ -72,24 +74,30 @@ interface Apply2C<F extends URI2, T0> extends Functor2C<F, T0>, IApply2C<F, T0> 
 }
 export { Apply2C };
 declare namespace Apply1 {
+    interface Base<F extends URI1> extends IApply1<F> {
+    }
     let Def: <F extends URI1>(_: Apply1<F>) => IApply1<F>;
     interface Ext<F extends URI1> extends IExtApply1<F> {
     }
     let Ext: <F extends URI1>(_: Apply1<F>) => Ext<F>;
-    let instantiate: <F extends URI1>(_: Apply1<F>) => Apply1<F> & Ext<F>;
+    let instantiate: <F extends URI1>() => <TApply extends Apply1<F>>(_: TApply) => TApply & Ext<F>;
 }
 declare namespace Apply2 {
+    interface Base<F extends URI2> extends IApply2<F> {
+    }
     let Def: <F extends URI2>(_: Apply2<F>) => IApply2<F>;
     interface Ext<F extends URI2> extends IExtApply2<F> {
     }
     let Ext: <F extends URI2>(_: Apply2<F>) => Ext<F>;
-    let instantiate: <F extends URI2>(_: Apply2<F>) => Apply2<F> & Ext<F>;
+    let instantiate: <F extends URI2>() => <TApply extends Apply2<F>>(_: TApply) => TApply & Ext<F>;
 }
 declare namespace Apply2C {
+    interface Base<F extends URI2, T0> extends IApply2C<F, T0> {
+    }
     let Def: <F extends URI2, T0>(_: Apply2C<F, T0>) => IApply2C<F, T0>;
     interface Ext<F extends URI2, T0> extends IExtApply2C<F, T0> {
     }
     let Ext: <F extends URI2, T0>(_: Apply2C<F, T0>) => Ext<F, T0>;
-    let instantiate: <F extends URI2, T0>(_: Apply2C<F, T0>) => Apply2C<F, T0> & Ext<F, T0>;
+    let instantiate: <F extends URI2, T0>() => <TApply extends Apply2C<F, T0>>(_: TApply) => TApply & Ext<F, T0>;
 }
 export default Apply;

@@ -17,7 +17,7 @@ declare namespace Transducible {
     interface Ext<F> extends IExtTransducible<F> {
     }
     let Ext: <F>(_: Transducible<F>) => Ext<F>;
-    let instantiate: <F>(_: Transducible<F>) => Transducible<F> & Ext<F>;
+    let instantiate: <F>() => <TTransducible extends Transducible<F>>(_: TTransducible) => TTransducible & Ext<F>;
 }
 interface ITransducible1<F extends URI1> {
     _reduce: <S, A, B>(f: (_: S) => (_: B) => (_: A) => ITuple<S, Reduced<B>>) => (_: S) => (_: B) => (_: Kind1<F, A>) => ITuple<S, B>;
@@ -34,6 +34,6 @@ declare namespace Transducible1 {
     interface Ext<F extends URI1> extends IExtTransducible1<F> {
     }
     let Ext: <F extends URI1>(_: Transducible1<F>) => Ext<F>;
-    let instantiate: <F extends URI1>(_: Transducible1<F>) => Transducible1<F> & Ext<F>;
+    let instantiate: <F extends URI1>() => <TTransducible extends Transducible1<F>>(_: TTransducible) => TTransducible & Ext<F>;
 }
 export default Transducible;

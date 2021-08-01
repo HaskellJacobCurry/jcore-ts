@@ -13,7 +13,10 @@ import {
 	Json,
 	apply,
 	reinterpret,
+	_,
 	placeholder,
+	merge,
+	create,
 } from '../../Common'
 
 export * from '../../DataStructure/Data/Maybe'
@@ -32,49 +35,8 @@ let show: <A>(_: IShow<A>) => (_: Maybe<A>) => String = (
 );
 export {show}
 
-let Show = <A>(_: IShow<A>) => apply(_)(ShowA => (
-	IShow.instantiate<Maybe<A>>({
-		show: show(ShowA),
-	})
-))
-export {Show}
-
-let Functor = Functor1.instantiate<URI>({
-	URI,
-	fmap: f => maybeA => (
-		apply(
-			maybeA.cata({
-				Nothing: () => Maybe.Nothing,
-				Just: value => Maybe.Just(f(value)),
-			})
-		)(Maybe.infer)
-	),
-});
-export {Functor}
-
-let Apply = Apply1.instantiate<URI>({
-	...Functor,
-	ap: maybeF => maybeA => (
-		apply(
-			maybeF.cata({
-				Just: f => Functor.fmap(f)(reinterpret(maybeA)),
-				Nothing: () => Maybe.Nothing,
-			})
-		)(Maybe.infer)
-	),
-	liftA2: reinterpret(),
-});
-export {Apply}
-
-let Applicative = Applicative1.instantiate<URI>({
-	...Apply,
-	pure: Maybe.Just,
-});
-export {Applicative}
-
-let Bind = Bind1.instantiate<URI>({
-	...Apply,
-	bind: maybeA => f => (
+let bind: <A>(_: Maybe<A>) => <B>(_: (_: A) => Maybe<B>) => Maybe<B> = (
+	maybeA => f => (
 		apply(
 			maybeA.cata({
 				Just: f,
@@ -82,49 +44,114 @@ let Bind = Bind1.instantiate<URI>({
 			})
 		)(Maybe.infer)
 	)
-});
+);
+export {bind}
+
+let fmap: <A, B>(_: (_: A) => B) => (_: Maybe<A>) => Maybe<B> = (
+	f => maybeA => (
+		apply(
+			maybeA.cata({
+				Nothing: () => Maybe.Nothing,
+				Just: value => Maybe.Just(f(value)),
+			})
+		)(Maybe.infer)
+	)
+);
+export {fmap}
+
+let ap: <A, B>(_: Maybe<(_: A) => B>) => (_: Maybe<A>) => Maybe<B> = (
+	maybeF => maybeA => (
+		apply(
+			maybeF.cata({
+				Just: f => Functor.fmap(f)(reinterpret(maybeA)),
+				Nothing: () => Maybe.Nothing,
+			})
+		)(Maybe.infer)
+	)
+);
+export {ap}
+
+let pure: <A>(_: A) => Maybe<A> = (
+	Maybe.Just
+);
+export {pure}
+
+let append: <A>(_: ISemigroup<A>) => (_: Maybe<A>) => (_: Maybe<A>) => Maybe<A> = (
+	SemigroupA => maybe0 => maybe1 => (
+		maybe0.cata({
+			Nothing: () => maybe1,
+			Just: value0 => (
+				maybe1.cata({
+					Nothing: () => maybe0,
+					Just: value1 => Maybe.Just(SemigroupA.append(value0)(value1)),
+				})
+			)
+		})
+	)
+);
+export {append}
+
+let mempty: <A>() => Maybe<A> = (
+	Maybe.Nothing_
+);
+export {mempty}
+
+let Show = <A>(_: IShow<A>) => (
+	IShow.instantiate<Maybe<A>>()(create<IShow<Maybe<A>>>({
+		show: show(_),
+	}))
+);
+export {Show}
+
+let Functor = Functor1.instantiate<URI>()(create<Functor1<URI>>({
+	URI,
+	fmap,
+}));
+export {Functor}
+
+let Apply = Apply1.instantiate<URI>()(merge(Functor, create<Apply1.Base<URI>>({
+	ap,
+	liftA2: _(),
+})));
+export {Apply}
+
+let Applicative = Applicative1.instantiate<URI>()(merge(Apply, create<Applicative1.Base<URI>>({
+	pure,
+})));
+export {Applicative}
+
+let Bind = Bind1.instantiate<URI>()(merge(Apply, create<Bind1.Base<URI>>({
+	bind,
+})));
 export {Bind}
 
-let Monad = Monad1.instantiate<URI>({
-	...Applicative,
-	...Bind,
-});
+let Monad = Monad1.instantiate<URI>()(merge(Applicative, Bind));
 export {Monad}
 
 let Semigroup = <A>(_: ISemigroup<A>) => (
-	((SemigroupA = _) => (
-		ISemigroup.instantiate<Maybe<A>>({
-			append: maybe0 => maybe1 => (
-				maybe0.cata({
-					Nothing: () => maybe1,
-					Just: value0 => (
-						maybe1.cata({
-							Nothing: () => maybe0,
-							Just: value1 => Maybe.Just(SemigroupA.append(value0)(value1)),
-						})
-					)
-				})
-			),
-		})
-	))()
+	ISemigroup.instantiate<Maybe<A>>()(create<ISemigroup<Maybe<A>>>({
+		append: append(_),
+	}))
 );
 export {Semigroup}
 
 let Monoid = <A>(_: ISemigroup<A>) => (
-	((SemigroupA = _) => (
-		IMonoid.instantiate<Maybe<A>>({
-			...Semigroup(SemigroupA),
-			mempty: () => reinterpret(Maybe.Nothing),
-		})
-	))()
+	IMonoid.instantiate<Maybe<A>>()(merge(Semigroup(_), create<IMonoid.Base<Maybe<A>>>({
+		mempty
+	})))
 );
 export {Monoid}
 
-let Foldable = Foldable1.instantiate<URI>({
+let foldMap: <G>(_: IMonoid<G>) => <A>(_: (_: A) => G) => (_: Maybe<A>) => G = (
+	Monoid => Maybe.maybe(Monoid.mempty())
+);
+export {foldMap}
+
+let Foldable = Foldable1.instantiate<URI>()(create<Foldable1<URI>>({
 	URI,
-	foldMap: Monoid => Maybe.maybe(Monoid.mempty()),
+	foldMap,
 	foldr: placeholder(),
-});
+}));
 export {Foldable}
 
 interface HMaybe extends _HMaybe {
@@ -138,6 +165,13 @@ interface HMaybe extends _HMaybe {
 	Monoid: typeof Monoid;
 	Foldable: typeof Foldable;
 	show: <A>(_: IShow<A>) => (_: Maybe<A>) => String;
+	bind: <A>(_: Maybe<A>) => <B>(f: (_: A) => Maybe<B>) => Maybe<B>;
+	fmap: <A, B>(_: (_: A) => B) => (_: Maybe<A>) => Maybe<B>;
+	ap: <A, B>(_: Maybe<(_: A) => B>) => (_: Maybe<A>) => Maybe<B>;
+	pure: <A>(_: A) => Maybe<A>;
+	append: <A>(_: ISemigroup<A>) => (_: Maybe<A>) => (_: Maybe<A>) => Maybe<A>;
+	mempty: <A>() => Maybe<A>;
+	foldMap: <G>(_: IMonoid<G>) => <A>(_: (_: A) => G) => (_: Maybe<A>) => G;
 }
 
 type _Maybe<A> = Maybe<A>;
@@ -153,6 +187,13 @@ let _Maybe: HMaybe = (
 		Monoid,
 		Foldable,
 		show,
+		bind,
+		fmap,
+		ap,
+		pure,
+		append,
+		mempty,
+		foldMap,
 	})
 );
 

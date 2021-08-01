@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-var Transducer_1 = require("../../../dist/Typeclass/Data/Transducer");
+var Transducer_1 = require("../../../dist/DataStructure/Data/Transducer");
 var Bool_1 = require("../../../dist/Instance/Data/Bool");
 var Int_1 = require("../../../dist/Instance/Data/Int");
 var Common_1 = require("../../../dist/Common");

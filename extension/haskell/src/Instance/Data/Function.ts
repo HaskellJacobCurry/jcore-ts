@@ -11,17 +11,17 @@ let compose: <B, C>(_: Function<B, C>) => <A>(_: Function<A, B>) => Function<A, 
 );
 export {compose}
 
-let Semigroupoid: Semigroupoid2<URI> = {
-	URI,
-	compose,
-};
-export {Semigroupoid}
-
 /** identity :: Category Function => Function a a */
 let identity: <A>() => Function<A, A> = (
 	() => a => a
 );
 export {identity}
+
+let Semigroupoid: Semigroupoid2<URI> = {
+	URI,
+	compose,
+};
+export {Semigroupoid}
 
 let Category: Category2<URI> = {
 	...Semigroupoid,

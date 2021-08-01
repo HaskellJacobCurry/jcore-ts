@@ -4,6 +4,8 @@ import {IBool} from '../IBool'
 import {
 	Json,
 	S,
+	merge,
+	create,
 } from '../../../Common/common'
 
 const URI = S('Any');
@@ -24,17 +26,26 @@ let createAny: (value: IBool) => Any = (
 );
 export {createAny as create}
 
+let append: (any0: Any) => (any1: Any) => Any = (
+	any0 => any1 => createAny(IBool.or(any0.value)(any1.value))
+);
+export {append}
+
+let mempty: () => Any = (
+	() => createAny(IBool.False)
+);
+export {mempty}
+
 /** Semigroup Any */
-let Semigroup = ISemigroup.instantiate<Any>({
-	append: any0 => any1 => createAny(IBool.or(any0.value)(any1.value)),
-});
+let Semigroup = ISemigroup.instantiate<Any>()(create<ISemigroup<Any>>({
+	append,
+}));
 export {Semigroup}
 
 /** Monoid Any */
-let Monoid = IMonoid.instantiate<Any>({
-	...Semigroup,
-	mempty: () => createAny(IBool.False),
-});
+let Monoid = IMonoid.instantiate<Any>()(merge(Semigroup, create<IMonoid.Base<Any>>({
+	mempty,
+})));
 export {Monoid}
 
 type Constructor = typeof createAny;
@@ -46,6 +57,8 @@ interface HAny {
 	create: (value: IBool) => Any;
 	Semigroup: typeof Semigroup;
 	Monoid: typeof Monoid;
+	append: (any0: Any) => (any1: Any) => Any;
+	mempty: () => Any;
 }
 export {HAny}
 
@@ -56,6 +69,8 @@ let Any: Constructor & HAny = (
 		create: createAny,
 		Semigroup,
 		Monoid,
+		append,
+		mempty,
 	})
 );
 export default Any

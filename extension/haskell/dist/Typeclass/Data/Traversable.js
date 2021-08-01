@@ -13,7 +13,7 @@ var Traversable;
         sequenceM: function (MonadG) { return TraversableF.sequenceA(MonadG); },
         sequence: function (MonadG) { return Ext().sequenceM(MonadG); },
     }); })); });
-    Traversable.instantiate = (function (_) { return (common_1.assign(common_1.Json.assign(Traversable.Def(_), _))(function (_) { return common_1.Json.assign(_, Traversable.Ext(_)); })); });
+    Traversable.instantiate = (function () { return function (_) { return common_1.assign(common_1.merge(Traversable.Def(_), _))(function (_) { return common_1.merge(_, Traversable.Ext(_)); }); }; });
 })(Traversable || (Traversable = {}));
 exports.Traversable = Traversable;
 exports.ITraversable = Traversable;
@@ -28,6 +28,6 @@ var ITraversable1;
         sequenceM: function (MonadG) { return TraversableF.sequenceA(MonadG); },
         sequence: function (MonadG) { return Ext().sequenceM(MonadG); },
     }); })); });
-    ITraversable1.instantiate = (function (_) { return (common_1.assign(common_1.Json.assign(ITraversable1.Def(_), _))(function (_) { return common_1.Json.assign(_, ITraversable1.Ext(_)); })); });
+    ITraversable1.instantiate = (function () { return function (_) { return common_1.assign(common_1.merge(ITraversable1.Def(_), _))(function (_) { return common_1.merge(_, ITraversable1.Ext(_)); }); }; });
 })(ITraversable1 || (ITraversable1 = {}));
 exports.default = Traversable;

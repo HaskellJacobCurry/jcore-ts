@@ -1,17 +1,6 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Monoid = exports.Semigroup = exports.create = exports.get = exports.Any = exports.URI = void 0;
+exports.Monoid = exports.Semigroup = exports.mempty = exports.append = exports.create = exports.get = exports.Any = exports.URI = void 0;
 var Semigroup_1 = require("../Semigroup");
 var Monoid_1 = require("../Monoid");
 var IBool_1 = require("../IBool");
@@ -22,13 +11,19 @@ var get = function (_) { return _.value; };
 exports.get = get;
 var createAny = (function (value) { return ({ URI: URI, value: value }); });
 exports.create = createAny;
+var append = (function (any0) { return function (any1) { return createAny(IBool_1.IBool.or(any0.value)(any1.value)); }; });
+exports.append = append;
+var mempty = (function () { return createAny(IBool_1.IBool.False); });
+exports.mempty = mempty;
 /** Semigroup Any */
-var Semigroup = Semigroup_1.ISemigroup.instantiate({
-    append: function (any0) { return function (any1) { return createAny(IBool_1.IBool.or(any0.value)(any1.value)); }; },
-});
+var Semigroup = Semigroup_1.ISemigroup.instantiate()(common_1.create({
+    append: append,
+}));
 exports.Semigroup = Semigroup;
 /** Monoid Any */
-var Monoid = Monoid_1.IMonoid.instantiate(__assign(__assign({}, Semigroup), { mempty: function () { return createAny(IBool_1.IBool.False); } }));
+var Monoid = Monoid_1.IMonoid.instantiate()(common_1.merge(Semigroup, common_1.create({
+    mempty: mempty,
+})));
 exports.Monoid = Monoid;
 var Any = (common_1.Json.assign(createAny, {
     URI: URI,
@@ -36,6 +31,8 @@ var Any = (common_1.Json.assign(createAny, {
     create: createAny,
     Semigroup: Semigroup,
     Monoid: Monoid,
+    append: append,
+    mempty: mempty,
 }));
 exports.Any = Any;
 exports.default = Any;

@@ -1,4 +1,8 @@
 import {Semiring} from './Semiring'
+import {
+	merge,
+	assign,
+} from '../../Common/common'
 
 /**
  * class (Semiring f) <= Ring f where
@@ -13,10 +17,10 @@ interface Ring<A> extends IRing<A>, Semiring<A> {}
 export {Ring}
 export {Ring as IRing}
 namespace Ring {
-	export let instantiate: <A>(_: Ring<A>) => Ring<A> = (
-		<A>(_: Ring<A>) => (
-			_
-		)
+	export interface Base<A> extends IRing<A> {}
+	
+	export let instantiate: <A>() => <TRing extends Ring<A>>(_: TRing) => TRing = (
+		() => _ => _
 	);
 }
 export default Ring

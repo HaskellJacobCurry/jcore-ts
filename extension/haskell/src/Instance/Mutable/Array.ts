@@ -9,6 +9,7 @@ import {
 	merge,
 	_,
 	apply,
+	create,
 } from '../../Common'
 
 export * from '../../DataStructure/Mutable/Array'
@@ -51,42 +52,46 @@ let populate: <A>(..._s: A[]) => (_: Array<A>) => Array<A> = (
 );
 export {populate}
 
-let Functor = Functor1.instantiate<URI>({
-	URI,
-	fmap,
-});
+let Functor = Functor1.instantiate<URI>()(
+	create<Functor1<URI>>({
+		URI,
+		fmap,
+	})
+);
 export {Functor}
 
-let Apply = Apply1.instantiate<URI>({
-	...Functor,
-	ap,
-	liftA2: _(),
-});
+let Apply = Apply1.instantiate<URI>()(
+	merge(Functor, create<Apply1.Base<URI>>({
+		ap,
+		liftA2: _(),
+	}))
+);
 export {Apply}
 
-let Applicative = Applicative1.instantiate<URI>({
-	...Apply,
-	pure,
-});
+let Applicative = Applicative1.instantiate<URI>()(
+	merge(Apply, create<Applicative1.Base<URI>>({
+		pure,
+	}))
+);
 export {Applicative}
 
-let Bind = Bind1.instantiate<URI>({
-	...Apply,
-	bind,
-});
+let Bind = Bind1.instantiate<URI>()(
+	merge(Apply, create<Bind1.Base<URI>>({
+		bind,
+	}))
+);
 export {Bind}
 
-let Monad = Monad1.instantiate<URI>({
-	...Applicative,
-	...Bind,
-});
+let Monad = Monad1.instantiate<URI>()(
+	merge(Applicative, Bind)
+);
 export {Monad}
 
-let Populatable = Populatable1.instantiate<URI>({
+let Populatable = Populatable1.instantiate<URI>()(create<Populatable1<URI>>({
 	URI,
 	seed,
 	populate,
-});
+}));
 export {Populatable}
 
 interface HArray extends _HArray {

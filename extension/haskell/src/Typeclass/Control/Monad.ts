@@ -32,6 +32,8 @@ interface Monad<F> extends IMonad<F>, Applicative<F>, Bind<F> {}
 export {Monad}
 export {Monad as IMonad}
 namespace Monad {
+	export interface Base<F> extends IMonad<F> {}
+	
 	export interface Ext<F> extends IExtMonad<F> {}
 	export let Ext: <F>(_: Monad<F>) => Ext<F> = (
 		<F>(MonadF: Monad<F>) => (
@@ -55,10 +57,8 @@ namespace Monad {
 		)
 	);
 
-	export let instantiate: <F>(_: Monad<F>) => Monad<F> & Ext<F> = (
-		<F>(_: Monad<F>) => (
-			assign(_)(_ => merge(_, Ext(_)))
-		)
+	export let instantiate: <F>() => <TMonad extends Monad<F>>(_: TMonad) => TMonad & Ext<F> = (
+		() => _ => assign(_)(_ => merge(_, Ext(_)))
 	);
 }
 
@@ -73,19 +73,23 @@ interface IExtMonad1<F extends URI1> {
 interface Monad1<F extends URI1> extends IMonad1<F>, Applicative1<F>, Bind1<F> {}
 export {Monad1}
 
+interface IMonad2<F extends URI2> {}
 interface IExtMonad2<F extends URI2> {
 	return: <T0, A>(_: A) => Kind2<F, T0, A>;
 }
-interface Monad2<F extends URI2> extends Applicative2<F>, Bind2<F> {}
+interface Monad2<F extends URI2> extends IMonad2<F>, Applicative2<F>, Bind2<F> {}
 export {Monad2}
 
+interface IMonad2C<F extends URI2, T0> {}
 interface IExtMonad2C<F extends URI2, T0> {
 	return: <A>(_: A) => Kind2<F, T0, A>;
 }
-interface Monad2C<F extends URI2, T0> extends Applicative2C<F, T0>, Bind2C<F, T0> {}
+interface Monad2C<F extends URI2, T0> extends IMonad2C<F, T0>, Applicative2C<F, T0>, Bind2C<F, T0> {}
 export {Monad2C}
 
 namespace Monad1 {
+	export interface Base<F extends URI1> extends IMonad1<F> {}
+	
 	export interface Ext<F extends URI1> extends IExtMonad1<F> {}
 	export let Ext: <F extends URI1>(_: Monad1<F>) => Ext<F> = (
 		<F extends URI1>(MonadF: Monad1<F>) => (
@@ -109,14 +113,14 @@ namespace Monad1 {
 		)
 	);
 
-	export let instantiate: <F extends URI1>(_: Monad1<F>) => Monad1<F> & Ext<F> = (
-		<F extends URI1>(_: Monad1<F>) => (
-			assign(_)((_: Monad1<F>) => Json.assign(_, Ext(_)))
-		)
+	export let instantiate: <F extends URI1>() => <TMonad extends Monad1<F>>(_: TMonad) => TMonad & Ext<F> = (
+		() => _ => assign(_)(_ => merge(_, Ext(_)))
 	);
 }
 
 namespace Monad2 {
+	export interface Base<F extends URI2> extends IMonad2<F> {}
+	
 	export interface Ext<F extends URI2> extends IExtMonad2<F> {}
 	export let Ext: <F extends URI2>(_: Monad2<F>) => Ext<F> = (
 		<F extends URI2>(Monad: Monad2<F>) => (
@@ -134,6 +138,8 @@ namespace Monad2 {
 }
 
 namespace Monad2C {
+	export interface Base<F extends URI2, T0> extends IMonad2C<F, T0> {}
+	
 	export interface Ext<F extends URI2, T0> extends IExtMonad2C<F, T0> {}
 	export let Ext: <F extends URI2, T0>(_: Monad2C<F, T0>) => Ext<F, T0> = (
 		<F extends URI2, T0>(Monad: Monad2C<F, T0>) => (
@@ -143,10 +149,8 @@ namespace Monad2C {
 		)
 	);
 
-	export let instantiate: <F extends URI2, T0>(_: Monad2C<F, T0>) => Monad2C<F, T0> & Ext<F, T0> = (
-		<F extends URI2, T0>(_: Monad2C<F, T0>) => (
-			assign(_)((_: Monad2C<F, T0>) => Json.assign(_, Ext(_)))
-		)
+	export let instantiate: <F extends URI2, T0>() => <TMonad extends Monad2C<F, T0>>(_: TMonad) => TMonad & Ext<F, T0> = (
+		() => _ => assign(_)(_ => merge(_, Ext(_)))
 	);
 }
 

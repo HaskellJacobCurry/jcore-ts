@@ -46,7 +46,7 @@ var Foldable;
             return (common_1.assign(FoldableF.foldr(function (a) { return function (g) { return function (b) { return MonadG.bind(f(b)(a))(g); }; }; }))(function (_) { return _(MonadExtG.return)(foldableA)(b); }));
         })()); }; }; }; },
     }); })); });
-    Foldable.instantiate = (function (_) { return (common_1.assign(common_1.Json.assign(Foldable.Def(_), _))(function (_) { return common_1.Json.assign(_, Foldable.Ext(_)); })); });
+    Foldable.instantiate = (function () { return function (_) { return common_1.assign(common_1.merge(Foldable.Def(_), _))(function (_) { return common_1.merge(_, Foldable.Ext(_)); }); }; });
 })(Foldable || (Foldable = {}));
 exports.Foldable = Foldable;
 exports.IFoldable = Foldable;
@@ -84,7 +84,7 @@ var Foldable1;
             return (common_1.assign(FoldableF.foldr(function (a) { return function (g) { return function (b) { return MonadG.bind(f(b)(a))(g); }; }; }))(function (_) { return _(MonadExtG.return)(foldableA)(b); }));
         })()); }; }; }; },
     }); })); });
-    Foldable1.instantiate = (function (_) { return (common_1.assign(common_1.Json.assign(Foldable1.Def(_), _))(function (_) { return common_1.Json.assign(_, Foldable1.Ext(_)); })); });
+    Foldable1.instantiate = (function () { return function (_) { return common_1.assign(common_1.merge(Foldable1.Def(_), _))(function (_) { return common_1.merge(_, Foldable1.Ext(_)); }); }; });
 })(Foldable1 || (Foldable1 = {}));
 exports.Foldable1 = Foldable1;
 exports.default = Foldable;

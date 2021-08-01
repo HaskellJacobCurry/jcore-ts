@@ -2,7 +2,7 @@ import {Eq} from './Eq'
 import {IOrdering} from './IOrdering'
 import {IBool} from './IBool'
 import {
-	Json,
+	merge,
 	assign,
 	define,
 } from '../../Common/common'
@@ -35,6 +35,8 @@ interface IExtOrd<A> {
 }
 interface Ord<A> extends IOrd<A>, Eq<A> {}
 namespace Ord {
+	export interface Base<A> extends IOrd<A> {}
+
 	export interface Ext<A> extends IExtOrd<A> {}
 	export let Ext: <A>(_: Ord<A>) => Ext<A> = (
 		<A>(Ord: Ord<A>) => (
@@ -70,10 +72,8 @@ namespace Ord {
 		)
 	);
 
-	export let instantiate: <A>(_: Ord<A>) => Ord<A> & Ext<A> = (
-		<A>(_: Ord<A>) => (
-			assign(_)((_: Ord<A>) => Json.assign(_, Ext(_)))
-		)
+	export let instantiate: <A>() => <TOrd extends Ord<A>>(_: TOrd) => TOrd & Ext<A> = (
+		() => _ => assign(_)(_ => merge(_, Ext(_)))
 	);
 }
 export {Ord}

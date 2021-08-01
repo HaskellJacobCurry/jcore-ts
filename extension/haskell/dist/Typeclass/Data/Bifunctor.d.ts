@@ -21,7 +21,7 @@ declare namespace Bifunctor {
     interface Ext<F> extends IExtBifunctor<F> {
     }
     let Ext: <F>(_: Bifunctor<F>) => Ext<F>;
-    let instantiate: <F>(_: Bifunctor<F>) => Bifunctor<F> & Ext<F>;
+    let instantiate: <F>() => <TBifunctor extends Bifunctor<F>>(_: TBifunctor) => TBifunctor & Ext<F>;
 }
 interface IBifunctor2<F extends URI2> {
     bimap: <A, C>(_: (_: A) => C) => <B, D>(_: (_: B) => D) => (_: Kind2<F, A, B>) => Kind2<F, C, D>;
@@ -38,6 +38,6 @@ declare namespace Bifunctor2 {
     interface Ext<F extends URI2> extends IExtBifunctor2<F> {
     }
     let Ext: <F extends URI2>(_: Bifunctor2<F>) => Ext<F>;
-    let instantiate: <F extends URI2>(_: Bifunctor2<F>) => Bifunctor2<F> & Ext<F>;
+    let instantiate: <F extends URI2>() => <TBifunctor extends Bifunctor2<F>>(_: TBifunctor) => TBifunctor & Ext<F>;
 }
 export default Bifunctor;

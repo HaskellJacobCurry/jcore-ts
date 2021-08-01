@@ -30,10 +30,12 @@ interface IExtOrd<A> {
 interface Ord<A> extends IOrd<A>, Eq<A> {
 }
 declare namespace Ord {
+    interface Base<A> extends IOrd<A> {
+    }
     interface Ext<A> extends IExtOrd<A> {
     }
     let Ext: <A>(_: Ord<A>) => Ext<A>;
-    let instantiate: <A>(_: Ord<A>) => Ord<A> & Ext<A>;
+    let instantiate: <A>() => <TOrd extends Ord<A>>(_: TOrd) => TOrd & Ext<A>;
 }
 export { Ord };
 export { Ord as IOrd };

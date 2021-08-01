@@ -61,11 +61,13 @@ interface Foldable<F> extends IFoldable<F> {
 export { Foldable };
 export { Foldable as IFoldable };
 declare namespace Foldable {
+    interface Base<F> extends IFoldable<F> {
+    }
     let Def: <F>(_: Foldable<F>) => IFoldable<F>;
     interface Ext<F> extends IExtFoldable<F> {
     }
     let Ext: <F>(_: Foldable<F>) => Ext<F>;
-    let instantiate: <F>(_: Foldable<F>) => Foldable<F> & Ext<F>;
+    let instantiate: <F>() => <TFoldable extends Foldable<F>>(_: TFoldable) => TFoldable & Ext<F>;
 }
 interface IFoldable1<F extends URI1> {
     foldMap: <G>(_: Monoid<G>) => <A>(_: (_: A) => G) => (_: Kind1<F, A>) => G;
@@ -103,10 +105,12 @@ interface Foldable2C<F extends URI2, T0> {
 }
 export { Foldable2C };
 declare namespace Foldable1 {
+    interface Base<F extends URI1> extends IFoldable1<F> {
+    }
     let Def: <F extends URI1>(_: Foldable1<F>) => IFoldable1<F>;
     interface Ext<F extends URI1> extends IExtFoldable1<F> {
     }
     let Ext: <F extends URI1>(_: Foldable1<F>) => Ext<F>;
-    let instantiate: <F extends URI1>(_: Foldable1<F>) => Foldable1<F> & Ext<F>;
+    let instantiate: <F extends URI1>() => <TFoldable extends Foldable1<F>>(_: TFoldable) => TFoldable & Ext<F>;
 }
 export default Foldable;

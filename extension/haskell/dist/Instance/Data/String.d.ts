@@ -16,7 +16,7 @@ declare let Show: IShow<String>;
 export { Show };
 declare let Semigroup: ISemigroup<String>;
 export { Semigroup };
-declare let Monoid: IMonoid<String> & IMonoid.Ext<String>;
+declare let Monoid: ISemigroup<String> & IMonoid.Base<String> & IMonoid.Ext<String>;
 export { Monoid };
 interface HString extends _HString {
     Show: typeof Show;

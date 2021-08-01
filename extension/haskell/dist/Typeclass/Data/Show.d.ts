@@ -11,6 +11,6 @@ interface Show<A> extends IShow<A> {
 export { Show };
 export { Show as IShow };
 declare namespace Show {
-    let instantiate: <A>(_: Show<A>) => Show<A>;
+    let instantiate: <A>() => <TShow extends Show<A>>(_: TShow) => TShow;
 }
 export default Show;

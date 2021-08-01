@@ -7,7 +7,7 @@ var Monoid;
     Monoid_1.Ext = (function (Monoid) { return (common_1.define(function (Ext) { return ({
         mappend: Monoid.append,
     }); })); });
-    Monoid_1.instantiate = (function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Monoid_1.Ext(_)); })); });
+    Monoid_1.instantiate = (function () { return function (_) { return common_1.assign(_)(function (_) { return common_1.merge(_, Monoid_1.Ext(_)); }); }; });
 })(Monoid || (Monoid = {}));
 exports.Monoid = Monoid;
 exports.IMonoid = Monoid;

@@ -22,14 +22,14 @@ var Common_1 = require("../../Common");
 __exportStar(require("../../DataStructure/Data/List"), exports);
 var show = (function (ShowA) { return function (listA) { return (Common_1.apply(Common_1.recurse()(function (list) { return function (show) { return (list.cata({
     Nil: function () { return String_1.String('Nil'); },
-    Cons: function (head, tail) { return (Common_1.apply((String_1.String('(Cons ')))(function (_) { return Common_1.apply(String_1.String.append(_)(String_1.String.fromI(ShowA.show(head)))); })(function (_) { return Common_1.apply(String_1.String.append(_)(String_1.String(' '))); })(function (_) { return Common_1.apply(String_1.String.append(_)(show(tail))); })(function (_) { return String_1.String.append(_)(String_1.String(')')); })); }
+    Cons: function (head, tail) { return (Common_1.apply(String_1.String('(Cons '))(function (_) { return Common_1.apply(String_1.String.append(_)(String_1.String.fromI(ShowA.show(head)))); })(function (_) { return Common_1.apply(String_1.String.append(_)(String_1.String(' '))); })(function (_) { return Common_1.apply(String_1.String.append(_)(show(tail))); })(function (_) { return String_1.String.append(_)(String_1.String(')')); })); }
 })); }; }))(function (_) { return _(listA); })); }; });
 exports.show = show;
 exports.show = show = function (ShowA) { return function (listA) { return (Common_1.apply(Common_1.trampoline()(function (list, done, acc, cont) { return function (show) { return (done.cata({
     True: function () { return cont(acc); },
     False: function () { return (list.cata({
         Nil: function () { return cont(String_1.String('Nil')); },
-        Cons: function (head, tail) { return (show(tail, done, acc, function (acc) { return (Common_1.apply((String_1.String('(Cons ')))(function (_) { return Common_1.apply(String_1.String.append(_)(String_1.String.fromI(ShowA.show(head)))); })(function (_) { return Common_1.apply(String_1.String.append(_)(String_1.String(' '))); })(function (_) { return Common_1.apply(String_1.String.append(_)(acc)); })(function (_) { return Common_1.apply(String_1.String.append(_)(String_1.String(')'))); })(function (acc) { return show(list, Bool_1.Bool.True, acc, cont); })); })); }
+        Cons: function (head, tail) { return (show(tail, done, acc, function (acc) { return (Common_1.apply(String_1.String('(Cons '))(function (_) { return Common_1.apply(String_1.String.append(_)(String_1.String.fromI(ShowA.show(head)))); })(function (_) { return Common_1.apply(String_1.String.append(_)(String_1.String(' '))); })(function (_) { return Common_1.apply(String_1.String.append(_)(acc)); })(function (_) { return Common_1.apply(String_1.String.append(_)(String_1.String(')'))); })(function (acc) { return show(list, Bool_1.Bool.True, acc, cont); })); })); }
     })); }
 })); }; }))(function (_) { return _(listA, Bool_1.Bool.False, String_1.String.mempty(), function (_) { return _; }); })); }; };
 var foldMap = (function (MonoidG) { return function (f) { return function (listA) { return (Common_1.apply({
@@ -69,23 +69,23 @@ var populate = (function () {
 });
 exports.populate = populate;
 /** show :: (Show a) => Show (List a) => List a -> String */
-var Show = function (_) { return Common_1.apply(_)(function (ShowA) { return (Show_1.IShow.instantiate({
-    show: show(ShowA),
-})); }); };
+var Show = function (_) { return (Show_1.IShow.instantiate()(Common_1.create({
+    show: show(_),
+}))); };
 exports.Show = Show;
-var Foldable = Foldable_1.Foldable1.instantiate({
+var Foldable = Foldable_1.Foldable1.instantiate()(Common_1.create({
     URI: List_1.URI,
     foldMap: foldMap,
     foldr: Common_1.placeholder(),
-});
+}));
 exports.Foldable = Foldable;
 Foldable.foldl = foldl;
 Foldable.foldr = foldr;
-var Populatable = Populatable_1.Populatable1.instantiate({
+var Populatable = Populatable_1.Populatable1.instantiate()(Common_1.create({
     URI: List_1.URI,
     seed: seed,
     populate: populate,
-});
+}));
 exports.Populatable = Populatable;
 var _List = (Common_1.Json.assign(List_1.List, {
     Show: Show,

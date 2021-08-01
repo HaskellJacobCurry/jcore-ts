@@ -12,7 +12,7 @@ var Bind;
             bindFirst: function (BindA) { return function (f) { return (BindF.bind(BindA)(function (a) { return (BindF.fmap(function (_) { return a; })(f(a))); })); }; }
         }); }));
     })()); });
-    Bind.instantiate = (function (_) { return (common_1.assign(_)(function (_) { return common_1.merge(_, Bind.Ext(_)); })); });
+    Bind.instantiate = (function () { return function (_) { return common_1.assign(_)(function (_) { return common_1.merge(_, Bind.Ext(_)); }); }; });
 })(Bind || (Bind = {}));
 exports.Bind = Bind;
 exports.IBind = Bind;
@@ -25,7 +25,7 @@ var Bind1;
             bindFirst: function (BindA) { return function (f) { return (BindF.bind(BindA)(function (a) { return (BindF.fmap(function (_) { return a; })(f(a))); })); }; }
         }); }));
     })()); });
-    Bind1.instantiate = (function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Bind1.Ext(_)); })); });
+    Bind1.instantiate = (function () { return function (_) { return common_1.assign(_)(function (_) { return common_1.merge(_, Bind1.Ext(_)); }); }; });
 })(Bind1 || (Bind1 = {}));
 exports.Bind1 = Bind1;
 var Bind2;
@@ -36,7 +36,7 @@ var Bind2;
             sequence: ApplyExt.sndAp,
         }); }));
     })()); });
-    Bind2.instantiate = (function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Bind2.Ext(_)); })); });
+    Bind2.instantiate = (function () { return function (_) { return common_1.assign(_)(function (_) { return common_1.merge(_, Bind2.Ext(_)); }); }; });
 })(Bind2 || (Bind2 = {}));
 exports.Bind2 = Bind2;
 var Bind2C;
@@ -47,7 +47,7 @@ var Bind2C;
             sequence: ApplyExt.sndAp,
         }); }));
     })()); });
-    Bind2C.instantiate = (function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Bind2C.Ext(_)); })); });
+    Bind2C.instantiate = (function () { return function (_) { return common_1.assign(_)(function (_) { return common_1.merge(_, Bind2C.Ext(_)); }); }; });
 })(Bind2C || (Bind2C = {}));
 exports.Bind2C = Bind2C;
 exports.default = Bind;

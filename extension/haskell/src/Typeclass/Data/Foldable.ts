@@ -12,7 +12,7 @@ import {Dual} from './Monoid/Dual_'
 import {Sum} from './Monoid/Sum_'
 import {Any} from './Monoid/Any_'
 import {
-	Json,
+	merge,
 	define,
 	assign,
 	flip,
@@ -75,6 +75,8 @@ interface Foldable<F> extends IFoldable<F> {
 export {Foldable}
 export {Foldable as IFoldable}
 namespace Foldable {
+	export interface Base<F> extends IFoldable<F> {}
+
 	export let Def: <F>(_: Foldable<F>) => IFoldable<F> = (
 		<F>(FoldableF: Foldable<F>) => ({
 			foldMap: <G>(MonoidG: Monoid<G>) => <A>(f: (_: A) => G) => (foldable: HKT<F, A>) => (
@@ -167,10 +169,8 @@ namespace Foldable {
 		)
 	);
 
-	export let instantiate: <F>(_: Foldable<F>) => Foldable<F> & Ext<F> = (
-		<F>(_: Foldable<F>) => (
-			assign(Json.assign(Def(_), _))((_: Foldable<F>) => Json.assign(_, Ext(_)))
-		)
+	export let instantiate: <F>() => <TFoldable extends Foldable<F>>(_: TFoldable) => TFoldable & Ext<F> = (
+		() => _ => assign(merge(Def(_), _))(_ => merge(_, Ext(_)))
 	);
 }
 
@@ -213,6 +213,8 @@ interface Foldable2C<F extends URI2, T0> {
 export {Foldable2C}
 
 namespace Foldable1 {
+	export interface Base<F extends URI1> extends IFoldable1<F> {}
+
 	export let Def: <F extends URI1>(_: Foldable1<F>) => IFoldable1<F> = (
 		<F extends URI1>(FoldableF: Foldable1<F>) => ({
 			foldMap: <G>(MonoidG: Monoid<G>) => <A>(f: (_: A) => G) => (foldable: Kind1<F, A>) => (
@@ -305,10 +307,8 @@ namespace Foldable1 {
 		)
 	);
 
-	export let instantiate: <F extends URI1>(_: Foldable1<F>) => Foldable1<F> & Ext<F> = (
-		<F extends URI1>(_: Foldable1<F>) => (
-			assign(Json.assign(Def(_), _))((_: Foldable1<F>) => Json.assign(_, Ext(_)))
-		)
+	export let instantiate: <F extends URI1>() => <TFoldable extends Foldable1<F>>(_: TFoldable) => TFoldable & Ext<F> = (
+		() => _ => assign(merge(Def(_), _))(_ => merge(_, Ext(_)))
 	);
 }
 

@@ -3,6 +3,8 @@ import {IMonoid} from '../Monoid'
 import {
 	Json,
 	S,
+	merge,
+	create,
 } from '../../../Common/common'
 
 const URI = S('Dual');
@@ -23,23 +25,28 @@ let createDual: <A>(value: A) => Dual<A> = (
 );
 export {createDual as create}
 
+let append: <A>(_: ISemigroup<A>) => (dual0: Dual<A>) => (dual1: Dual<A>) => Dual<A> = (
+	SemigroupA => dual0 => dual1 => createDual(SemigroupA.append(dual1.value)(dual0.value))
+);
+export {append}
+
+let mempty: <A>(_: IMonoid<A>) => () => Dual<A> = (
+	Monoid => () => Dual(Monoid.mempty())
+);
+export {mempty}
+
 /** Semigroup a => Semigroup (Dual a) */
 let Semigroup = <A>(_: ISemigroup<A>) => (
-	((SemigroupA = _) => (
-		ISemigroup.instantiate<Dual<A>>({
-			append: dual0 => dual1 => createDual(SemigroupA.append(dual1.value)(dual0.value))
-		})
-	))()
+	ISemigroup.instantiate<Dual<A>>()(create<ISemigroup<Dual<A>>>({
+		append: append(_)
+	}))
 );
 export {Semigroup}
 
 let Monoid = <A>(_: IMonoid<A>) => (
-	((MonoidA = _) => (
-		IMonoid.instantiate<Dual<A>>({
-			...Semigroup(MonoidA),
-			mempty: () => Dual(MonoidA.mempty()),
-		})
-	))()
+	IMonoid.instantiate<Dual<A>>()(merge(Semigroup(_), create<IMonoid.Base<Dual<A>>>({
+		mempty: mempty(_),
+	})))
 );
 export {Monoid}
 
@@ -52,6 +59,8 @@ interface HDual {
 	create: <A>(value: A) => Dual<A>;
 	Semigroup: typeof Semigroup;
 	Monoid: typeof Monoid;
+	append: <A>(_: ISemigroup<A>) => (dual0: Dual<A>) => (dual1: Dual<A>) => Dual<A>;
+	mempty: <A>(_: IMonoid<A>) => () => Dual<A>
 }
 export {HDual}
 
@@ -62,6 +71,8 @@ let Dual: Constructor & HDual = (
 		create: createDual,
 		Semigroup,
 		Monoid,
+		append,
+		mempty,
 	})
 );
 export default Dual

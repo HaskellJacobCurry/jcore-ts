@@ -4,9 +4,7 @@ import {IUnit} from '../Data/IUnit'
 import {Reduced} from '../../DataStructure/Clojure/Reduced'
 import {Reducer} from '../../DataStructure/Clojure/Reducer'
 import {
-	Json,
-	create,
-	const_,
+	merge,
 	apply,
 	define,
 } from '../../Common'
@@ -25,18 +23,18 @@ export {Transducible as ITransducible}
 namespace Transducible {
 	export interface Ext<F> extends IExtTransducible<F> {}
 	export let Ext: <F>(_: Transducible<F>) => Ext<F> = (
-		<F>(TransducibleF: Transducible<F>) => define<Ext<F>>(Ext => ({
-			reduce_: reducer => b => transducibleA => (
-				apply((TransducibleF._reduce(reducer.step)(reducer.state)(b)(transducibleA)
-				))(_ => reducer.complete(_.fst)(_.snd))
-			),
-		}))
+		<F>(TransducibleF: Transducible<F>) => (
+			define<Ext<F>>(Ext => ({
+				reduce_: reducer => b => transducibleA => (
+					apply((TransducibleF._reduce(reducer.step)(reducer.state)(b)(transducibleA)
+					))(_ => reducer.complete(_.fst)(_.snd))
+				),
+			}))
+		)
 	);
 
-	export let instantiate: <F>(_: Transducible<F>) => Transducible<F> & Ext<F> = (
-		<F>(_: Transducible<F>) => (
-			Json.assign(_, Ext(_))
-		)
+	export let instantiate: <F>() => <TTransducible extends Transducible<F>>(_: TTransducible) => TTransducible & Ext<F> = (
+		() => _ => merge(_, Ext(_))
 	);
 }
 
@@ -55,18 +53,18 @@ export {Transducible1 as ITransducible1}
 namespace Transducible1 {
 	export interface Ext<F extends URI1> extends IExtTransducible1<F> {}
 	export let Ext: <F extends URI1>(_: Transducible1<F>) => Ext<F> = (
-		<F extends URI1>(TransducibleF: Transducible1<F>) => define<Ext<F>>(Ext => ({
-			reduce_: reducer => b => transducibleA => (
-				apply((TransducibleF._reduce(reducer.step)(reducer.state)(b)(transducibleA)
-				))(_ => reducer.complete(_.fst)(_.snd))
-			),
-		}))
+		<F extends URI1>(TransducibleF: Transducible1<F>) => (
+			define<Ext<F>>(Ext => ({
+				reduce_: reducer => b => transducibleA => (
+					apply((TransducibleF._reduce(reducer.step)(reducer.state)(b)(transducibleA)
+					))(_ => reducer.complete(_.fst)(_.snd))
+				),
+			}))
+		)
 	);
 
-	export let instantiate: <F extends URI1>(_: Transducible1<F>) => Transducible1<F> & Ext<F> = (
-		<F extends URI1>(_: Transducible1<F>) => (
-			Json.assign(_, Ext(_))
-		)
+	export let instantiate: <F extends URI1>() => <TTransducible extends Transducible1<F>>(_: TTransducible) => TTransducible & Ext<F> = (
+		() => _ => merge(_, Ext(_))
 	);
 }
 

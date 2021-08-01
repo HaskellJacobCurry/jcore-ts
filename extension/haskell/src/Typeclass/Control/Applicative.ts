@@ -41,10 +41,10 @@ interface Applicative2C<F extends URI2, T0> extends IApplicative2C<F, T0>, Apply
 export {Applicative2C}
 
 namespace Applicative1 {
-	export let instantiate: <F extends URI1>(_: Applicative1<F>) => Applicative1<F> = (
-		<F extends URI1>(_: Applicative1<F>) => (
-			_
-		)
+	export interface Base<F extends URI1> extends IApplicative1<F> {}
+
+	export let instantiate: <F extends URI1>() => <TApplicative extends Applicative1<F>>(_: TApplicative) => TApplicative = (
+		() => _ => _
 	);
 }
 

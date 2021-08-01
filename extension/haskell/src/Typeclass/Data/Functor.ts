@@ -8,7 +8,7 @@ import {
 	compose,
 	id,
 	const_,
-	flip,
+	merge,
 } from '../../Common/common'
 
 /**
@@ -48,6 +48,8 @@ interface Functor<F> extends IFunctor<F> {
 export {Functor}
 export {Functor as IFunctor}
 namespace Functor {
+	export interface Base<F> extends IFunctor<F> {}
+	
 	export interface Ext<F> extends IExtFunctor<F> {}
 	export let Ext: <F>(_: Functor<F>) => Ext<F> = (
 		<F>(Functor: Functor<F>) => (
@@ -60,10 +62,8 @@ namespace Functor {
 		)
 	);
 
-	export let instantiate: <F>(_: Functor<F>) => Functor<F> & Ext<F> = (
-		<F>(_: Functor<F>) => (
-			assign(_)((_: Functor<F>) => Json.assign(_, Ext(_)))
-		)
+	export let instantiate: <F>() => <TFunctor extends Functor<F>>(_: TFunctor) => TFunctor & Ext<F> = (
+		() => _ => assign(_)(_ => merge(_, Ext(_)))
 	);
 }
 
@@ -120,6 +120,8 @@ interface Functor2C<F extends URI2, T0> extends IFunctor2C<F, T0> {
 export {Functor2C}
 
 namespace Functor1 {
+	export interface Base<F extends URI1> extends IFunctor1<F> {}
+	
 	export interface Ext<F extends URI1> extends IExtFunctor1<F> {}
 	export let Ext: <F extends URI1>(_: Functor1<F>) => Ext<F> = (
 		<F extends URI1>(Functor: Functor1<F>) => (
@@ -132,14 +134,14 @@ namespace Functor1 {
 		)
 	);
 
-	export let instantiate: <F extends URI1>(_: Functor1<F>) => Functor1<F> & Ext<F> = (
-		<F extends URI1>(_: Functor1<F>) => (
-			assign(_)((_: Functor1<F>) => Json.assign(_, Ext(_)))
-		)
+	export let instantiate: <F extends URI1>() => <TFunctor extends Functor1<F>>(_: TFunctor) => TFunctor & Ext<F> = (
+		() => _ => assign(_)(_ => merge(_, Ext(_)))
 	);
 }
 
 namespace Functor2 {
+	export interface Base<F extends URI2> extends IFunctor2<F> {}
+	
 	export interface Ext<F extends URI2> extends IExtFunctor2<F> {}
 	export let Ext: <F extends URI2>(_: Functor2<F>) => Ext<F> = (
 		<F extends URI2>(Functor: Functor2<F>) => (
@@ -152,14 +154,14 @@ namespace Functor2 {
 		)
 	);
 
-	export let instantiate: <F extends URI2>(_: Functor2<F>) => Functor2<F> & Ext<F> = (
-		<F extends URI2>(_: Functor2<F>) => (
-			assign(_)((_: Functor2<F>) => Json.assign(_, Ext(_)))
-		)
+	export let instantiate: <F extends URI2>() => <TFunctor extends Functor2<F>>(_: TFunctor) => TFunctor & Ext<F> = (
+		() => _ => assign(_)(_ => merge(_, Ext(_)))
 	);
 }
 
 namespace Functor2C {
+	export interface Base<F extends URI2, T0> extends IFunctor2C<F, T0> {}
+	
 	export interface Ext<F extends URI2, T0> extends IExtFunctor2C<F, T0> {}
 	export let Ext: <F extends URI2, T0>(_: Functor2C<F, T0>) => Ext<F, T0> = (
 		<F extends URI2, T0>(Functor: Functor2C<F, T0>) => (
@@ -172,10 +174,8 @@ namespace Functor2C {
 		)
 	);
 
-	export let instantiate: <F extends URI2, T0>(_: Functor2C<F, T0>) => Functor2C<F, T0> & Ext<F, T0> = (
-		<F extends URI2, T0>(_: Functor2C<F, T0>) => (
-			assign(_)((_: Functor2C<F, T0>) => Json.assign(_, Ext(_)))
-		)
+	export let instantiate: <F extends URI2, T0>() => <TFunctor extends Functor2C<F, T0>>(_: TFunctor) => TFunctor & Ext<F, T0> = (
+		() => _ => assign(_)(_ => merge(_, Ext(_)))
 	);
 }
 

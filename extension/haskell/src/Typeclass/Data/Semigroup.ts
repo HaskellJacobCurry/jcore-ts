@@ -1,3 +1,8 @@
+import {
+	merge,
+	assign
+} from '../../Common/common'
+
 /**
  * class Semigroup f where
  *  append :: f -> f -> f
@@ -13,10 +18,8 @@ interface Semigroup<A> extends ISemigroup<A> {}
 export {Semigroup}
 export {Semigroup as ISemigroup};
 namespace Semigroup {
-	export let instantiate: <A>(_: Semigroup<A>) => Semigroup<A> = (
-		<A>(_: Semigroup<A>) => (
-			_
-		)
+	export let instantiate: <A>() => <TSemigroup extends Semigroup<A>>(_: TSemigroup) => TSemigroup = (
+		() => _ => _
 	);
 }
 export default Semigroup

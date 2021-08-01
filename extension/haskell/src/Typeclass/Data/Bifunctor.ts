@@ -1,6 +1,6 @@
 import {HKT2, URI1, URI2, Kind1, Kind2} from '../../Common/HKT'
 import {
-	Json,
+	merge,
 	define,
 	assign,
 	id_,
@@ -39,10 +39,8 @@ namespace Bifunctor {
 		)
 	);
 
-	export let instantiate: <F>(_: Bifunctor<F>) => Bifunctor<F> & Ext<F> = (
-		<F>(_: Bifunctor<F>) => (
-			assign(_)((_: Bifunctor<F>) => Json.assign(_, Ext(_)))
-		)
+	export let instantiate: <F>() => <TBifunctor extends Bifunctor<F>>(_: TBifunctor) => TBifunctor & Ext<F> = (
+		() => _ => assign(_)(_ => merge(_, Ext(_)))
 	);
 }
 
@@ -73,10 +71,8 @@ namespace Bifunctor2 {
 		)
 	);
 
-	export let instantiate: <F extends URI2>(_: Bifunctor2<F>) => Bifunctor2<F> & Ext<F> = (
-		<F extends URI2>(_: Bifunctor2<F>) => (
-			assign(_)((_: Bifunctor2<F>) => Json.assign(_, Ext(_)))
-		)
+	export let instantiate: <F extends URI2>() => <TBifunctor extends Bifunctor2<F>>(_: TBifunctor) => TBifunctor & Ext<F> = (
+		() => _ => assign(_)(_ => merge(_, Ext(_)))
 	);
 }
 

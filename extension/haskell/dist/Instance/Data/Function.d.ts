@@ -5,11 +5,11 @@ export * from '../../DataStructure/Data/Function';
 /** compose :: Semigroupoid Function => Function b c -> Function a b -> Function a c */
 declare let compose: <B, C>(_: Function<B, C>) => <A>(_: Function<A, B>) => Function<A, C>;
 export { compose };
-declare let Semigroupoid: Semigroupoid2<URI>;
-export { Semigroupoid };
 /** identity :: Category Function => Function a a */
 declare let identity: <A>() => Function<A, A>;
 export { identity };
+declare let Semigroupoid: Semigroupoid2<URI>;
+export { Semigroupoid };
 declare let Category: Category2<URI>;
 export { Category };
 interface HFunction extends _HFunction {

@@ -6,6 +6,8 @@ import {
 	compose,
 	id,
 	S,
+	merge,
+	create,
 } from '../../../Common/common'
 
 const URI = S('Endo');
@@ -31,15 +33,26 @@ let createEndo: <A>(fn: (_: A) => A) => Endo<A> = (
 );
 export {createEndo as create}
 
-let Semigroup = <A>() => ISemigroup.instantiate<Endo<A>>({
-	append: endo0 => endo1 => Endo(compose(endo0.fn, endo1.fn)),
-});
+let append: <A>() => (endo0: Endo<A>) => (endo1: Endo<A>) => Endo<A> = (
+	() => endo0 => endo1 => Endo(compose(endo0.fn, endo1.fn))
+);
+export {append}
+
+let mempty: <A>() => () => Endo<A> = (
+	() => () => Endo(id)
+);
+export {mempty}
+
+let Semigroup = <A>() => ISemigroup.instantiate<Endo<A>>()(create<ISemigroup<Endo<A>>>({
+	append: append(),
+}));
 export {Semigroup}
 
-let Monoid = <A>() => IMonoid.instantiate<Endo<A>>({
-	...Semigroup<A>(),
-	mempty: () => Endo(id),
-});
+let Monoid = <A>() => (
+	IMonoid.instantiate<Endo<A>>()(merge(Semigroup<A>(), create<IMonoid.Base<Endo<A>>>({
+		mempty: mempty(),
+	})))
+);
 export {Monoid}
 
 type Constructor = typeof createEndo;
@@ -51,6 +64,8 @@ interface HEndo {
 	create: <A>(fn: (_: A) => A) => Endo<A>;
 	Semigroup: typeof Semigroup;
 	Monoid: typeof Monoid;
+	append: <A>() => (endo0: Endo<A>) => (endo1: Endo<A>) => Endo<A>;
+	mempty: <A>() => () => Endo<A>;
 }
 export {HEndo}
 
@@ -61,6 +76,8 @@ let Endo: Constructor & HEndo = (
 		create: createEndo,
 		Semigroup,
 		Monoid,
+		append,
+		mempty,
 	})
 );
 export default Endo

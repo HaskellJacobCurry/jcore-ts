@@ -30,11 +30,11 @@ let show: <A>(_: IShow<A>) => (_: List<A>) => String = (
 				list.cata({
 					Nil: () => String('Nil'),
 					Cons: (head, tail) => (
-						apply((String('(Cons ')
-						))(_ => apply(String.append(_)(String.fromI(ShowA.show(head)))
-						))(_ => apply(String.append(_)(String(' '))
-						))(_ => apply(String.append(_)(show(tail))
-						))(_ => String.append(_)(String(')')))
+						apply(String('(Cons '))
+						(_ => apply(String.append(_)(String.fromI(ShowA.show(head)))))
+						(_ => apply(String.append(_)(String(' '))))
+						(_ => apply(String.append(_)(show(tail))))
+						(_ => String.append(_)(String(')')))
 					)
 				})
 			))
@@ -51,12 +51,12 @@ show = <A>(ShowA: IShow<A>) => (listA: List<A>) => (
 						Nil: () => cont(String('Nil')),
 						Cons: (head, tail) => (
 							show(tail, done, acc, acc => (
-								apply((String('(Cons ')
-								))(_ => apply(String.append(_)(String.fromI(ShowA.show(head)))
-								))(_ => apply(String.append(_)(String(' '))
-								))(_ => apply(String.append(_)(acc)
-								))(_ => apply(String.append(_)(String(')'))
-								))(acc => show(list, Bool.True, acc, cont))
+								apply(String('(Cons '))
+								(_ => apply(String.append(_)(String.fromI(ShowA.show(head)))))
+								(_ => apply(String.append(_)(String(' '))))
+								(_ => apply(String.append(_)(acc)))
+								(_ => apply(String.append(_)(String(')'))))
+								(acc => show(list, Bool.True, acc, cont))
 							))
 						)
 					})
@@ -130,27 +130,27 @@ let populate: <A>(..._s: A[]) => (_: List<A>) => List<A> = (
 export {populate}
 
 /** show :: (Show a) => Show (List a) => List a -> String */
-let Show = <A>(_: IShow<A>) => apply(_)(ShowA => (
-	IShow.instantiate<List<A>>({
-		show: show(ShowA),
-	})
-));
+let Show = <A>(_: IShow<A>) => (
+	IShow.instantiate<List<A>>()(create<IShow<List<A>>>({
+		show: show(_),
+	}))
+);
 export {Show}
 
-let Foldable = Foldable1.instantiate<URI>({
+let Foldable = Foldable1.instantiate<URI>()(create<Foldable1<URI>>({
 	URI,
 	foldMap,
 	foldr: placeholder(),
-});
+}));
 Foldable.foldl = foldl;
 Foldable.foldr = foldr;
 export {Foldable}
 
-let Populatable = Populatable1.instantiate<URI>({
+let Populatable = Populatable1.instantiate<URI>()(create<Populatable1<URI>>({
 	URI,
 	seed,
 	populate,
-});
+}));
 export {Populatable}
 
 interface HList extends _HList {

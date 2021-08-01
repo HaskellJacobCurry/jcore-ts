@@ -1,3 +1,8 @@
+import {
+	merge,
+	assign,
+} from '../../Common/common'
+
 /**
  * class Semiring f where
  *  add :: f -> f -> f
@@ -15,10 +20,10 @@ interface Semiring<A> extends ISemiring<A> {}
 export {Semiring}
 export {Semiring as ISemiring};
 namespace Semiring {
-	export let instantiate: <A>(_: Semiring<A>) => Semiring<A> = (
-		<A>(_: Semiring<A>) => (
-			_
-		)
+	export interface Base<A> extends Semiring<A> {}
+
+	export let instantiate: <A>() => <TSemiring extends Semiring<A>>(_: TSemiring) => TSemiring = (
+		() => _ => _
 	);
 }
 export default Semiring

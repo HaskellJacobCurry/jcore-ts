@@ -15,9 +15,11 @@ interface Eq<A> extends IEq<A> {
 export { Eq };
 export { Eq as IEq };
 declare namespace Eq {
+    interface Base<A> extends Eq<A> {
+    }
     interface Ext<A> extends IExtEq<A> {
     }
     let Ext: <A>(Eq: Eq<A>) => Ext<A>;
-    let instantiate: <A>(_: Eq<A>) => Eq<A> & Ext<A>;
+    let instantiate: <A>() => <TEq extends Eq<A>>(_: TEq) => TEq & Ext<A>;
 }
 export default Eq;

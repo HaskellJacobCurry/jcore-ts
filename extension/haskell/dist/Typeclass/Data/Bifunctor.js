@@ -8,7 +8,7 @@ var Bifunctor;
         lmap: function (f) { return function (bifunctor) { return (BifunctorF.bimap(f)(common_1.id_())(bifunctor)); }; },
         rmap: function (f) { return function (bifunctor) { return (BifunctorF.bimap(common_1.id_())(f)(bifunctor)); }; },
     }); })); });
-    Bifunctor.instantiate = (function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Bifunctor.Ext(_)); })); });
+    Bifunctor.instantiate = (function () { return function (_) { return common_1.assign(_)(function (_) { return common_1.merge(_, Bifunctor.Ext(_)); }); }; });
 })(Bifunctor || (Bifunctor = {}));
 exports.Bifunctor = Bifunctor;
 exports.IBifunctor = Bifunctor;
@@ -18,7 +18,7 @@ var Bifunctor2;
         lmap: function (f) { return function (bifunctor) { return (BifunctorF.bimap(f)(common_1.id_())(bifunctor)); }; },
         rmap: function (f) { return function (bifunctor) { return (BifunctorF.bimap(common_1.id_())(f)(bifunctor)); }; },
     }); })); });
-    Bifunctor2.instantiate = (function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Bifunctor2.Ext(_)); })); });
+    Bifunctor2.instantiate = (function () { return function (_) { return common_1.assign(_)(function (_) { return common_1.merge(_, Bifunctor2.Ext(_)); }); }; });
 })(Bifunctor2 || (Bifunctor2 = {}));
 exports.Bifunctor2 = Bifunctor2;
 exports.default = Bifunctor;

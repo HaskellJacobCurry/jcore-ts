@@ -37,10 +37,12 @@ interface Functor<F> extends IFunctor<F> {
 export { Functor };
 export { Functor as IFunctor };
 declare namespace Functor {
+    interface Base<F> extends IFunctor<F> {
+    }
     interface Ext<F> extends IExtFunctor<F> {
     }
     let Ext: <F>(_: Functor<F>) => Ext<F>;
-    let instantiate: <F>(_: Functor<F>) => Functor<F> & Ext<F>;
+    let instantiate: <F>() => <TFunctor extends Functor<F>>(_: TFunctor) => TFunctor & Ext<F>;
 }
 interface IFunctor1<F extends URI1> {
     fmap: <A, B>(_: (_: A) => B) => (_: Kind1<F, A>) => Kind1<F, B>;
@@ -82,21 +84,27 @@ interface Functor2C<F extends URI2, T0> extends IFunctor2C<F, T0> {
 }
 export { Functor2C };
 declare namespace Functor1 {
+    interface Base<F extends URI1> extends IFunctor1<F> {
+    }
     interface Ext<F extends URI1> extends IExtFunctor1<F> {
     }
     let Ext: <F extends URI1>(_: Functor1<F>) => Ext<F>;
-    let instantiate: <F extends URI1>(_: Functor1<F>) => Functor1<F> & Ext<F>;
+    let instantiate: <F extends URI1>() => <TFunctor extends Functor1<F>>(_: TFunctor) => TFunctor & Ext<F>;
 }
 declare namespace Functor2 {
+    interface Base<F extends URI2> extends IFunctor2<F> {
+    }
     interface Ext<F extends URI2> extends IExtFunctor2<F> {
     }
     let Ext: <F extends URI2>(_: Functor2<F>) => Ext<F>;
-    let instantiate: <F extends URI2>(_: Functor2<F>) => Functor2<F> & Ext<F>;
+    let instantiate: <F extends URI2>() => <TFunctor extends Functor2<F>>(_: TFunctor) => TFunctor & Ext<F>;
 }
 declare namespace Functor2C {
+    interface Base<F extends URI2, T0> extends IFunctor2C<F, T0> {
+    }
     interface Ext<F extends URI2, T0> extends IExtFunctor2C<F, T0> {
     }
     let Ext: <F extends URI2, T0>(_: Functor2C<F, T0>) => Ext<F, T0>;
-    let instantiate: <F extends URI2, T0>(_: Functor2C<F, T0>) => Functor2C<F, T0> & Ext<F, T0>;
+    let instantiate: <F extends URI2, T0>() => <TFunctor extends Functor2C<F, T0>>(_: TFunctor) => TFunctor & Ext<F, T0>;
 }
 export default Functor;

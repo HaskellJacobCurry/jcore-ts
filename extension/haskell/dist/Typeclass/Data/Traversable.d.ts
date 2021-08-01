@@ -26,7 +26,7 @@ declare namespace Traversable {
     interface Ext<F> extends IExtTraversable<F> {
     }
     let Ext: <F>(_: Traversable<F>) => Ext<F>;
-    let instantiate: <F>(_: Traversable<F>) => Traversable<F>;
+    let instantiate: <F>() => <TTraversable extends Traversable<F>>(_: TTraversable) => TTraversable & Ext<F>;
 }
 interface ITraversable1<F extends URI1> {
     traverse: <G extends URI1>(_: Applicative1<G>) => <A, B>(_: (_: A) => Kind1<G, B>) => (_: Kind1<F, A>) => Kind1<G, Kind1<F, B>>;
@@ -52,6 +52,6 @@ declare namespace ITraversable1 {
         sequenceM: MonadG => TraversableF.sequenceA(MonadG),
         sequence: MonadG => Ext().sequenceM(MonadG),
     }))));
-    let instantiate: <F extends URI1>(_: Traversable1<F>) => Traversable1<F> & Ext<F> = (<F extends URI1>(_: Traversable1<F>) => (assign(Json.assign(Def(_), _))((_: Traversable1<F>) => Json.assign(_, Ext(_)))));
+    let instantiate: <F extends URI1>() => <TTraversable extends Traversable1<F>>(_: TTraversable) => TTraversable & Ext<F> = (() => _ => assign(merge(Def(_), _))(_ => merge(_, Ext(_))));
 }
 export default Traversable;

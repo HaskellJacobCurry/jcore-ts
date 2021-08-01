@@ -21,21 +21,21 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Function = exports.Category = exports.identity = exports.Semigroupoid = exports.compose = void 0;
+exports.Function = exports.Category = exports.Semigroupoid = exports.identity = exports.compose = void 0;
 var Function_1 = require("../../DataStructure/Data/Function");
 var Common_1 = require("../../Common");
 __exportStar(require("../../DataStructure/Data/Function"), exports);
 /** compose :: Semigroupoid Function => Function b c -> Function a b -> Function a c */
 var compose = (function (f0) { return function (f1) { return function (a) { return f0(f1(a)); }; }; });
 exports.compose = compose;
+/** identity :: Category Function => Function a a */
+var identity = (function () { return function (a) { return a; }; });
+exports.identity = identity;
 var Semigroupoid = {
     URI: Function_1.URI,
     compose: compose,
 };
 exports.Semigroupoid = Semigroupoid;
-/** identity :: Category Function => Function a a */
-var identity = (function () { return function (a) { return a; }; });
-exports.identity = identity;
 var Category = __assign(__assign({}, Semigroupoid), { identity: function () { return function (a) { return a; }; } });
 exports.Category = Category;
 var _Function = (Common_1.Json.assign(Function_1.Function, {

@@ -32,6 +32,8 @@ interface Bind<F> extends IBind<F>, Apply<F> {}
 export {Bind}
 export {Bind as IBind}
 namespace Bind {
+	export interface Base<F> extends IBind<F> {}
+	
 	export interface Ext<F> extends IExtBind<F> {}
 	export let Ext: <F>(_: Bind<F>) => Ext<F> = (
 		<F>(BindF: Bind<F>) => (
@@ -48,10 +50,8 @@ namespace Bind {
 		)
 	);
 
-	export let instantiate: <F>(_: Bind<F>) => Bind<F> & Ext<F> = (
-		<F>(_: Bind<F>) => (
-			assign(_)(_ => merge(_, Ext(_)))
-		)
+	export let instantiate: <F>() => <TBind extends Bind<F>>(_: TBind) => TBind & Ext<F> = (
+		() => _ => assign(_)(_ => merge(_, Ext(_)))
 	);
 }
 
@@ -84,6 +84,8 @@ interface Bind2C<F extends URI2, T0> extends IBind2C<F, T0>, Apply2C<F, T0> {}
 export {Bind2C}
 
 namespace Bind1 {
+	export interface Base<F extends URI1> extends IBind1<F> {}
+	
 	export interface Ext<F extends URI1> extends IExtBind1<F> {}
 	export let Ext: <F extends URI1>(_: Bind1<F>) => Ext<F> = (
 		<F extends URI1>(BindF: Bind1<F>) => (
@@ -100,14 +102,14 @@ namespace Bind1 {
 		)
 	);
 
-	export let instantiate: <F extends URI1>(_: Bind1<F>) => Bind1<F> & Ext<F> = (
-		<F extends URI1>(_: Bind1<F>) => (
-			assign(_)((_: Bind1<F>) => Json.assign(_, Ext(_)))
-		)
+	export let instantiate: <F extends URI1>() => <TBind extends Bind1<F>>(_: TBind) => TBind & Ext<F> = (
+		() => _ => assign(_)(_ => merge(_, Ext(_)))
 	);
 }
 
 namespace Bind2 {
+	export interface Base<F extends URI2> extends IBind2<F> {}
+	
 	export interface Ext<F extends URI2> extends IExtBind2<F> {}
 	export let Ext: <F extends URI2>(_: Bind2<F>) => Ext<F> = (
 		<F extends URI2>(Bind: Bind2<F>) => (
@@ -119,14 +121,14 @@ namespace Bind2 {
 		)
 	);
 
-	export let instantiate: <F extends URI2>(_: Bind2<F>) => Bind2<F> & Ext<F> = (
-		<F extends URI2>(_: Bind2<F>) => (
-			assign(_)((_: Bind2<F>) => Json.assign(_, Ext(_)))
-		)
+	export let instantiate: <F extends URI2>() => <TBind extends Bind2<F>>(_: TBind) => TBind & Ext<F> = (
+		() => _ => assign(_)(_ => merge(_, Ext(_)))
 	);
 }
 
 namespace Bind2C {
+	export interface Base<F extends URI2, T0> extends IBind2C<F, T0> {}
+	
 	export interface Ext<F extends URI2, T0> extends IExtBind2C<F, T0> {}
 	export let Ext: <F extends URI2, T0>(_: Bind2C<F, T0>) => Ext<F, T0> = (
 		<F extends URI2, T0>(Bind: Bind2C<F, T0>) => (
@@ -138,10 +140,8 @@ namespace Bind2C {
 		)
 	);
 
-	export let instantiate: <F extends URI2, T0>(_: Bind2C<F, T0>) => Bind2C<F, T0> & Ext<F, T0> = (
-		<F extends URI2, T0>(_: Bind2C<F, T0>) => (
-			assign(_)((_: Bind2C<F, T0>) => Json.assign(_, Ext(_)))
-		)
+	export let instantiate: <F extends URI2, T0>() => <TBind extends Bind2C<F, T0>>(_: TBind) => TBind & Ext<F, T0> = (
+		() => _ => assign(_)(_ => merge(_, Ext(_)))
 	);
 }
 

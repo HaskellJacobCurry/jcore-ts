@@ -16,15 +16,17 @@ var String_1 = require("../../DataStructure/Data/String");
 var Show_1 = require("../../Typeclass/Data/Show");
 var Common_1 = require("../../Common");
 __exportStar(require("../../DataStructure/Data/Bool"), exports);
-var Show = Show_1.IShow.instantiate({
-    show: function (bool) { return (bool.cata({
-        True: function () { return String_1.String('True'); },
-        False: function () { return String_1.String('False'); },
-    })); }
-});
+var show = (function (bool) { return (bool.cata({
+    True: function () { return String_1.String('True'); },
+    False: function () { return String_1.String('False'); },
+})); });
+var Show = Show_1.IShow.instantiate()(Common_1.create({
+    show: show,
+}));
 exports.Show = Show;
-var _Bool = (Common_1.Json.assign(Bool_1.Bool, {
+var _Bool = (Common_1.merge(Bool_1.Bool, {
     Show: Show,
+    show: show,
 }));
 exports.Bool = _Bool;
 exports.default = _Bool;

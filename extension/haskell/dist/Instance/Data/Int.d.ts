@@ -1,4 +1,5 @@
 import { Int, HInt as _HInt, Constructor } from '../../DataStructure/Data/Int';
+import { String } from '../../DataStructure/Data/String';
 import { Bool } from './Bool';
 import { Ordering } from '../../DataStructure/Data/Ordering';
 import { INum } from '../../Typeclass/GHC/Num';
@@ -20,17 +21,19 @@ declare let gt: (_: Int) => (_: Int) => Bool;
 export { gt };
 declare let notGt: (_: Int) => (_: Int) => Bool;
 export { notGt };
+declare let show: (_: Int) => String;
+export { show };
 declare let Num: INum<Int> & INum.Ext<Int>;
 export { Num };
 declare let Show: IShow<Int>;
 export { Show };
 declare let Semiring: ISemiring<Int>;
 export { Semiring };
-declare let Ring: IRing<Int>;
+declare let Ring: ISemiring<Int> & IRing.Base<Int>;
 export { Ring };
 declare let Eq: IEq<Int> & IEq.Ext<Int>;
 export { Eq };
-declare let Ord: IOrd<Int> & IOrd.Ext<Int>;
+declare let Ord: IEq<Int> & IEq.Ext<Int> & IOrd.Base<Int> & IOrd.Ext<Int>;
 export { Ord };
 interface HInt extends _HInt {
     Num: typeof Num;
@@ -45,6 +48,7 @@ interface HInt extends _HInt {
     notLt: (_: Int) => (_: Int) => Bool;
     gt: (_: Int) => (_: Int) => Bool;
     notGt: (_: Int) => (_: Int) => Bool;
+    show: (_: Int) => String;
 }
 export { HInt };
 declare type _Int = Int;

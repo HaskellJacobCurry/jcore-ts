@@ -26,7 +26,7 @@ var Ord;
         })); }; }; },
         between: function (min) { return function (max) { return function (ord) { return Ord.eq(Ext().clamp(min)(max)(ord))(ord); }; }; },
     }); })); });
-    Ord_1.instantiate = (function (_) { return (common_1.assign(_)(function (_) { return common_1.Json.assign(_, Ord_1.Ext(_)); })); });
+    Ord_1.instantiate = (function () { return function (_) { return common_1.assign(_)(function (_) { return common_1.merge(_, Ord_1.Ext(_)); }); }; });
 })(Ord || (Ord = {}));
 exports.Ord = Ord;
 exports.IOrd = Ord;

@@ -16,11 +16,11 @@ var String_1 = require("../../DataStructure/Data/String");
 var Show_1 = require("../../Typeclass/Data/Show");
 var Common_1 = require("../../Common");
 __exportStar(require("../../DataStructure/Data/Unit"), exports);
-var Show = Show_1.IShow.instantiate({
+var Show = Show_1.IShow.instantiate()(Common_1.create({
     show: function (_) { return String_1.String('Unit'); },
-});
+}));
 exports.Show = Show;
-var _Unit = (Common_1.Json.assign(Unit_1.Unit, {
+var _Unit = (Common_1.merge(Unit_1.Unit, {
     Show: Show,
 }));
 exports.Unit = _Unit;

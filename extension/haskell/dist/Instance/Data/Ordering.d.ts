@@ -1,25 +1,35 @@
 import { Ordering, HOrdering as _HOrdering } from '../../DataStructure/Data/Ordering';
+import { String } from '../../DataStructure/Data/String';
 import { Bool } from './Bool';
 import { IEq } from '../../Typeclass/Data/Eq';
 import { IOrd } from '../../Typeclass/Data/Ord';
 import { IShow } from '../../Typeclass/Data/Show';
 export * from '../../DataStructure/Data/Ordering';
+declare let show: (_: Ordering) => String;
+export { show };
 declare let eq: (_: Ordering) => (_: Ordering) => Bool;
 export { eq };
 declare let notEq: (_: Ordering) => (_: Ordering) => Bool;
 export { notEq };
+declare let compare: (_: Ordering) => (_: Ordering) => Ordering;
+export { compare };
+declare let lt: (_: Ordering) => (_: Ordering) => Bool;
+export { lt };
 declare let Show: IShow<Ordering>;
 export { Show };
 declare let Eq: IEq<Ordering> & IEq.Ext<Ordering>;
 export { Eq };
-declare let Ord: IOrd<Ordering> & IOrd.Ext<Ordering>;
+declare let Ord: IEq<Ordering> & IEq.Ext<Ordering> & IOrd.Base<Ordering> & IOrd.Ext<Ordering>;
 export { Ord };
 interface HOrdering extends _HOrdering {
     Show: typeof Show;
     Eq: typeof Eq;
     Ord: typeof Ord;
+    show: (_: Ordering) => String;
     eq: (_: Ordering) => (_: Ordering) => Bool;
     notEq: (_: Ordering) => (_: Ordering) => Bool;
+    compare: (_: Ordering) => (_: Ordering) => Ordering;
+    lt: (_: Ordering) => (_: Ordering) => Bool;
 }
 export { HOrdering };
 declare type _Ordering = Ordering;

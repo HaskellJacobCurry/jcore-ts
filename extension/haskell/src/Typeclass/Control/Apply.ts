@@ -7,6 +7,7 @@ import {
 	id_,
 	id,
 	const_,
+	merge,
 } from '../../Common/common'
 
 /**
@@ -41,6 +42,8 @@ export {Apply}
 export {Apply as IApply}
 
 namespace Apply {
+	export interface Base<F> extends IApply<F> {}
+	
 	export let Def: <F>(_: Apply<F>) => IApply<F> = (
 		<F>(ApplyF: Apply<F>) => <IApply<F>>{
 			ap: <A, B>(_0: HKT<F, (_: A) => B>) => (_1: HKT<F, A>) => (
@@ -68,10 +71,8 @@ namespace Apply {
 		)
 	);
 
-	export let instantiate: <F>(_: Apply<F>) => Apply<F> & Ext<F> = (
-		<F>(_: Apply<F>) => (
-			assign(Json.assign(Def(_), _))((_: Apply<F>) => Json.assign(_, Ext(_)))
-		)
+	export let instantiate: <F>() => <TApply extends Apply<F>>(_: TApply) => TApply & Ext<F> = (
+		() => _ => assign(merge(Def(_), _))(_ => merge(_, Ext(_)))
 	);
 }
 
@@ -109,6 +110,8 @@ interface Apply2C<F extends URI2, T0> extends Functor2C<F, T0>, IApply2C<F, T0> 
 export {Apply2C}
 
 namespace Apply1 {
+	export interface Base<F extends URI1> extends IApply1<F> {}
+	
 	export let Def: <F extends URI1>(_: Apply1<F>) => IApply1<F> = (
 		<F extends URI1>(Apply: Apply1<F>) => <IApply1<F>>{
 			ap: <A, B>(_0: Kind1<F, (_: A) => B>) => (_1: Kind1<F, A>) => (
@@ -138,14 +141,14 @@ namespace Apply1 {
 		)
 	);
 
-	export let instantiate: <F extends URI1>(_: Apply1<F>) => Apply1<F> & Ext<F> = (
-		<F extends URI1>(_: Apply1<F>) => (
-			assign(Json.assign(Def(_), _))((_: Apply1<F>) => Json.assign(_, Ext(_)))
-		)
+	export let instantiate: <F extends URI1>() => <TApply extends Apply1<F>>(_: TApply) => TApply & Ext<F> = (
+		() => _ => assign(merge(Def(_), _))(_ => merge(_, Ext(_)))
 	);
 }
 
 namespace Apply2 {
+	export interface Base<F extends URI2> extends IApply2<F> {}
+	
 	export let Def: <F extends URI2>(_: Apply2<F>) => IApply2<F> = (
 		<F extends URI2>(Apply: Apply2<F>) => <IApply2<F>>{
 			ap: <T0, A, B>(_0: Kind2<F, T0, (_: A) => B>) => (_1: Kind2<F, T0, A>) => (
@@ -175,14 +178,14 @@ namespace Apply2 {
 		)
 	);
 
-	export let instantiate: <F extends URI2>(_: Apply2<F>) => Apply2<F> & Ext<F> = (
-		<F extends URI2>(_: Apply2<F>) => (
-			assign(Json.assign(Def(_), _))((_: Apply2<F>) => Json.assign(_, Ext(_)))
-		)
+	export let instantiate: <F extends URI2>() => <TApply extends Apply2<F>>(_: TApply) => TApply & Ext<F> = (
+		() => _ => assign(merge(Def(_), _))(_ => merge(_, Ext(_)))
 	);
 }
 
 namespace Apply2C {
+	export interface Base<F extends URI2, T0> extends IApply2C<F, T0> {}
+	
 	export let Def: <F extends URI2, T0>(_: Apply2C<F, T0>) => IApply2C<F, T0> = (
 		<F extends URI2, T0>(Apply: Apply2C<F, T0>) => <IApply2C<F, T0>>{
 			ap: <A, B>(_0: Kind2<F, T0, (_: A) => B>) => (_1: Kind2<F, T0, A>) => (
@@ -212,10 +215,8 @@ namespace Apply2C {
 		)
 	);
 
-	export let instantiate: <F extends URI2, T0>(_: Apply2C<F, T0>) => Apply2C<F, T0> & Ext<F, T0> = (
-		<F extends URI2, T0>(_: Apply2C<F, T0>) => (
-			assign(Json.assign(Def(_), _))((_: Apply2C<F, T0>) => Json.assign(_, Ext(_)))
-		)
+	export let instantiate: <F extends URI2, T0>() => <TApply extends Apply2C<F, T0>>(_: TApply) => TApply & Ext<F, T0> = (
+		() => _ => assign(merge(Def(_), _))(_ => merge(_, Ext(_)))
 	);
 }
 

@@ -1,6 +1,6 @@
 import {HKT, URI1, URI2, Kind1, Kind2} from '../../Common/HKT'
 import {
-	Json,
+	merge,
 	define
 } from '../../Common'
 
@@ -32,10 +32,8 @@ namespace Reducible {
 		)
 	);
 
-	export let instantiate: <F>(_: Reducible<F>) => Reducible<F> & Ext<F> = (
-		<F>(_: Reducible<F>) => (
-			Json.assign(_, Ext(_))
-		)
+	export let instantiate: <F>() => <TReducible extends Reducible<F>>(_: TReducible) => TReducible & Ext<F> = (
+		() => _ => merge(_, Ext(_))
 	);
 }
 
@@ -61,10 +59,8 @@ namespace Reducible1 {
 		)
 	);
 
-	export let instantiate: <F extends URI1>(_: Reducible1<F>) => Reducible1<F> & Ext<F> = (
-		<F extends URI1>(_: Reducible1<F>) => (
-			Json.assign(_, Ext(_))
-		)
+	export let instantiate: <F extends URI1>() => <TReducible extends Reducible1<F>>(_: TReducible) => TReducible & Ext<F> = (
+		() => _ => merge(_, Ext(_))
 	);
 }
 

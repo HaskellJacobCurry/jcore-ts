@@ -12,7 +12,7 @@ var Apply;
         fstAp: function (_0) { return function (_1) { return Apply.liftA2(common_1.const_)(_0)(_1); }; },
         sndAp: function (_0) { return function (_1) { return (common_1.assign(Apply.fmap(common_1.const_(common_1.id_()))(_0))(function (_) { return Apply.ap(_)(_1); })); }; },
     }); })); });
-    Apply_1.instantiate = (function (_) { return (common_1.assign(common_1.Json.assign(Apply_1.Def(_), _))(function (_) { return common_1.Json.assign(_, Apply_1.Ext(_)); })); });
+    Apply_1.instantiate = (function () { return function (_) { return common_1.assign(common_1.merge(Apply_1.Def(_), _))(function (_) { return common_1.merge(_, Apply_1.Ext(_)); }); }; });
 })(Apply || (Apply = {}));
 exports.Apply = Apply;
 exports.IApply = Apply;
@@ -26,7 +26,7 @@ var Apply1;
         fstAp: function (_0) { return function (_1) { return (Apply.liftA2(common_1.const_)(_0)(_1)); }; },
         sndAp: function (_0) { return function (_1) { return (common_1.assign(Apply.fmap(common_1.const_(common_1.id_()))(_0))(function (_) { return Apply.ap(_)(_1); })); }; },
     }); })); });
-    Apply1.instantiate = (function (_) { return (common_1.assign(common_1.Json.assign(Apply1.Def(_), _))(function (_) { return common_1.Json.assign(_, Apply1.Ext(_)); })); });
+    Apply1.instantiate = (function () { return function (_) { return common_1.assign(common_1.merge(Apply1.Def(_), _))(function (_) { return common_1.merge(_, Apply1.Ext(_)); }); }; });
 })(Apply1 || (Apply1 = {}));
 exports.Apply1 = Apply1;
 var Apply2;
@@ -39,7 +39,7 @@ var Apply2;
         fstAp: function (_0) { return function (_1) { return (Apply.liftA2(common_1.const_)(_0)(_1)); }; },
         sndAp: function (_0) { return function (_1) { return (common_1.assign(Apply.fmap(common_1.const_(common_1.id_()))(_0))(function (_) { return Apply.ap(_)(_1); })); }; },
     }); })); });
-    Apply2.instantiate = (function (_) { return (common_1.assign(common_1.Json.assign(Apply2.Def(_), _))(function (_) { return common_1.Json.assign(_, Apply2.Ext(_)); })); });
+    Apply2.instantiate = (function () { return function (_) { return common_1.assign(common_1.merge(Apply2.Def(_), _))(function (_) { return common_1.merge(_, Apply2.Ext(_)); }); }; });
 })(Apply2 || (Apply2 = {}));
 exports.Apply2 = Apply2;
 var Apply2C;
@@ -52,7 +52,7 @@ var Apply2C;
         fstAp: function (_0) { return function (_1) { return (Apply.liftA2(common_1.const_)(_0)(_1)); }; },
         sndAp: function (_0) { return function (_1) { return (common_1.assign(Apply.fmap(common_1.const_(common_1.id_()))(_0))(function (_) { return Apply.ap(_)(_1); })); }; },
     }); })); });
-    Apply2C.instantiate = (function (_) { return (common_1.assign(common_1.Json.assign(Apply2C.Def(_), _))(function (_) { return common_1.Json.assign(_, Apply2C.Ext(_)); })); });
+    Apply2C.instantiate = (function () { return function (_) { return common_1.assign(common_1.merge(Apply2C.Def(_), _))(function (_) { return common_1.merge(_, Apply2C.Ext(_)); }); }; });
 })(Apply2C || (Apply2C = {}));
 exports.Apply2C = Apply2C;
 exports.default = Apply;

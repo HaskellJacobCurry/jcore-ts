@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
@@ -49,24 +38,31 @@ var populate = (function () {
     return function (arrayA) { return (Array_1.Array.concatMT(Array_1.Array(as))(arrayA)); };
 });
 exports.populate = populate;
-var Functor = Functor_1.Functor1.instantiate({
+var Functor = Functor_1.Functor1.instantiate()(Common_1.create({
     URI: Array_1.URI,
     fmap: fmap,
-});
+}));
 exports.Functor = Functor;
-var Apply = Apply_1.Apply1.instantiate(__assign(__assign({}, Functor), { ap: ap, liftA2: Common_1._() }));
+var Apply = Apply_1.Apply1.instantiate()(Common_1.merge(Functor, Common_1.create({
+    ap: ap,
+    liftA2: Common_1._(),
+})));
 exports.Apply = Apply;
-var Applicative = Applicative_1.Applicative1.instantiate(__assign(__assign({}, Apply), { pure: pure }));
+var Applicative = Applicative_1.Applicative1.instantiate()(Common_1.merge(Apply, Common_1.create({
+    pure: pure,
+})));
 exports.Applicative = Applicative;
-var Bind = Bind_1.Bind1.instantiate(__assign(__assign({}, Apply), { bind: bind }));
+var Bind = Bind_1.Bind1.instantiate()(Common_1.merge(Apply, Common_1.create({
+    bind: bind,
+})));
 exports.Bind = Bind;
-var Monad = Monad_1.Monad1.instantiate(__assign(__assign({}, Applicative), Bind));
+var Monad = Monad_1.Monad1.instantiate()(Common_1.merge(Applicative, Bind));
 exports.Monad = Monad;
-var Populatable = Populatable_1.Populatable1.instantiate({
+var Populatable = Populatable_1.Populatable1.instantiate()(Common_1.create({
     URI: Array_1.URI,
     seed: seed,
     populate: populate,
-});
+}));
 exports.Populatable = Populatable;
 var _Array = (Common_1.merge(Array_1.Array, {
     Functor: Functor,
