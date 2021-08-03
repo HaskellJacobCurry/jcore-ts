@@ -97,7 +97,7 @@ export {concatMT}
 let concatMap: <A, B>(f: (_: A) => Array<B>) => (_: Array<A>) => Array<B> = (
 	<A, B>(f: (_: A) => Array<B>) => (arrayA: Array<A>) => (
 		apply(
-			reduce<A, Array<B>>(() => acc => a => concatMT(f(a))(acc))(Array.empty())
+			reduce<A, Array<B>>(() => acc => a => concatMT(f(a))(acc))(empty())
 		)(_ => _(arrayA))
 	)
 );

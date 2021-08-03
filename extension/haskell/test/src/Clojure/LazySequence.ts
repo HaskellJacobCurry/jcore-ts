@@ -2,9 +2,12 @@ import {LazySequence} from '../../../dist/DataStructure/Clojure/LazySequence'
 import {Int} from '../../../dist/Instance/Data/Int'
 import {Unit} from '../../../dist/Instance/Data/Unit'
 import {Bool} from '../../../dist/Instance/Data/Bool'
+import {Array} from '../../../dist/Instance/Mutable/Array'
 import {
     trampoline,
     apply,
+    apply_,
+    merge,
 } from '../../../dist/Common'
 
 ({
@@ -65,5 +68,52 @@ import {
         )(lazy => apply(LazySequence.foldl(Int.add)(Int(0))(lazy)
         ))(_ => apply(Int.Show.show(_)
         ))(console.log)
+    ),
+    concat_: () => (
+        apply({
+            front: apply(LazySequence(Int.dec)(Int(55)))(LazySequence.until(Int.gt(Int(45)))),
+            tail: apply(LazySequence(Int.inc)(Int(0)))(LazySequence.until(Int.lt(Int(15)))),
+        })
+        (_ => apply(
+            apply(_)
+            (({front, tail}) => merge(_, {
+                merged: LazySequence.concat_(tail)(front),
+            }))
+        ))
+        (({front, tail, merged}) => (
+            apply(Array([front, tail, merged]))
+            (Array.reduce<LazySequence<Int>, Unit>(() => _ => lazy => (
+                console.log('----'),
+                LazySequence.evaluate<Int>(_ => (
+                    console.log(Int.Show.show(_).toString()),
+                    Unit()
+                ))(lazy),
+                _
+            ))(Unit()))
+        ))
+    ),
+    concat: () => (
+        apply([
+            apply(LazySequence(Int.dec)(Int(55)))(LazySequence.until(Int.gt(Int(45)))),
+            apply(LazySequence(Int.inc)(Int(0)))(LazySequence.until(Int.lt(Int(15)))), (
+                apply(LazySequence(Int.inc)(Int(0)))
+                (apply_(LazySequence.until(Int.lt(Int(25)))))
+                (LazySequence.filter(Int.even))
+            ), (
+                apply(LazySequence(Int.dec)(Int(85)))
+                (apply_(LazySequence.filter(Int.odd)))
+                (LazySequence.until(Int.gt(Int(70))))
+            ),
+        ])
+        (lazys => apply(
+            apply(LazySequence(Int.inc)(Int(0)))
+            (_ => apply(LazySequence.take(Int(lazys.length))(_)))
+            (_ => LazySequence.map((i: Int) => lazys[i.value])(_))
+        ))
+        (apply_(LazySequence.concat))
+        (LazySequence.evaluate<Int>(_ => (
+            console.log(Int.Show.show(_).toString()),
+            Unit()
+        )))
     )
-})[2]();
+})['concat']();

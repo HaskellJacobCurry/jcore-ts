@@ -48,6 +48,11 @@ export {define}
 let apply = assign;
 export {apply}
 
+let apply_: <A, B>(_: (_: A) => B) => (_: A) => <C>(_: (_: B) => C) => C = (
+    f => _ => apply(f(_))
+);
+export {apply_}
+
 let create: <T>(_: T) => T = _ => _;
 export {create}
 

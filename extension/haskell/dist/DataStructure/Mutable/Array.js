@@ -28,7 +28,7 @@ var concat = (function (ass) { return (reduce(function () { return Common_1.flip
 exports.concat = concat;
 var concatMT = (function (src) { return function (dest) { return (Common_1.apply(reduce(function () { return function (acc) { return function (a) { return pushMT(a)(acc); }; }; })(dest))(function (_) { return _(src); })); }; });
 exports.concatMT = concatMT;
-var concatMap = (function (f) { return function (arrayA) { return (Common_1.apply(reduce(function () { return function (acc) { return function (a) { return concatMT(f(a))(acc); }; }; })(Array.empty()))(function (_) { return _(arrayA); })); }; });
+var concatMap = (function (f) { return function (arrayA) { return (Common_1.apply(reduce(function () { return function (acc) { return function (a) { return concatMT(f(a))(acc); }; }; })(empty()))(function (_) { return _(arrayA); })); }; });
 exports.concatMap = concatMap;
 var Array = (Common_1.merge(createArray, {
     URI: URI,

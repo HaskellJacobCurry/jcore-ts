@@ -21,8 +21,6 @@ declare let createLazySequence: <T>(transform: (_: T) => T) => (seed: T) => Lazy
 export { createLazySequence as create };
 declare let empty: <A>() => LazySequence<A>;
 export { empty };
-declare let singleton: <A>(_: A) => LazySequence<A>;
-export { singleton };
 declare let map: <A, B>(f: (_: A) => B) => (_: LazySequence<A>) => LazySequence<B>;
 export { map };
 declare let filter: <A>(f: (_: A) => Bool) => (_: LazySequence<A>) => LazySequence<A>;
@@ -37,8 +35,6 @@ declare let concat_: <A>(tail: LazySequence<A>) => (front: LazySequence<A>) => L
 export { concat_ };
 declare let concat: <A>(lazys: LazySequence<LazySequence<A>>) => LazySequence<A>;
 export { concat };
-declare let concatMap: <A, B>(f: (_: A) => LazySequence<B>) => (_: LazySequence<A>) => LazySequence<B>;
-export { concatMap };
 declare let toPopulatable1: <F extends URI1>(_: Populatable1<F>) => <A>(_: LazySequence<A>) => Kind1<F, A>;
 export { toPopulatable1 };
 declare let toPopulatable: typeof toPopulatable1;
@@ -51,7 +47,6 @@ interface HLazySequence {
     URI: URI;
     create: <T>(transform: (_: T) => T) => (seed: T) => LazySequence<T>;
     empty: <A>() => LazySequence<A>;
-    singleton: <A>(_: A) => LazySequence<A>;
     map: <A, B>(f: (_: A) => B) => (_: LazySequence<A>) => LazySequence<B>;
     filter: <A>(f: (_: A) => Bool) => (_: LazySequence<A>) => LazySequence<A>;
     until: <A>(f: (_: A) => Bool) => (_: LazySequence<A>) => LazySequence<A>;
@@ -60,7 +55,6 @@ interface HLazySequence {
     evaluate: <A>(f: (_: A) => Unit) => (_: LazySequence<A>) => Unit;
     concat_: <A>(tail: LazySequence<A>) => (front: LazySequence<A>) => LazySequence<A>;
     concat: <A>(lazys: LazySequence<LazySequence<A>>) => LazySequence<A>;
-    concatMap: <A, B>(f: (_: A) => LazySequence<B>) => (_: LazySequence<A>) => LazySequence<B>;
     toPopulatable1: <F extends URI1>(_: Populatable1<F>) => <A>(_: LazySequence<A>) => Kind1<F, A>;
     toPopulatable: this['toPopulatable1'];
     range: (min: Int, max: Int) => <F extends URI1>(_: Populatable1<F>) => Kind1<F, Int>;

@@ -20,6 +20,8 @@ declare let define: <T>(f: (_: () => T) => T) => T;
 export { define };
 declare let apply: <T>(_: T) => <U>(f: (_: T) => U) => U;
 export { apply };
+declare let apply_: <A, B>(_: (_: A) => B) => (_: A) => <C>(_: (_: B) => C) => C;
+export { apply_ };
 declare let create: <T>(_: T) => T;
 export { create };
 /** recurse :: ((...a[i]) -> ((...a[i]) -> b) -> b) -> (...a[i]) -> b */

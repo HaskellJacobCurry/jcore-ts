@@ -17,7 +17,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._ = exports.chain = exports.json = exports.merge = exports.recurse_ = exports.recurse = exports.create = exports.apply = exports.define = exports.assign = exports.flip = exports.const_ = exports.const = exports.id_ = exports.id = exports.placeholder = void 0;
+exports._ = exports.chain = exports.json = exports.merge = exports.recurse_ = exports.recurse = exports.create = exports.apply_ = exports.apply = exports.define = exports.assign = exports.flip = exports.const_ = exports.const = exports.id_ = exports.id = exports.placeholder = void 0;
 var ts_toolbelt_1 = require("../../dependency/jcore/dist/ts-toolbelt");
 __exportStar(require("../../dependency/jcore/dist/ts-toolbelt"), exports);
 __exportStar(require("../../dependency/jcore/dist/ts-toolbelt/common"), exports);
@@ -40,6 +40,8 @@ var define = (function (f) { return ((function (a) { return ((function (x) { ret
 exports.define = define;
 var apply = assign;
 exports.apply = apply;
+var apply_ = (function (f) { return function (_) { return apply(f(_)); }; });
+exports.apply_ = apply_;
 var create = function (_) { return _; };
 exports.create = create;
 /** recurse :: ((...a[i]) -> ((...a[i]) -> b) -> b) -> (...a[i]) -> b */
