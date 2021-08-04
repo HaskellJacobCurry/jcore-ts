@@ -30,19 +30,25 @@ let mappend: (_: String) => (_: String) => String = (
 );
 export {mappend}
 
-let Show = IShow.instantiate<String>()(create<IShow<String>>({
-	show,
-}));
+let Show = IShow.instantiate<String>()(
+	create<IShow<String>>({
+		show,
+	})
+);
 export {Show}
 
-let Semigroup = ISemigroup.instantiate<String>()(create<ISemigroup<String>>({
-	append,
-}));
+let Semigroup = ISemigroup.instantiate<String>()(
+	create<ISemigroup<String>>({
+		append,
+	})
+);
 export {Semigroup}
 
-let Monoid = IMonoid.instantiate<String>()(merge(Semigroup, create<IMonoid.Base<String>>({
-	mempty
-})));
+let Monoid = IMonoid.instantiate<String>()(
+	merge(Semigroup, create<IMonoid.Base<String>>({
+		mempty
+	}))
+);
 export {Monoid}
 
 interface HString extends _HString {

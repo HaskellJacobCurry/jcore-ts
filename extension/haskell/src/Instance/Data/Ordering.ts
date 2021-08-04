@@ -67,20 +67,26 @@ let lt: (_: Ordering) => (_: Ordering) => Bool = (
 );
 export {lt}
 
-let Show = IShow.instantiate<Ordering>()(create<IShow<Ordering>>({
-	show: ordering => String(ordering.tag),
-}));
+let Show = IShow.instantiate<Ordering>()(
+	create<IShow<Ordering>>({
+		show: ordering => String(ordering.tag),
+	})
+);
 export {Show}
 
-let Eq = IEq.instantiate<Ordering>()(create<IEq<Ordering>>({
-	eq,
-}));
+let Eq = IEq.instantiate<Ordering>()(
+	create<IEq<Ordering>>({
+		eq,
+	})
+);
 export {Eq}
 
-let Ord = IOrd.instantiate<Ordering>()(merge(Eq, create<IOrd.Base<Ordering>>({
-	compare,
-	lt,
-})));
+let Ord = IOrd.instantiate<Ordering>()(
+	merge(Eq, create<IOrd.Base<Ordering>>({
+		compare,
+		lt,
+	}))
+);
 export {Ord}
 
 interface HOrdering extends _HOrdering {

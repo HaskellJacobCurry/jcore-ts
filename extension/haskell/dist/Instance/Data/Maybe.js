@@ -10,7 +10,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Maybe = exports.Foldable = exports.foldMap = exports.Monoid = exports.Semigroup = exports.Monad = exports.Bind = exports.Applicative = exports.Apply = exports.Functor = exports.Show = exports.mempty = exports.append = exports.pure = exports.ap = exports.fmap = exports.bind = exports.show = void 0;
+exports.Maybe = exports.Foldable = exports.Monoid = exports.Semigroup = exports.Monad = exports.Bind = exports.Applicative = exports.Apply = exports.Functor = exports.Show = exports.foldMap = exports.mempty = exports.append = exports.pure = exports.ap = exports.fmap = exports.bind = exports.show = void 0;
 var Maybe_1 = require("../../DataStructure/Data/Maybe");
 var String_1 = require("./String");
 var Show_1 = require("../../Typeclass/Data/Show");
@@ -56,9 +56,11 @@ var append = (function (SemigroupA) { return function (maybe0) { return function
 exports.append = append;
 var mempty = (Maybe_1.Maybe.Nothing_);
 exports.mempty = mempty;
-var Show = function (_) { return (Show_1.IShow.instantiate()(Common_1.create({
+var foldMap = (function (Monoid) { return Maybe_1.Maybe.maybe(Monoid.mempty()); });
+exports.foldMap = foldMap;
+var Show = function (_) { return Show_1.IShow.instantiate()(Common_1.create({
     show: show(_),
-}))); };
+})); };
 exports.Show = Show;
 var Functor = Functor_1.Functor1.instantiate()(Common_1.create({
     URI: Maybe_1.URI,
@@ -84,12 +86,10 @@ var Semigroup = function (_) { return (Semigroup_1.ISemigroup.instantiate()(Comm
     append: append(_),
 }))); };
 exports.Semigroup = Semigroup;
-var Monoid = function (_) { return (Monoid_1.IMonoid.instantiate()(Common_1.merge(Semigroup(_), Common_1.create({
+var Monoid = function (_) { return Monoid_1.IMonoid.instantiate()(Common_1.merge(Semigroup(_), Common_1.create({
     mempty: mempty
-})))); };
+}))); };
 exports.Monoid = Monoid;
-var foldMap = (function (Monoid) { return Maybe_1.Maybe.maybe(Monoid.mempty()); });
-exports.foldMap = foldMap;
 var Foldable = Foldable_1.Foldable1.instantiate()(Common_1.create({
     URI: Maybe_1.URI,
     foldMap: foldMap,

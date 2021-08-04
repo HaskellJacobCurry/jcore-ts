@@ -87,11 +87,13 @@ let Monad = Monad1.instantiate<URI>()(
 );
 export {Monad}
 
-let Populatable = Populatable1.instantiate<URI>()(create<Populatable1<URI>>({
-	URI,
-	seed,
-	populate,
-}));
+let Populatable = Populatable1.instantiate<URI>()(
+	create<Populatable1<URI>>({
+		URI,
+		seed,
+		populate,
+	})
+);
 export {Populatable}
 
 interface HArray extends _HArray {

@@ -130,27 +130,31 @@ let populate: <A>(..._s: A[]) => (_: List<A>) => List<A> = (
 export {populate}
 
 /** show :: (Show a) => Show (List a) => List a -> String */
-let Show = <A>(_: IShow<A>) => (
-	IShow.instantiate<List<A>>()(create<IShow<List<A>>>({
+let Show = <A>(_: IShow<A>) => IShow.instantiate<List<A>>()(
+	create<IShow<List<A>>>({
 		show: show(_),
-	}))
+	})
 );
 export {Show}
 
-let Foldable = Foldable1.instantiate<URI>()(create<Foldable1<URI>>({
-	URI,
-	foldMap,
-	foldr: placeholder(),
-}));
+let Foldable = Foldable1.instantiate<URI>()(
+	create<Foldable1<URI>>({
+		URI,
+		foldMap,
+		foldr: placeholder(),
+	})
+);
 Foldable.foldl = foldl;
 Foldable.foldr = foldr;
 export {Foldable}
 
-let Populatable = Populatable1.instantiate<URI>()(create<Populatable1<URI>>({
-	URI,
-	seed,
-	populate,
-}));
+let Populatable = Populatable1.instantiate<URI>()(
+	create<Populatable1<URI>>({
+		URI,
+		seed,
+		populate,
+	})
+);
 export {Populatable}
 
 interface HList extends _HList {

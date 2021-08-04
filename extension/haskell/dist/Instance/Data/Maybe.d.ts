@@ -24,6 +24,8 @@ declare let append: <A>(_: ISemigroup<A>) => (_: Maybe<A>) => (_: Maybe<A>) => M
 export { append };
 declare let mempty: <A>() => Maybe<A>;
 export { mempty };
+declare let foldMap: <G>(_: IMonoid<G>) => <A>(_: (_: A) => G) => (_: Maybe<A>) => G;
+export { foldMap };
 declare let Show: <A>(_: IShow<A>) => IShow<Maybe<A>>;
 export { Show };
 declare let Functor: Functor1<"Maybe"> & Functor1.Ext<"Maybe">;
@@ -40,8 +42,6 @@ declare let Semigroup: <A>(_: ISemigroup<A>) => ISemigroup<Maybe<A>>;
 export { Semigroup };
 declare let Monoid: <A>(_: ISemigroup<A>) => ISemigroup<Maybe<A>> & IMonoid.Base<Maybe<A>> & IMonoid.Ext<Maybe<A>>;
 export { Monoid };
-declare let foldMap: <G>(_: IMonoid<G>) => <A>(_: (_: A) => G) => (_: Maybe<A>) => G;
-export { foldMap };
 declare let Foldable: Foldable1<"Maybe"> & Foldable1.Ext<"Maybe">;
 export { Foldable };
 interface HMaybe extends _HMaybe {

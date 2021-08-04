@@ -63,53 +63,53 @@ let bimap: <A, C>(_: (_: A) => C) => <B, D>(_: (_: B) => D) => (_: Tuple<A, B>) 
 export {bimap}
 
 /** show :: (Show a, Show b) => Show (Tuple a b) => Tuple a b -> String */
-let Show = <A, B>(_0: IShow<A>, _1: IShow<B>) => (
-	IShow.instantiate<Tuple<A, B>>()(create<IShow<Tuple<A, B>>>({
+let Show = <A, B>(_0: IShow<A>, _1: IShow<B>) => IShow.instantiate<Tuple<A, B>>()(
+	create<IShow<Tuple<A, B>>>({
 		show: show(_0, _1),
-	}))
-);;
+	})
+);
 export {Show}
 
 /** append :: (Semigroup a, Semigroup b) => Semigroup (Tuple a b) => Tuple a b -> Tuple a b -> Tuple a b */
-let Semigroup = <A, B>(_0: ISemigroup<A>, _1: ISemigroup<B>) => (
-	ISemigroup.instantiate<Tuple<A, B>>()(create<ISemigroup<Tuple<A, B>>>({
+let Semigroup = <A, B>(_0: ISemigroup<A>, _1: ISemigroup<B>) => ISemigroup.instantiate<Tuple<A, B>>()(
+	create<ISemigroup<Tuple<A, B>>>({
 		append: append(_0, _1),
-	}))
+	})
 );
 export {Semigroup}
 
 /** mempty :: (Monoid a, Monoid b) => Monoid (Tuple a b) => Unit -> Tuple a b */
-let Monoid = <A, B>(_0: IMonoid<A>, _1: IMonoid<B>) => (
-	IMonoid.instantiate<Tuple<A, B>>()(merge(Semigroup(_0, _1), create<IMonoid.Base<Tuple<A, B>>>({
+let Monoid = <A, B>(_0: IMonoid<A>, _1: IMonoid<B>) => IMonoid.instantiate<Tuple<A, B>>()(
+	merge(Semigroup(_0, _1), create<IMonoid.Base<Tuple<A, B>>>({
 		mempty: mempty(_0, _1),
-	})))
+	}))
 );
 export {Monoid}
 
 /** map :: Functor (Tuple a) => (b -> c) -> Tuple a b -> Tuple a c */
-let Functor = (
-	Functor2.instantiate<URI>()(create<Functor2<URI>>({
+let Functor = Functor2.instantiate<URI>()(
+	create<Functor2<URI>>({
 		URI,
 		fmap,
-	}))
+	})
 );
 export {Functor}
 
 /** ap :: Semigroup a => Apply (Tuple a) => Tuple a (b -> c) -> Tuple a b -> Tuple a c */
-let Apply = <T0>(_: ISemigroup<T0>) => (
-	Apply2C.instantiate<URI, T0>()(merge(Functor, create<Apply2C.Base<URI, T0>>({
+let Apply = <T0>(_: ISemigroup<T0>) => Apply2C.instantiate<URI, T0>()(
+	merge(Functor, create<Apply2C.Base<URI, T0>>({
 		ap: ap(_),
 		liftA2: placeholder(),
-	})))
+	}))
 );
 export {Apply}
 
 /** bimap :: Bifunctor Tuple => (a -> c) -> (b -> d) -> Tuple a b -> Tuple c d */
-let Bifunctor = (
-	Bifunctor2.instantiate<URI>()(create<Bifunctor2<URI>>({
+let Bifunctor = Bifunctor2.instantiate<URI>()(
+	create<Bifunctor2<URI>>({
 		URI,
 		bimap,
-	}))
+	})
 );
 export {Bifunctor}
 

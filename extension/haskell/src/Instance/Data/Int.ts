@@ -72,34 +72,44 @@ let Num = INum.instantiate<Int>({
 });
 export {Num}
 
-let Show = IShow.instantiate<Int>()(create<IShow<Int>>({
-	show,
-}));
+let Show = IShow.instantiate<Int>()(
+	create<IShow<Int>>({
+		show,
+	})
+);
 export {Show}
 
-let Semiring = ISemiring.instantiate<Int>()(create<ISemiring<Int>>({
-	add: Int.add,
-	zero: Int.zero,
-	mul: Int.mul,
-	one: Int.one,
-}));
+let Semiring = ISemiring.instantiate<Int>()(
+	create<ISemiring<Int>>({
+		add: Int.add,
+		zero: Int.zero,
+		mul: Int.mul,
+		one: Int.one,
+	})
+);
 export {Semiring}
 
-let Ring = IRing.instantiate<Int>()(merge(Semiring, create<IRing.Base<Int>>({
-	sub: Int.sub,
-	negate: Int.negate,
-})));
+let Ring = IRing.instantiate<Int>()(
+	merge(Semiring, create<IRing.Base<Int>>({
+		sub: Int.sub,
+		negate: Int.negate,
+	}))
+);
 export {Ring}
 
-let Eq = IEq.instantiate<Int>()(create<IEq<Int>>({
-	eq: Int.eq,
-}));
+let Eq = IEq.instantiate<Int>()(
+	create<IEq<Int>>({
+		eq: Int.eq,
+	})
+);
 export {Eq}
 
-let Ord = IOrd.instantiate<Int>()(merge(Eq, create<IOrd.Base<Int>>({
-	compare,
-	lt,
-})));
+let Ord = IOrd.instantiate<Int>()(
+	merge(Eq, create<IOrd.Base<Int>>({
+		compare,
+		lt,
+	}))
+);
 export {Ord}
 
 interface HInt extends _HInt {

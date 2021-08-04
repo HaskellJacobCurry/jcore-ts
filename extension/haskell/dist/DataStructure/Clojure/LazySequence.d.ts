@@ -19,7 +19,7 @@ declare module '../../Common/HKT' {
 export { URI };
 declare let createLazySequence: <T>(transform: (_: T) => T) => (seed: T) => LazySequence<T>;
 export { createLazySequence as create };
-declare let empty: <A>() => LazySequence<A>;
+declare let empty: <A = never>() => LazySequence<A>;
 export { empty };
 declare let singleton: <A>(_: A) => LazySequence<A>;
 export { singleton };
@@ -50,7 +50,7 @@ export { Constructor };
 interface HLazySequence {
     URI: URI;
     create: <T>(transform: (_: T) => T) => (seed: T) => LazySequence<T>;
-    empty: <A>() => LazySequence<A>;
+    empty: <A = never>() => LazySequence<A>;
     singleton: <A>(_: A) => LazySequence<A>;
     map: <A, B>(f: (_: A) => B) => (_: LazySequence<A>) => LazySequence<B>;
     filter: <A>(f: (_: A) => Bool) => (_: LazySequence<A>) => LazySequence<A>;

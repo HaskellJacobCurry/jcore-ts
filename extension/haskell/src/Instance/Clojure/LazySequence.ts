@@ -40,10 +40,12 @@ let bind: <A>(_: LazySequence<A>) => <B>(_: (_: A) => LazySequence<B>) => LazySe
 );
 export {bind}
 
-let Functor = Functor1.instantiate<URI>()(create<Functor1<URI>>({
-	URI,
-	fmap,
-}));
+let Functor = Functor1.instantiate<URI>()(
+	create<Functor1<URI>>({
+		URI,
+		fmap,
+	})
+);
 export {Functor}
 
 let Apply = Apply1.instantiate<URI>()(

@@ -8,9 +8,11 @@ import {
 
 export * from '../../DataStructure/Data/Unit'
 
-let Show = IShow.instantiate<Unit>()(create<IShow<Unit>>({
-	show: _ => String('Unit'),
-}));
+let Show = IShow.instantiate<Unit>()(
+	create<IShow<Unit>>({
+		show: _ => String('Unit'),
+	})
+);
 export {Show}
 
 interface HUnit extends _HUnit {

@@ -1,7 +1,8 @@
-import {LazySequence} from '../../../dist/DataStructure/Clojure/LazySequence'
+import {LazySequence} from '../../../dist/Instance/Clojure/LazySequence'
 import {Int} from '../../../dist/Instance/Data/Int'
 import {Unit} from '../../../dist/Instance/Data/Unit'
 import {Bool} from '../../../dist/Instance/Data/Bool'
+import {Tuple} from '../../../dist/Instance/Data/Tuple'
 import {Array} from '../../../dist/Instance/Mutable/Array'
 import {
     trampoline,
@@ -115,5 +116,26 @@ import {
             console.log(Int.Show.show(_).toString()),
             Unit()
         )))
+    ),
+    MDo: () => (
+        LazySequence.Monad.Do(LazySequence.Monad)((Do, {assign, bind, run}) => (
+            apply(Do)
+            (_ => apply(assign(_)('a')(() => (
+                apply(LazySequence(Int.inc)(Int(-7)))(LazySequence.until(Int.lt(Int(9))))
+            ))))
+            (_ => apply(assign(_)('b')(({a}) => (
+                apply(LazySequence(Int.inc)(Int(-2)))(LazySequence.until(Int.lt(Int(15))))
+            ))))
+            (_ => apply(bind(_)(({a, b}) => (
+                Int.eq(Int.add(a)(b))(Int(4)).cata({
+                    True: () => LazySequence.singleton(Tuple(a, b)),
+                    False: () => LazySequence.empty(),
+                })
+            ))))
+            (_ => run(_)((_) => (
+                console.log(Tuple.Show(Int.Show, Int.Show).show(_).toString()),
+                LazySequence.empty()
+            )))
+        ))
     )
-})['concat']();
+})['MDo']();

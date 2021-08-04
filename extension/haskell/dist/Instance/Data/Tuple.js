@@ -45,38 +45,37 @@ var bimap = (function (f) { return function (g) { return function (_a) {
 }; }; });
 exports.bimap = bimap;
 /** show :: (Show a, Show b) => Show (Tuple a b) => Tuple a b -> String */
-var Show = function (_0, _1) { return (Show_1.IShow.instantiate()(common_1.create({
+var Show = function (_0, _1) { return Show_1.IShow.instantiate()(common_1.create({
     show: show(_0, _1),
-}))); };
+})); };
 exports.Show = Show;
-;
 /** append :: (Semigroup a, Semigroup b) => Semigroup (Tuple a b) => Tuple a b -> Tuple a b -> Tuple a b */
-var Semigroup = function (_0, _1) { return (Semigroup_1.ISemigroup.instantiate()(common_1.create({
+var Semigroup = function (_0, _1) { return Semigroup_1.ISemigroup.instantiate()(common_1.create({
     append: append(_0, _1),
-}))); };
+})); };
 exports.Semigroup = Semigroup;
 /** mempty :: (Monoid a, Monoid b) => Monoid (Tuple a b) => Unit -> Tuple a b */
-var Monoid = function (_0, _1) { return (Monoid_1.IMonoid.instantiate()(common_1.merge(Semigroup(_0, _1), common_1.create({
+var Monoid = function (_0, _1) { return Monoid_1.IMonoid.instantiate()(common_1.merge(Semigroup(_0, _1), common_1.create({
     mempty: mempty(_0, _1),
-})))); };
+}))); };
 exports.Monoid = Monoid;
 /** map :: Functor (Tuple a) => (b -> c) -> Tuple a b -> Tuple a c */
-var Functor = (Functor_1.Functor2.instantiate()(common_1.create({
+var Functor = Functor_1.Functor2.instantiate()(common_1.create({
     URI: Tuple_1.URI,
     fmap: fmap,
-})));
+}));
 exports.Functor = Functor;
 /** ap :: Semigroup a => Apply (Tuple a) => Tuple a (b -> c) -> Tuple a b -> Tuple a c */
-var Apply = function (_) { return (Apply_1.Apply2C.instantiate()(common_1.merge(Functor, common_1.create({
+var Apply = function (_) { return Apply_1.Apply2C.instantiate()(common_1.merge(Functor, common_1.create({
     ap: ap(_),
     liftA2: common_1.placeholder(),
-})))); };
+}))); };
 exports.Apply = Apply;
 /** bimap :: Bifunctor Tuple => (a -> c) -> (b -> d) -> Tuple a b -> Tuple c d */
-var Bifunctor = (Bifunctor_1.Bifunctor2.instantiate()(common_1.create({
+var Bifunctor = Bifunctor_1.Bifunctor2.instantiate()(common_1.create({
     URI: Tuple_1.URI,
     bimap: bimap,
-})));
+}));
 exports.Bifunctor = Bifunctor;
 var _Tuple = (common_1.Json.assign(Tuple_1.Tuple, {
     Show: Show,

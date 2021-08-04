@@ -69,9 +69,9 @@ var populate = (function () {
 });
 exports.populate = populate;
 /** show :: (Show a) => Show (List a) => List a -> String */
-var Show = function (_) { return (Show_1.IShow.instantiate()(Common_1.create({
+var Show = function (_) { return Show_1.IShow.instantiate()(Common_1.create({
     show: show(_),
-}))); };
+})); };
 exports.Show = Show;
 var Foldable = Foldable_1.Foldable1.instantiate()(Common_1.create({
     URI: List_1.URI,

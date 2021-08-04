@@ -53,7 +53,7 @@ let tryBreak: <A>(_: LazySequence<A>) => <B>(_: (_: LazySequence<A>) => LazySequ
     )
 );
 
-let empty: <A>() => LazySequence<A> = (
+let empty: <A = never>() => LazySequence<A> = (
     <A>() => (
         apply(
             recurse<LazySequence<A>>()(() => empty => ({
@@ -241,7 +241,7 @@ export {Constructor}
 interface HLazySequence {
     URI: URI;
     create: <T>(transform: (_: T) => T) => (seed: T) => LazySequence<T>;
-    empty: <A>() => LazySequence<A>;
+    empty: <A = never>() => LazySequence<A>;
     singleton: <A>(_: A) => LazySequence<A>;
     map: <A, B>(f: (_: A) => B) => (_: LazySequence<A>) => LazySequence<B>;
     filter: <A>(f: (_: A) => Bool) => (_: LazySequence<A>) => LazySequence<A>;

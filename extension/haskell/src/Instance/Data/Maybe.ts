@@ -96,36 +96,51 @@ let mempty: <A>() => Maybe<A> = (
 );
 export {mempty}
 
-let Show = <A>(_: IShow<A>) => (
-	IShow.instantiate<Maybe<A>>()(create<IShow<Maybe<A>>>({
+let foldMap: <G>(_: IMonoid<G>) => <A>(_: (_: A) => G) => (_: Maybe<A>) => G = (
+	Monoid => Maybe.maybe(Monoid.mempty())
+);
+export {foldMap}
+
+let Show = <A>(_: IShow<A>) => IShow.instantiate<Maybe<A>>()(
+	create<IShow<Maybe<A>>>({
 		show: show(_),
-	}))
+	})
 );
 export {Show}
 
-let Functor = Functor1.instantiate<URI>()(create<Functor1<URI>>({
-	URI,
-	fmap,
-}));
+let Functor = Functor1.instantiate<URI>()(
+	create<Functor1<URI>>({
+		URI,
+		fmap,
+	})
+);
 export {Functor}
 
-let Apply = Apply1.instantiate<URI>()(merge(Functor, create<Apply1.Base<URI>>({
-	ap,
-	liftA2: _(),
-})));
+let Apply = Apply1.instantiate<URI>()(
+	merge(Functor, create<Apply1.Base<URI>>({
+		ap,
+		liftA2: _(),
+	}))
+);
 export {Apply}
 
-let Applicative = Applicative1.instantiate<URI>()(merge(Apply, create<Applicative1.Base<URI>>({
-	pure,
-})));
+let Applicative = Applicative1.instantiate<URI>()(
+	merge(Apply, create<Applicative1.Base<URI>>({
+		pure,
+	}))
+);
 export {Applicative}
 
-let Bind = Bind1.instantiate<URI>()(merge(Apply, create<Bind1.Base<URI>>({
-	bind,
-})));
+let Bind = Bind1.instantiate<URI>()(
+	merge(Apply, create<Bind1.Base<URI>>({
+		bind,
+	}))
+);
 export {Bind}
 
-let Monad = Monad1.instantiate<URI>()(merge(Applicative, Bind));
+let Monad = Monad1.instantiate<URI>()(
+	merge(Applicative, Bind)
+);
 export {Monad}
 
 let Semigroup = <A>(_: ISemigroup<A>) => (
@@ -135,23 +150,20 @@ let Semigroup = <A>(_: ISemigroup<A>) => (
 );
 export {Semigroup}
 
-let Monoid = <A>(_: ISemigroup<A>) => (
-	IMonoid.instantiate<Maybe<A>>()(merge(Semigroup(_), create<IMonoid.Base<Maybe<A>>>({
+let Monoid = <A>(_: ISemigroup<A>) => IMonoid.instantiate<Maybe<A>>()(
+	merge(Semigroup(_), create<IMonoid.Base<Maybe<A>>>({
 		mempty
-	})))
+	}))
 );
 export {Monoid}
 
-let foldMap: <G>(_: IMonoid<G>) => <A>(_: (_: A) => G) => (_: Maybe<A>) => G = (
-	Monoid => Maybe.maybe(Monoid.mempty())
+let Foldable = Foldable1.instantiate<URI>()(
+	create<Foldable1<URI>>({
+		URI,
+		foldMap,
+		foldr: placeholder(),
+	})
 );
-export {foldMap}
-
-let Foldable = Foldable1.instantiate<URI>()(create<Foldable1<URI>>({
-	URI,
-	foldMap,
-	foldr: placeholder(),
-}));
 export {Foldable}
 
 interface HMaybe extends _HMaybe {
